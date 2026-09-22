@@ -106,17 +106,17 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-11 h-11 rounded-xl ${theme.bg} text-white flex items-center justify-center shrink-0`}
+                  className={`w-12 h-12 rounded-2xl ${theme.bg} text-white flex items-center justify-center shrink-0 shadow-xs`}
                 >
                   <TaskIcon name={task.iconName} className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-semibold text-stone-500 dark:text-stone-400">
+                    <span className="text-xs sm:text-sm font-bold text-stone-500 dark:text-stone-400">
                       {task.time} • Passos da Tarefa
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100 leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 leading-snug">
                     {task.title}
                   </h3>
                 </div>
@@ -218,17 +218,17 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                     <button
                       type="button"
                       onClick={() => onToggleSubtask(subtask.id)}
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
                         isChecked
-                          ? 'bg-emerald-500 text-white'
+                          ? 'bg-emerald-500 text-white shadow-2xs'
                           : 'bg-stone-100 dark:bg-stone-700/60 text-stone-300 dark:text-stone-500 hover:text-emerald-500 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border border-stone-200 dark:border-stone-600'
                       }`}
                       aria-label={isChecked ? 'Desmarcar' : 'Marcar como feito'}
                     >
                       {isChecked ? (
-                        <CheckCircle2 className="w-5 h-5" />
+                        <CheckCircle2 className="w-6 h-6" />
                       ) : (
-                        <Circle className="w-5 h-5" />
+                        <Circle className="w-6 h-6" />
                       )}
                     </button>
 
@@ -245,15 +245,15 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                               if (e.key === 'Escape') setEditingSubtaskId(null);
                             }}
                             autoFocus
-                            className="w-full px-2.5 py-1 text-sm bg-stone-100 dark:bg-stone-700 border border-stone-300 dark:border-stone-600 text-stone-900 dark:text-stone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full px-3 py-1.5 text-base bg-stone-100 dark:bg-stone-700 border border-stone-300 dark:border-stone-600 text-stone-900 dark:text-stone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"
                           />
                           <button
                             type="button"
                             onClick={() => handleSaveEdit(subtask.id)}
-                            className="p-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                            className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                             title="Salvar alteração"
                           >
-                            <Check className="w-3.5 h-3.5" />
+                            <Check className="w-4 h-4" />
                           </button>
                         </div>
                       ) : (
@@ -261,11 +261,11 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                           onClick={() => onToggleSubtask(subtask.id)}
                           className="cursor-pointer"
                         >
-                          <span className="text-[10px] font-semibold text-stone-400 dark:text-stone-500 uppercase tracking-wider block">
+                          <span className="text-xs sm:text-sm font-extrabold text-stone-500 dark:text-stone-400 uppercase tracking-wide block">
                             Passo {index + 1}
                           </span>
                           <p
-                            className={`text-sm font-semibold leading-snug break-words ${
+                            className={`text-base sm:text-lg font-bold leading-snug break-words ${
                               isChecked ? 'line-through text-stone-400 dark:text-stone-500' : 'text-stone-800 dark:text-stone-100'
                             }`}
                           >
@@ -344,13 +344,13 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                   placeholder="Novo passo (ex: Guardar sapatos)..."
                   value={newSubtaskTitle}
                   onChange={(e) => setNewSubtaskTitle(e.target.value)}
-                  className="flex-1 px-3 py-2 text-sm bg-white dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500"
+                  className="flex-1 px-3.5 py-2.5 text-base bg-white dark:bg-stone-700 border border-stone-200 dark:border-stone-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500"
                 />
                 <button
                   type="submit"
                   id="add-step-btn"
                   disabled={!newSubtaskTitle.trim()}
-                  className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-xs disabled:opacity-40 flex items-center gap-1 active:scale-95 transition-all"
+                  className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm disabled:opacity-40 flex items-center gap-1 active:scale-95 transition-all shadow-xs"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Adicionar</span>

@@ -124,7 +124,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   />
                 </div>
 
-                <h4 className="text-lg font-extrabold text-stone-900 dark:text-stone-100 mb-2">
+                <h4 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 mb-2">
                   {firstTask.title}
                 </h4>
 
@@ -193,7 +193,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   />
                 </div>
 
-                <h4 className="text-lg font-extrabold text-stone-900 dark:text-stone-100 mb-2">
+                <h4 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 mb-2">
                   {thenTask.title}
                 </h4>
 
@@ -284,7 +284,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
 
                 {/* High Contrast Bold Title */}
                 <h4
-                  className={`text-sm sm:text-base font-extrabold leading-snug tracking-tight my-1.5 line-clamp-2 px-1 ${
+                  className={`text-base sm:text-lg md:text-xl font-black leading-snug tracking-tight my-2 line-clamp-2 px-1 ${
                     isCompleted
                       ? 'line-through text-stone-400 dark:text-stone-500'
                       : 'text-stone-900 dark:text-stone-100'
@@ -301,7 +301,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                       e.stopPropagation();
                       onToggleComplete(task.id);
                     }}
-                    className={`w-full py-2 px-3 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all shadow-2xs active:scale-95 ${
+                    className={`w-full py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 transition-all shadow-2xs active:scale-95 ${
                       isCompleted
                         ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
                         : 'bg-stone-100 dark:bg-stone-700/80 text-stone-800 dark:text-stone-100 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-600 border border-stone-200/80 dark:border-stone-600'

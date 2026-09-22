@@ -111,11 +111,11 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
             {/* Big Activity Title */}
             <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight">
                 {task.title}
               </h2>
               {task.notes && (
-                <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1 max-w-sm">
+                <p className="text-sm sm:text-base text-stone-600 dark:text-stone-300 mt-2 max-w-md font-semibold leading-relaxed">
                   {task.notes}
                 </p>
               )}
@@ -123,37 +123,46 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
             {/* Subtasks / Steps Sequence (if available, e.g. for Bathroom or Brushing) */}
             {task.subtasks && task.subtasks.length > 0 && (
-              <div className="w-full pt-2 text-left">
-                <span className="text-xs font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2 text-center">
-                  Passos desta atividade ({task.subtasks.filter(s => s.completed).length}/{task.subtasks.length}):
-                </span>
+              <div className="w-full pt-3 text-left">
+                <div className="flex items-center justify-between mb-3 px-1">
+                  <span className="text-sm sm:text-base font-black text-stone-700 dark:text-stone-200 uppercase tracking-wide">
+                    Passos desta atividade:
+                  </span>
+                  <span className="text-xs sm:text-sm font-extrabold px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                    {task.subtasks.filter(s => s.completed).length} de {task.subtasks.length} concluídos
+                  </span>
+                </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {task.subtasks.map((step, idx) => (
                     <motion.div
                       key={step.id}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onToggleSubtask && onToggleSubtask(task.id, step.id)}
-                      className={`p-3 rounded-2xl border-2 flex items-center justify-between gap-3 cursor-pointer transition-all ${
+                      className={`p-3.5 sm:p-4.5 rounded-2xl border-2 sm:border-3 flex items-center justify-between gap-3.5 cursor-pointer transition-all shadow-xs ${
                         step.completed
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 opacity-80'
-                          : 'bg-stone-50 dark:bg-stone-800/80 border-stone-200 dark:border-stone-700 text-stone-800 dark:text-stone-100 hover:border-indigo-300'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 opacity-80'
+                          : 'bg-white dark:bg-stone-800/90 border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 hover:border-indigo-400 dark:hover:border-indigo-500'
                       }`}
                     >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="w-6 h-6 rounded-full bg-stone-200 dark:bg-stone-700 font-bold text-xs flex items-center justify-center shrink-0">
+                      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                        <span className={`w-8 h-8 sm:w-10 sm:h-10 rounded-2xl font-black text-sm sm:text-base flex items-center justify-center shrink-0 shadow-2xs ${
+                          step.completed
+                            ? 'bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200'
+                            : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200'
+                        }`}>
                           {idx + 1}
                         </span>
-                        <span className={`text-sm font-bold truncate ${step.completed ? 'line-through text-stone-400' : ''}`}>
+                        <span className={`text-base sm:text-xl font-bold leading-snug break-words ${step.completed ? 'line-through opacity-75' : ''}`}>
                           {step.title}
                         </span>
                       </div>
 
                       <div className="shrink-0">
                         {step.completed ? (
-                          <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                          <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-600 dark:text-emerald-400" />
                         ) : (
-                          <Circle className="w-6 h-6 text-stone-300 dark:text-stone-600" />
+                          <Circle className="w-7 h-7 sm:w-8 sm:h-8 text-stone-300 dark:text-stone-600" />
                         )}
                       </div>
                     </motion.div>
