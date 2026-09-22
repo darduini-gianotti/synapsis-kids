@@ -173,6 +173,12 @@ export default function App() {
 
   useEffect(() => {
     saveSettings(settings);
+    soundManager.setVoicePreferences(
+      settings.selectedVoiceURI,
+      settings.voicePitch,
+      settings.voiceRate,
+      settings.voiceStyle || 'mascot'
+    );
   }, [settings]);
 
   useEffect(() => {
@@ -347,12 +353,20 @@ export default function App() {
     }
 
     if (willBeCompleted) {
-      soundManager.playSuccess(settings.soundVolume);
+      // Check if this was the last remaining uncompleted task of the day
+      const remainingUncompleted = currentDayTasks.filter(
+        (t) => t.id !== taskId && !t.completed
+      );
+      const isAllDayDone = remainingUncompleted.length === 0 && currentDayTasks.length > 0;
+
+      if (isAllDayDone) {
+        soundManager.playGrandCelebration(settings.soundVolume);
+      } else {
+        soundManager.playSuccess(settings.soundVolume);
+      }
+
       if (settings.voiceEnabled) {
-        soundManager.speak(
-          `Muito bem! Você concluiu: ${task.title}!`,
-          settings.soundVolume
-        );
+        soundManager.speakEncouragement(task.title, isAllDayDone, settings.soundVolume);
       }
     } else {
       soundManager.playSound('chime', settings.soundVolume);

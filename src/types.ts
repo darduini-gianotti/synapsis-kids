@@ -11,6 +11,8 @@ export type TaskCategory =
 
 export type SoundAlert = 'chime' | 'harp' | 'bell' | 'marimba' | 'voice' | 'none';
 
+export type VoiceCharacterStyle = 'mascot' | 'gentle' | 'normal';
+
 export type ThemeMode = 'light' | 'dark' | 'system';
 
 export interface SubTask {
@@ -56,6 +58,7 @@ export interface AppSettings {
   themeMode?: ThemeMode; // 'light' | 'dark' | 'system'
   enableLargeCards?: boolean; // Habilitar ou desabilitar modo cartões grandes (PECS/CAA)
   selectedVoiceURI?: string; // URI da voz selecionada pelo usuário (ex: Google, Natural)
-  voicePitch?: number; // 0.8 a 1.2
+  voiceStyle?: VoiceCharacterStyle; // 'mascot' | 'gentle' | 'normal'
+  voicePitch?: number; // 0.8 a 1.5
   voiceRate?: number; // 0.8 a 1.2
 }

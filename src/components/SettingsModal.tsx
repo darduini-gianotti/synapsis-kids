@@ -17,8 +17,9 @@ import {
   Delete,
   Calendar,
   LayoutGrid,
+  Sparkles,
 } from 'lucide-react';
-import { AppSettings, ThemeMode } from '../types';
+import { AppSettings, ThemeMode, VoiceCharacterStyle } from '../types';
 import { soundManager } from '../utils/audio';
 
 interface SettingsModalProps {
@@ -45,8 +46,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     themeMode: settings.themeMode || 'light',
     enableLargeCards: settings.enableLargeCards !== false,
     selectedVoiceURI: settings.selectedVoiceURI,
-    voiceRate: settings.voiceRate || 0.95,
-    voicePitch: settings.voicePitch || 1.0,
+    voiceStyle: settings.voiceStyle || 'mascot',
+    voiceRate: settings.voiceRate || 1.0,
+    voicePitch: settings.voicePitch || 1.35,
   });
 
   const [pinInput, setPinInput] = useState<string>(settings.parentPin || '1234');
@@ -76,8 +78,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       themeMode: settings.themeMode || 'light',
       enableLargeCards: settings.enableLargeCards !== false,
       selectedVoiceURI: settings.selectedVoiceURI,
-      voiceRate: settings.voiceRate || 0.95,
-      voicePitch: settings.voicePitch || 1.0,
+      voiceStyle: settings.voiceStyle || 'mascot',
+      voiceRate: settings.voiceRate || 1.0,
+      voicePitch: settings.voicePitch || 1.35,
     });
     setPinInput(settings.parentPin || '1234');
     setPinError('');
@@ -96,6 +99,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     onSaveSettings(updated);
   };
 
+  const handleVoiceStyleChange = (style: VoiceCharacterStyle) => {
+    let pitch = 1.35;
+    let rate = 1.0;
+    if (style === 'gentle') {
+      pitch = 1.05;
+      rate = 0.88;
+    } else if (style === 'normal') {
+      pitch = 1.0;
+      rate = 0.95;
+    }
+    const updated: AppSettings = {
+      ...localSettings,
+      voiceStyle: style,
+      voicePitch: pitch,
+      voiceRate: rate,
+    };
+    setLocalSettings(updated);
+    onSaveSettings(updated);
+    soundManager.setVoicePreferences(
+      localSettings.selectedVoiceURI,
+      pitch,
+      rate,
+      style
+    );
+  };
+
   const handleTestChime = () => {
     soundManager.playSound('chime', localSettings.soundVolume);
   };
@@ -105,15 +134,40 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleTestVoice = () => {
+    const style = localSettings.voiceStyle || 'mascot';
     soundManager.setVoicePreferences(
       localSettings.selectedVoiceURI,
-      localSettings.voicePitch || 1.0,
-      localSettings.voiceRate || 0.95
+      localSettings.voicePitch,
+      localSettings.voiceRate,
+      style
     );
-    soundManager.speak(
-      'Olá! Esta é a voz de apoio à rotina. O som está acolhedor e natural para você?',
-      localSettings.soundVolume
+    if (style === 'mascot') {
+      soundManager.speak(
+        'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
+        localSettings.soundVolume
+      );
+    } else if (style === 'gentle') {
+      soundManager.speak(
+        'Olá. Vamos realizar as atividades com calma e carinho, no seu ritmo.',
+        localSettings.soundVolume
+      );
+    } else {
+      soundManager.speak(
+        'Olá! Esta é a voz de apoio à rotina do Synapsis Kids.',
+        localSettings.soundVolume
+      );
+    }
+  };
+
+  const handleTestCelebration = () => {
+    const style = localSettings.voiceStyle || 'mascot';
+    soundManager.setVoicePreferences(
+      localSettings.selectedVoiceURI,
+      localSettings.voicePitch,
+      localSettings.voiceRate,
+      style
     );
+    soundManager.playCelebrationSample(localSettings.soundVolume);
   };
 
   const handlePinKeypad = (digit: string) => {
@@ -353,6 +407,56 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </span>
                   </div>
 
+                  {/* Personagem & Estilo da Voz */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
+                      Personagem & Estilo da Voz
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleVoiceStyleChange('mascot')}
+                        className={`p-2 sm:p-2.5 rounded-xl border flex flex-col items-center gap-1 text-center transition-all ${
+                          (localSettings.voiceStyle || 'mascot') === 'mascot'
+                            ? 'bg-amber-50 dark:bg-amber-950/70 border-amber-400 text-amber-900 dark:text-amber-200 ring-2 ring-amber-400/50 font-bold shadow-2xs'
+                            : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                        }`}
+                      >
+                        <span className="text-xl">🧸</span>
+                        <span className="text-[11px] font-black leading-tight">Mascote</span>
+                        <span className="text-[9px] opacity-75 leading-tight">Estilo Desenho</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleVoiceStyleChange('gentle')}
+                        className={`p-2 sm:p-2.5 rounded-xl border flex flex-col items-center gap-1 text-center transition-all ${
+                          localSettings.voiceStyle === 'gentle'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/70 border-emerald-400 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-400/50 font-bold shadow-2xs'
+                            : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                        }`}
+                      >
+                        <span className="text-xl">🌸</span>
+                        <span className="text-[11px] font-black leading-tight">Voz Suave</span>
+                        <span className="text-[9px] opacity-75 leading-tight">Apoio TEA</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleVoiceStyleChange('normal')}
+                        className={`p-2 sm:p-2.5 rounded-xl border flex flex-col items-center gap-1 text-center transition-all ${
+                          localSettings.voiceStyle === 'normal'
+                            ? 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-400 text-indigo-900 dark:text-indigo-200 ring-2 ring-indigo-400/50 font-bold shadow-2xs'
+                            : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                        }`}
+                      >
+                        <span className="text-xl">👤</span>
+                        <span className="text-[11px] font-black leading-tight">Voz Normal</span>
+                        <span className="text-[9px] opacity-75 leading-tight">Padrão Sistema</span>
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Speech Pace / Speed */}
                   <div>
                     <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
@@ -365,12 +469,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           setLocalSettings((prev) => ({ ...prev, voiceRate: 0.88 }));
                           soundManager.setVoicePreferences(
                             localSettings.selectedVoiceURI,
-                            localSettings.voicePitch || 1.0,
-                            0.88
+                            localSettings.voicePitch,
+                            0.88,
+                            localSettings.voiceStyle || 'mascot'
                           );
                         }}
                         className={`py-1.5 px-2 rounded-xl text-xs font-bold border transition-colors ${
-                          (localSettings.voiceRate || 0.95) <= 0.9
+                          (localSettings.voiceRate || 1.0) <= 0.9
                             ? 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-400 text-indigo-700 dark:text-indigo-300'
                             : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400'
                         }`}
@@ -380,37 +485,45 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          setLocalSettings((prev) => ({ ...prev, voiceRate: 0.96 }));
+                          setLocalSettings((prev) => ({ ...prev, voiceRate: 1.0 }));
                           soundManager.setVoicePreferences(
                             localSettings.selectedVoiceURI,
-                            localSettings.voicePitch || 1.0,
-                            0.96
+                            localSettings.voicePitch,
+                            1.0,
+                            localSettings.voiceStyle || 'mascot'
                           );
                         }}
                         className={`py-1.5 px-2 rounded-xl text-xs font-bold border transition-colors ${
-                          (localSettings.voiceRate || 0.95) > 0.9
+                          (localSettings.voiceRate || 1.0) > 0.9
                             ? 'bg-indigo-50 dark:bg-indigo-950/70 border-indigo-400 text-indigo-700 dark:text-indigo-300'
                             : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400'
                         }`}
                       >
-                        🗣️ Cadência Normal
+                        🗣️ Cadência Animada
                       </button>
                     </div>
                   </div>
 
-                  {/* Test Voice Button */}
-                  <div className="pt-1 flex items-center justify-between">
+                  {/* Action & Test Voice Buttons */}
+                  <div className="pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-stone-200/60 dark:border-stone-700/60">
                     <button
                       type="button"
                       onClick={handleTestVoice}
-                      className="px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs font-bold flex items-center gap-1.5 transition-colors border border-indigo-200 dark:border-indigo-800"
+                      className="px-2.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs font-bold flex items-center gap-1.5 transition-colors border border-indigo-200 dark:border-indigo-800"
                     >
-                      <Play className="w-3.5 h-3.5 fill-indigo-600 dark:fill-indigo-400" />
-                      <span>Ouvir Teste da Voz</span>
+                      <Play className="w-3 h-3 fill-indigo-600 dark:fill-indigo-400" />
+                      <span>Ouvir Apresentação</span>
                     </button>
-                    <span className="text-[10px] text-stone-400 font-medium">
-                      Português (Brasil)
-                    </span>
+
+                    <button
+                      type="button"
+                      onClick={handleTestCelebration}
+                      className="px-2.5 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/70 hover:bg-amber-100 text-amber-800 dark:text-amber-200 text-xs font-bold flex items-center gap-1.5 transition-colors border border-amber-200 dark:border-amber-800"
+                      title="Testa a fanfarra comemorativa e o elogio com voz de mascote"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      <span>Ouvir Elogio / Comemoração</span>
+                    </button>
                   </div>
                 </div>
               )}

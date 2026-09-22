@@ -369,8 +369,9 @@ export function loadSettings(): AppSettings {
     parentPin: '1234',
     themeMode: 'light',
     enableLargeCards: true,
-    voiceRate: 0.95,
-    voicePitch: 1.0,
+    voiceStyle: 'mascot',
+    voiceRate: 1.0,
+    voicePitch: 1.35,
   };
 
   if (typeof window === 'undefined') return defaults;

@@ -1,5 +1,5 @@
 import confetti from 'canvas-confetti';
-import { SoundAlert } from '../types';
+import { SoundAlert, VoiceCharacterStyle } from '../types';
 
 class AudioManager {
   private ctx: AudioContext | null = null;
@@ -80,6 +80,44 @@ class AudioManager {
   }
 
   /**
+   * Play grand victory celebration with joyful cartoon sparkles and double confetti
+   * Triggered when completing all daily tasks!
+   */
+  playGrandCelebration(volume = 0.85) {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(volume, now);
+    masterGain.connect(ctx.destination);
+
+    // Triumphant cartoon fanfare melody (C5, E5, G5, C6, A5, sustained high C6)
+    const melody = [
+      { freq: 523.25, time: 0, dur: 0.16 },
+      { freq: 659.25, time: 0.13, dur: 0.16 },
+      { freq: 783.99, time: 0.26, dur: 0.18 },
+      { freq: 1046.50, time: 0.42, dur: 0.35 },
+      { freq: 880.00, time: 0.70, dur: 0.20 },
+      { freq: 1046.50, time: 0.90, dur: 0.90 },
+    ];
+
+    melody.forEach(({ freq, time, dur }) => {
+      this.playTone(ctx, masterGain, freq, now + time, dur, 'triangle');
+    });
+
+    // Magical chime cascade in background (shimmering bells)
+    const chimes = [1318.51, 1567.98, 1760.00, 2093.00];
+    chimes.forEach((freq, idx) => {
+      this.playBell(ctx, masterGain, freq, now + 0.45 + idx * 0.14, 0.6);
+    });
+
+    // Fire double celebratory confetti!
+    this.triggerConfetti();
+    setTimeout(() => this.triggerConfetti(), 350);
+  }
+
+  /**
    * Play subtask check click sound
    */
   playCheckSound(volume = 0.7) {
@@ -150,8 +188,9 @@ class AudioManager {
 
   private cachedVoices: SpeechSynthesisVoice[] = [];
   private preferredVoiceURI: string | null = null;
-  private preferredPitch: number = 1.0;
-  private preferredRate: number = 0.95;
+  private preferredPitch: number = 1.35;
+  private preferredRate: number = 1.0;
+  private voiceStyle: VoiceCharacterStyle = 'mascot';
 
   constructor() {
     this.initVoices();
@@ -170,10 +209,32 @@ class AudioManager {
   /**
    * Set voice customization preferences (saved from settings)
    */
-  setVoicePreferences(voiceURI?: string, pitch = 1.0, rate = 0.95) {
+  setVoicePreferences(
+    voiceURI?: string,
+    pitch?: number,
+    rate?: number,
+    style: VoiceCharacterStyle = 'mascot'
+  ) {
     this.preferredVoiceURI = voiceURI || null;
-    this.preferredPitch = pitch;
-    this.preferredRate = rate;
+    this.voiceStyle = style;
+
+    if (style === 'mascot') {
+      // Lively cartoon mascot pitch (1.35) and cheerful rate
+      this.preferredPitch = pitch !== undefined ? pitch : 1.35;
+      this.preferredRate = rate !== undefined ? rate : 1.0;
+    } else if (style === 'gentle') {
+      // Calm, reassuring, sensory-friendly tone for autism/TEA
+      this.preferredPitch = pitch !== undefined ? pitch : 1.05;
+      this.preferredRate = rate !== undefined ? rate : 0.88;
+    } else {
+      // Standard neutral voice
+      this.preferredPitch = pitch !== undefined ? pitch : 1.0;
+      this.preferredRate = rate !== undefined ? rate : 0.95;
+    }
+  }
+
+  getVoiceStyle(): VoiceCharacterStyle {
+    return this.voiceStyle;
   }
 
   /**
@@ -252,6 +313,60 @@ class AudioManager {
     } catch {
       // Ignore if speech is restricted by browser policy before user interaction
     }
+  }
+
+  /**
+   * Speak lively encouragement praise with positive reinforcement tailored for children
+   */
+  speakEncouragement(taskTitle: string, isAllCompleted = false, volume = 0.9) {
+    let phrase = '';
+
+    if (isAllCompleted) {
+      if (this.voiceStyle === 'mascot') {
+        const celebrations = [
+          'Uau, sensacional! Você terminou todas as tarefas de hoje! Você é um super campeão! Viva!',
+          'Eba! Missão cumprida! Concluímos todas as tarefas de hoje! Que orgulho de você!',
+          'Parabéns, nota dez! Você finalizou toda a rotina de hoje! Você arrasou!',
+        ];
+        phrase = celebrations[Math.floor(Math.random() * celebrations.length)];
+      } else if (this.voiceStyle === 'gentle') {
+        phrase = 'Muito bem. Você concluiu todas as tarefas com calma e dedicação hoje. Parabéns pelo seu dia.';
+      } else {
+        phrase = 'Parabéns! Todas as tarefas programadas para hoje foram concluídas com sucesso.';
+      }
+    } else {
+      if (this.voiceStyle === 'mascot') {
+        const praises = [
+          `Eba! Você concluiu: ${taskTitle}! Você é demais!`,
+          `Muito bem! Tarefa prontinha: ${taskTitle}! Que orgulho!`,
+          `Uau, que capricho! Tarefa concluída: ${taskTitle}!`,
+          `Show de bola! Concluímos: ${taskTitle}!`,
+          `Incrível! Parabéns por fazer: ${taskTitle}!`,
+        ];
+        phrase = praises[Math.floor(Math.random() * praises.length)];
+      } else if (this.voiceStyle === 'gentle') {
+        const praises = [
+          `Muito bem. Você concluiu: ${taskTitle}.`,
+          `Parabéns pelo capricho em: ${taskTitle}.`,
+          `Tarefa realizada com carinho: ${taskTitle}.`,
+        ];
+        phrase = praises[Math.floor(Math.random() * praises.length)];
+      } else {
+        phrase = `Muito bem! Você concluiu: ${taskTitle}!`;
+      }
+    }
+
+    this.speak(phrase, volume);
+  }
+
+  /**
+   * Play sample fanfare celebration and voice praise for demonstration/testing in settings
+   */
+  playCelebrationSample(volume = 0.9) {
+    this.playSuccess(volume);
+    setTimeout(() => {
+      this.speakEncouragement('Escovar os Dentes', false, volume);
+    }, 450);
   }
 
   /**
