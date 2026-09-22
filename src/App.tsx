@@ -775,62 +775,75 @@ export default function App() {
         )}
 
         {/* Minimalist Top App Bar */}
-        <header className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex items-center justify-between transition-colors gap-2">
-          {/* Brand Left */}
-          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-            <div
-              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-all bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 ${
-                viewMode === 'board'
-                  ? 'ring-2 ring-amber-400'
-                  : ''
-              }`}
-            >
-              <img
-                src="/assets/synapsi_brain1.png"
-                alt="Synapsis Logo"
-                className="w-7 h-7 object-contain drop-shadow-2xs"
-              />
-            </div>
-
-            <div className="min-w-0 flex flex-col justify-center">
-              <div className="flex items-center gap-1.5">
-                <h1 className="text-sm sm:text-base font-black text-stone-900 dark:text-stone-100 tracking-tight whitespace-nowrap leading-none">
-                  Synapsis Kids
-                </h1>
-
-                {viewMode === 'board' && (
-                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0">
-                    TEA
-                  </span>
-                )}
-              </div>
-
-              {/* Official "powered by Synapsis" badge */}
-              <a
-                href="https://synapsisclinico.com.br"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-1"
-                title="Conhecer o ecossistema Synapsis Clínico"
+        <header className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex flex-col gap-2.5 transition-colors">
+          {/* Linha 1: Identidade da Marca (Esquerda) + Progresso de Tarefas (Direita) */}
+          <div className="flex items-center justify-between gap-2">
+            {/* Esquerda: Logo + Nome + Powered by */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-all bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 ${
+                  viewMode === 'board'
+                    ? 'ring-2 ring-amber-400'
+                    : ''
+                }`}
               >
                 <img
                   src="/assets/synapsi_brain1.png"
                   alt="Synapsis Logo"
-                  className="w-2.5 h-2.5 object-contain"
+                  className="w-7 h-7 object-contain drop-shadow-2xs"
                 />
-                <span className="text-[8.5px] font-medium text-slate-300">
-                  powered by
-                </span>
-                <span className="text-[9px] font-extrabold text-teal-400 group-hover:text-teal-300 transition-colors">
-                  Synapsis
-                </span>
-              </a>
+              </div>
+
+              <div className="min-w-0 flex flex-col justify-center">
+                <div className="flex items-center gap-1.5">
+                  <h1 className="text-base sm:text-lg font-black text-stone-900 dark:text-stone-100 tracking-tight whitespace-nowrap leading-none">
+                    Synapsis Kids
+                  </h1>
+
+                  {viewMode === 'board' && (
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0">
+                      TEA
+                    </span>
+                  )}
+                </div>
+
+                {/* Powered by Synapsis posicionado elegantemente abaixo do nome */}
+                <a
+                  href="https://synapsisclinico.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-1"
+                  title="Conhecer o ecossistema Synapsis Clínico"
+                >
+                  <img
+                    src="/assets/synapsi_brain1.png"
+                    alt="Synapsis Logo"
+                    className="w-2.5 h-2.5 object-contain"
+                  />
+                  <span className="text-[8.5px] font-medium text-slate-300">
+                    powered by
+                  </span>
+                  <span className="text-[9px] font-extrabold text-teal-400 group-hover:text-teal-300 transition-colors">
+                    Synapsis
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* Direita: "xx de xx tarefas feitas (x%)" */}
+            <div className="text-right shrink-0">
+              <span className="text-xs font-bold text-stone-700 dark:text-stone-200 block">
+                {completedDayTasks} de {totalDayTasks} feitas
+              </span>
+              <span className="text-[10px] font-extrabold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded-full border border-indigo-200/60 dark:border-indigo-800/60 inline-block mt-0.5">
+                {dayProgressPercent}% concluído
+              </span>
             </div>
           </div>
 
-          {/* Actions Right */}
-          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-            {/* Direct "+ Nova Tarefa" button */}
+          {/* Linha 2: Botão Nova Tarefa + Botões de Utilidade (Tema, Som, Trava, Configurações) */}
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 dark:border-stone-800/60">
+            {/* Botão Nova Tarefa em destaque */}
             <button
               type="button"
               id="header-new-task-btn"
@@ -841,7 +854,7 @@ export default function App() {
                   'Digite a senha de 4 dígitos para adicionar uma nova tarefa à programação.'
                 )
               }
-              className="px-2 sm:px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1 active:scale-95 transition-all shadow-xs shrink-0 whitespace-nowrap"
+              className="flex-1 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black flex items-center justify-center gap-1.5 active:scale-98 transition-all shadow-xs"
               title={
                 isEditLocked
                   ? 'Adicionar nova tarefa (requer senha dos pais)'
@@ -851,103 +864,99 @@ export default function App() {
               {isEditLocked ? (
                 <Lock className="w-3.5 h-3.5 opacity-80" />
               ) : (
-                <Plus className="w-3.5 h-3.5" />
+                <Plus className="w-4 h-4" />
               )}
-              <span className="hidden sm:inline">Nova Tarefa</span>
-              <span className="sm:hidden text-[11px]">Tarefa</span>
+              <span>Nova Tarefa</span>
             </button>
 
-            {/* Quick theme toggle button */}
-            <button
-              type="button"
-              id="quick-theme-toggle-btn"
-              onClick={handleToggleTheme}
-              className="p-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shrink-0"
-              title={isDarkMode ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
-              aria-label="Alternar tema claro/escuro"
-            >
-              {isDarkMode ? (
-                <Sun className="w-4 h-4 text-amber-400" />
-              ) : (
-                <Moon className="w-4 h-4 text-stone-600" />
-              )}
-            </button>
-
-            {/* Quick sound toggle */}
-            <button
-              type="button"
-              onClick={() => {
-                const nextVol = settings.soundVolume > 0 ? 0 : 0.8;
-                setSettings((s) => ({ ...s, soundVolume: nextVol }));
-                if (nextVol > 0) soundManager.playSound('chime', 0.8);
-              }}
-              className={`p-1.5 rounded-lg transition-colors shrink-0 ${
-                settings.soundVolume > 0
-                  ? 'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50'
-                  : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
-              }`}
-              title={settings.soundVolume > 0 ? 'Som ativado' : 'Som desativado'}
-            >
-              {settings.soundVolume > 0 ? (
-                <Volume2 className="w-4 h-4" />
-              ) : (
-                <VolumeX className="w-4 h-4" />
-              )}
-            </button>
-
-            {/* Parental Lock Status Button */}
-            <button
-              type="button"
-              id="parent-lock-status-btn"
-              onClick={handleToggleLockStatus}
-              className={`p-1.5 rounded-lg flex items-center gap-1 transition-all shrink-0 ${
-                settings.childLockEnabled
-                  ? isEditLocked
-                    ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800'
-                    : 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800'
-                  : 'text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800'
-              }`}
-              title={
-                settings.childLockEnabled
-                  ? isEditLocked
-                    ? 'Edição Bloqueada por Senha (Toque para liberar)'
-                    : 'Edição Liberada (Toque para bloquear para a criança)'
-                  : 'Ativar Bloqueio de Edição com Senha nas Configurações'
-              }
-            >
-              {settings.childLockEnabled ? (
-                isEditLocked ? (
-                  <>
-                    <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                    <span className="text-[11px] font-bold pr-1 hidden sm:inline">Bloqueado</span>
-                  </>
+            {/* Ações de Utilidade agrupadas à direita */}
+            <div className="flex items-center gap-1 shrink-0">
+              {/* Quick theme toggle button */}
+              <button
+                type="button"
+                id="quick-theme-toggle-btn"
+                onClick={handleToggleTheme}
+                className="p-2 rounded-xl text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                title={isDarkMode ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+                aria-label="Alternar tema claro/escuro"
+              >
+                {isDarkMode ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
                 ) : (
-                  <>
-                    <Unlock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[11px] font-bold pr-1 hidden sm:inline">Liberado</span>
-                  </>
-                )
-              ) : (
-                <Lock className="w-4 h-4 opacity-40" />
-              )}
-            </button>
+                  <Moon className="w-4 h-4 text-stone-600" />
+                )}
+              </button>
 
-            {/* Settings button */}
-            <button
-              type="button"
-              id="open-settings-modal-btn"
-              onClick={() =>
-                handleRequirePin(
-                  () => setIsSettingsOpen(true),
-                  'Configurações dos Pais',
-                  'Digite a senha para acessar as configurações e gerenciar o bloqueio.'
-                )
-              }
-              className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shrink-0"
-              title="Configurações de som e rotina"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
+              {/* Quick sound toggle */}
+              <button
+                type="button"
+                onClick={() => {
+                  const nextVol = settings.soundVolume > 0 ? 0 : 0.8;
+                  setSettings((s) => ({ ...s, soundVolume: nextVol }));
+                  if (nextVol > 0) soundManager.playSound('chime', 0.8);
+                }}
+                className={`p-2 rounded-xl transition-colors ${
+                  settings.soundVolume > 0
+                    ? 'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50'
+                    : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                }`}
+                title={settings.soundVolume > 0 ? 'Som ativado' : 'Som desativado'}
+              >
+                {settings.soundVolume > 0 ? (
+                  <Volume2 className="w-4 h-4" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
+              </button>
+
+              {/* Parental Lock Status Button */}
+              <button
+                type="button"
+                id="parent-lock-status-btn"
+                onClick={handleToggleLockStatus}
+                className={`p-2 rounded-xl flex items-center gap-1 transition-all ${
+                  settings.childLockEnabled
+                    ? isEditLocked
+                      ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800'
+                      : 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800'
+                    : 'text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800'
+                }`}
+                title={
+                  settings.childLockEnabled
+                    ? isEditLocked
+                      ? 'Edição Bloqueada por Senha (Toque para liberar)'
+                      : 'Edição Liberada (Toque para bloquear para a criança)'
+                    : 'Ativar Bloqueio de Edição com Senha nas Configurações'
+                }
+              >
+                {settings.childLockEnabled ? (
+                  isEditLocked ? (
+                    <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                  ) : (
+                    <Unlock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  )
+                ) : (
+                  <Lock className="w-4 h-4 opacity-40" />
+                )}
+              </button>
+
+              {/* Settings button */}
+              <button
+                type="button"
+                id="open-settings-modal-btn"
+                onClick={() =>
+                  handleRequirePin(
+                    () => setIsSettingsOpen(true),
+                    'Configurações dos Pais',
+                    'Digite a senha para acessar as configurações e gerenciar o bloqueio.'
+                  )
+                }
+                className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                title="Configurações de som e rotina"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </header>
 
