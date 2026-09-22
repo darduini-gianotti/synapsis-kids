@@ -775,10 +775,11 @@ export default function App() {
         )}
 
         {/* Minimalist Top App Bar */}
-        <header className="px-4 py-3.5 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex items-center justify-between transition-colors">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <header className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex items-center justify-between transition-colors gap-2">
+          {/* Brand Left */}
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             <div
-              className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-all bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-all bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 ${
                 viewMode === 'board'
                   ? 'ring-2 ring-amber-400'
                   : ''
@@ -790,47 +791,46 @@ export default function App() {
                 className="w-7 h-7 object-contain drop-shadow-2xs"
               />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h1 className="text-base font-extrabold text-stone-900 dark:text-stone-100 leading-tight tracking-tight">
+
+            <div className="min-w-0 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-sm sm:text-base font-black text-stone-900 dark:text-stone-100 tracking-tight whitespace-nowrap leading-none">
                   Synapsis Kids
                 </h1>
 
-                {/* Official "powered by Synapsis" pill badge */}
-                <a
-                  href="https://synapsisclinico.com.br"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-900/95 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0"
-                  title="Conhecer o ecossistema Synapsis Clínico"
-                >
-                  <img
-                    src="/assets/synapsi_brain1.png"
-                    alt="Synapsis Logo"
-                    className="w-3.5 h-3.5 object-contain"
-                  />
-                  <span className="text-[10px] font-medium text-slate-300">
-                    powered by
-                  </span>
-                  <span className="text-[10.5px] font-extrabold text-teal-400 group-hover:text-teal-300 transition-colors">
-                    Synapsis
-                  </span>
-                </a>
-
                 {viewMode === 'board' && (
-                  <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800">
+                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0">
                     TEA
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
-                {completedDayTasks} de {totalDayTasks} tarefas feitas ({dayProgressPercent}%)
-              </p>
+
+              {/* Official "powered by Synapsis" badge */}
+              <a
+                href="https://synapsisclinico.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-1"
+                title="Conhecer o ecossistema Synapsis Clínico"
+              >
+                <img
+                  src="/assets/synapsi_brain1.png"
+                  alt="Synapsis Logo"
+                  className="w-2.5 h-2.5 object-contain"
+                />
+                <span className="text-[8.5px] font-medium text-slate-300">
+                  powered by
+                </span>
+                <span className="text-[9px] font-extrabold text-teal-400 group-hover:text-teal-300 transition-colors">
+                  Synapsis
+                </span>
+              </a>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            {/* Direct "+ Nova Tarefa" button right in the header! */}
+          {/* Actions Right */}
+          <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+            {/* Direct "+ Nova Tarefa" button */}
             <button
               type="button"
               id="header-new-task-btn"
@@ -841,7 +841,7 @@ export default function App() {
                   'Digite a senha de 4 dígitos para adicionar uma nova tarefa à programação.'
                 )
               }
-              className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1 active:scale-95 transition-all shadow-2xs"
+              className="px-2 sm:px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1 active:scale-95 transition-all shadow-xs shrink-0 whitespace-nowrap"
               title={
                 isEditLocked
                   ? 'Adicionar nova tarefa (requer senha dos pais)'
@@ -853,7 +853,8 @@ export default function App() {
               ) : (
                 <Plus className="w-3.5 h-3.5" />
               )}
-              <span>Nova Tarefa</span>
+              <span className="hidden sm:inline">Nova Tarefa</span>
+              <span className="sm:hidden text-[11px]">Tarefa</span>
             </button>
 
             {/* Quick theme toggle button */}
@@ -861,7 +862,7 @@ export default function App() {
               type="button"
               id="quick-theme-toggle-btn"
               onClick={handleToggleTheme}
-              className="p-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="p-1.5 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shrink-0"
               title={isDarkMode ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
               aria-label="Alternar tema claro/escuro"
             >
@@ -880,7 +881,7 @@ export default function App() {
                 setSettings((s) => ({ ...s, soundVolume: nextVol }));
                 if (nextVol > 0) soundManager.playSound('chime', 0.8);
               }}
-              className={`p-1.5 rounded-lg transition-colors ${
+              className={`p-1.5 rounded-lg transition-colors shrink-0 ${
                 settings.soundVolume > 0
                   ? 'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50'
                   : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
@@ -899,7 +900,7 @@ export default function App() {
               type="button"
               id="parent-lock-status-btn"
               onClick={handleToggleLockStatus}
-              className={`p-1.5 rounded-lg flex items-center gap-1 transition-all ${
+              className={`p-1.5 rounded-lg flex items-center gap-1 transition-all shrink-0 ${
                 settings.childLockEnabled
                   ? isEditLocked
                     ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800'
@@ -942,7 +943,7 @@ export default function App() {
                   'Digite a senha para acessar as configurações e gerenciar o bloqueio.'
                 )
               }
-              className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shrink-0"
               title="Configurações de som e rotina"
             >
               <Settings className="w-4 h-4" />
