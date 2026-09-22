@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, Calendar, Clock, Check, X, ShieldAlert, ArrowRight } from 'lucide-react';
+import { Sparkles, Calendar, Clock, Check, X, ShieldAlert, Copy, Smartphone } from 'lucide-react';
 import { DayOfWeek, DayRoutine, RoutineTask } from '../types';
 import { DAY_NAMES } from '../utils/storage';
 import { TaskIcon } from './TaskIcon';
-import { PecsIllustration } from './PecsIllustration';
 
 export interface IncomingRoutineData {
   app?: string;
@@ -31,7 +30,24 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
   onApply,
   isParentLocked = false,
 }) => {
+  const [hasCopiedLink, setHasCopiedLink] = useState(false);
+
   if (!isOpen || !data) return null;
+
+  const isStandalone = typeof window !== 'undefined' && (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (window.navigator as unknown as { standalone?: boolean }).standalone === true
+  );
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setHasCopiedLink(true);
+      setTimeout(() => setHasCopiedLink(false), 3000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const isSingle = data.type === 'single_day' || Boolean(data.tasks);
   const targetDay = data.dayOfWeek ?? 0;
@@ -72,7 +88,7 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               title="Fechar"
             >
               <X className="w-5 h-5" />
@@ -101,6 +117,27 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
               </span>
             </div>
 
+            {/* In-App Browser Guidance Banner (If not in installed PWA standalone) */}
+            {!isStandalone && (
+              <div className="p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 rounded-2xl space-y-2 text-xs">
+                <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200 font-extrabold">
+                  <Smartphone className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                  <span>Abriu no navegador do WhatsApp?</span>
+                </div>
+                <p className="text-[11px] text-amber-800 dark:text-amber-300 leading-snug">
+                  Se você já usa o <strong>Synapsis Kids instalado na sua Tela de Início</strong> (com seu modo escuro e configurações salvas), você pode copiar este link e colá-lo no seu app instalado:
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="w-full py-2 px-3 bg-amber-600 hover:bg-amber-700 active:scale-98 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{hasCopiedLink ? '✓ Link Copiado! Abra o seu App na Tela de Início' : 'Copiar Link para Abrir no App Instalado'}</span>
+                </button>
+              </div>
+            )}
+
             {/* Task Preview List */}
             {tasksList.length > 0 && (
               <div>
@@ -114,7 +151,7 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
                       className="p-2.5 bg-stone-50 dark:bg-stone-850 rounded-2xl border border-stone-200/80 dark:border-stone-800 flex items-center justify-between gap-2.5"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-white flex items-center justify-center p-1 border border-stone-200/80 shadow-2xs shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-stone-800 flex items-center justify-center p-1 border border-stone-200/80 dark:border-stone-700 shadow-2xs shrink-0">
                           {task.imageUrl ? (
                             <img
                               src={task.imageUrl}
@@ -122,7 +159,7 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
                               className="max-h-full max-w-full object-contain"
                             />
                           ) : (
-                            <TaskIcon name={task.iconName} size={20} className="text-indigo-600" />
+                            <TaskIcon name={task.iconName} size={20} className="text-indigo-600 dark:text-indigo-400" />
                           )}
                         </div>
 
@@ -164,7 +201,7 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="py-3 px-4 rounded-2xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-750 text-xs font-bold text-stone-700 dark:text-stone-300 transition-colors"
+              className="py-3 px-4 rounded-2xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-750 text-xs font-bold text-stone-700 dark:text-stone-300 transition-colors cursor-pointer"
             >
               Descartar
             </button>
@@ -172,10 +209,10 @@ export const IncomingRoutineModal: React.FC<IncomingRoutineModalProps> = ({
             <button
               type="button"
               onClick={() => onApply(data)}
-              className="flex-1 py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all"
+              className="flex-1 py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-98 text-white text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
             >
               <Check className="w-4 h-4" />
-              <span>Sim, Aplicar Rotina no Celular!</span>
+              <span>Sim, Aplicar Rotina!</span>
             </button>
           </div>
         </motion.div>

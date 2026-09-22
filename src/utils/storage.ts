@@ -367,7 +367,7 @@ export function loadSettings(): AppSettings {
     childLockEnabled: false,
     showVisualTimer: true,
     parentPin: '1234',
-    themeMode: 'light',
+    themeMode: 'system',
     enableLargeCards: true,
     voiceStyle: 'mascot',
     voiceRate: 0.88,
