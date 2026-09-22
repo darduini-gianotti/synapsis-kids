@@ -143,7 +143,7 @@ export const ExportCalendarModal: React.FC<ExportCalendarModalProps> = ({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-stone-900 dark:text-stone-100">
-                      Apenas {DAY_NAMES[selectedDay].short}
+                      Apenas {DAY_NAMES[selectedDay].full}
                     </span>
                     <Clock className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
                   </div>
