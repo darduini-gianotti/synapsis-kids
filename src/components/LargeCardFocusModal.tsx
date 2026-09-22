@@ -38,11 +38,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   const theme = COLOR_THEMES[task.color] || COLOR_THEMES.indigo;
 
   const handleSpeak = () => {
-    if (task.voicePhrase) {
-      soundManager.speak(task.voicePhrase);
-    } else {
-      soundManager.speak(`Hora de: ${task.title}!`);
-    }
+    soundManager.playTaskAudio(task.title, task.voicePhrase, task.audioRecording);
   };
 
   const handleComplete = () => {

@@ -57,6 +57,10 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
   const theme = COLOR_THEMES[task.color] || COLOR_THEMES.indigo;
 
   const handleSpeak = () => {
+    if (task.audioRecording) {
+      soundManager.playRecording(task.audioRecording);
+      return;
+    }
     if (task.voicePhrase) {
       soundManager.speak(task.voicePhrase);
     } else {

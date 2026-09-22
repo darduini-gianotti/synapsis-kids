@@ -305,10 +305,10 @@ class AudioManager {
   getPortugueseVoices(): SpeechSynthesisVoice[] {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return [];
     
-    let voices = this.cachedVoices;
-    if (!voices || voices.length === 0) {
-      voices = window.speechSynthesis.getVoices();
-      this.cachedVoices = voices;
+    const liveVoices = window.speechSynthesis.getVoices();
+    const voices = liveVoices && liveVoices.length > 0 ? liveVoices : (this.cachedVoices || []);
+    if (liveVoices && liveVoices.length > 0) {
+      this.cachedVoices = liveVoices;
     }
 
     const ptVoices = voices.filter((v) => {
@@ -327,7 +327,7 @@ class AudioManager {
       if (name.includes('google')) score += 90;
       if (name.includes('online')) score += 70;
       if (name.includes('neural')) score += 70;
-      if (name.includes('francisca') || name.includes('thalita') || name.includes('luciana') || name.includes('felipe') || name.includes('antonio')) {
+      if (name.includes('francisca') || name.includes('thalita') || name.includes('luciana') || name.includes('felipe') || name.includes('antonio') || name.includes('maria')) {
         score += 50;
       }
       // Deprioritize older robotic desktop voices
@@ -347,27 +347,31 @@ class AudioManager {
     try {
       window.speechSynthesis.cancel(); // Stop any pending speech
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
       utterance.rate = this.preferredRate || 0.95; // Natural human conversational pace
-      utterance.pitch = this.preferredPitch || 1.0; // Warm, natural human pitch (no robotic distortion)
+      utterance.pitch = this.preferredPitch || 1.0; // Warm, natural human pitch
       utterance.volume = volume;
 
-      const ptVoices = this.getPortugueseVoices();
-
+      const allVoices = window.speechSynthesis.getVoices();
       let chosenVoice: SpeechSynthesisVoice | undefined;
 
-      // 1. If user selected a specific voice in Settings, try to use it
+      // 1. If user selected a specific voice in Settings, try to use it across all voices
       if (this.preferredVoiceURI) {
-        chosenVoice = ptVoices.find((v) => v.voiceURI === this.preferredVoiceURI);
+        chosenVoice = allVoices.find((v) => v.voiceURI === this.preferredVoiceURI);
       }
 
-      // 2. Otherwise pick the top-ranked natural voice
-      if (!chosenVoice && ptVoices.length > 0) {
-        chosenVoice = ptVoices[0];
+      // 2. Otherwise pick the top-ranked natural voice in Portuguese
+      if (!chosenVoice) {
+        const ptVoices = this.getPortugueseVoices();
+        if (ptVoices.length > 0) {
+          chosenVoice = ptVoices[0];
+        }
       }
 
       if (chosenVoice) {
         utterance.voice = chosenVoice;
+        utterance.lang = chosenVoice.lang || 'pt-BR';
+      } else {
+        utterance.lang = 'pt-BR';
       }
 
       window.speechSynthesis.speak(utterance);
@@ -379,10 +383,10 @@ class AudioManager {
 
   /**
    * Speak lively encouragement praise with positive reinforcement tailored for children.
-   * Plays studio pre-recorded MP3 when in mascot mode!
+   * Plays studio pre-recorded MP3 when in mascot mode without custom voice override.
    */
   speakEncouragement(taskTitle: string, isAllCompleted = false, volume = 0.9) {
-    if (this.voiceStyle === 'mascot') {
+    if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
       if (isAllCompleted) {
         const audioFiles = ['/audio/all_done.mp3', '/audio/all_done_2.mp3'];
         const chosen = audioFiles[Math.floor(Math.random() * audioFiles.length)];
@@ -436,18 +440,26 @@ class AudioManager {
    * Play studio intro speech for the Mascot
    */
   playMascotIntro(volume = 0.9): Promise<void> {
-    return this.playRecording('/audio/intro_mascote.mp3', volume).catch(() => {
-      this.speak(
-        'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
-        volume
-      );
-    });
+    if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
+      return this.playRecording('/audio/intro_mascote.mp3', volume).catch(() => {
+        this.speak(
+          'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
+          volume
+        );
+      });
+    }
+
+    this.speak(
+      'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
+      volume
+    );
+    return Promise.resolve();
   }
 
   /**
    * Play task audio:
    * 1. Voice Memo recorded by parents / therapist (if present)
-   * 2. Studio pre-recorded MP3 for core routine tasks (when in mascot mode)
+   * 2. Studio pre-recorded MP3 for core routine tasks (when in mascot mode without custom voice override)
    * 3. Customized voice phrase or task title via Speech Synthesis
    */
   playTaskAudio(
@@ -460,7 +472,7 @@ class AudioManager {
       return this.playRecording(audioRecording, volume);
     }
 
-    if (this.voiceStyle === 'mascot') {
+    if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
       const coreAudio = getCoreTaskAudioUrl(title);
       if (coreAudio) {
         return this.playRecording(coreAudio, volume).catch(() => {

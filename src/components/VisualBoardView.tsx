@@ -36,11 +36,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
 
   const handleCardClick = (e: React.MouseEvent, task: RoutineTask) => {
     e.stopPropagation();
-    if (task.voicePhrase) {
-      soundManager.speak(task.voicePhrase);
-    } else {
-      soundManager.speak(task.title);
-    }
+    soundManager.playTaskAudio(task.title, task.voicePhrase, task.audioRecording);
     onSelectTask(task);
   };
 

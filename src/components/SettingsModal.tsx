@@ -90,7 +90,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   if (!isOpen) return null;
 
   const handleVolumeChange = (vol: number) => {
-    setLocalSettings((prev) => ({ ...prev, soundVolume: vol }));
+    const updated = { ...localSettings, soundVolume: vol };
+    setLocalSettings(updated);
+    onSaveSettings(updated);
   };
 
   const handleThemeChange = (mode: ThemeMode) => {
@@ -235,6 +237,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       parentPin: cleanedPin,
     };
     onSaveSettings(finalSettings);
+    soundManager.setVoicePreferences(
+      finalSettings.selectedVoiceURI,
+      finalSettings.voicePitch,
+      finalSettings.voiceRate,
+      finalSettings.voiceStyle || 'mascot'
+    );
     onClose();
   };
 
@@ -365,9 +373,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <input
                   type="checkbox"
                   checked={localSettings.voiceEnabled}
-                  onChange={(e) =>
-                    setLocalSettings((prev) => ({ ...prev, voiceEnabled: e.target.checked }))
-                  }
+                  onChange={(e) => {
+                    const updated = { ...localSettings, voiceEnabled: e.target.checked };
+                    setLocalSettings(updated);
+                    onSaveSettings(updated);
+                  }}
                   className="w-4 h-4 text-indigo-600 rounded-md focus:ring-indigo-500 border-stone-300 dark:border-stone-600"
                 />
               </div>
@@ -383,11 +393,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       value={localSettings.selectedVoiceURI || ''}
                       onChange={(e) => {
                         const uri = e.target.value || undefined;
-                        setLocalSettings((prev) => ({ ...prev, selectedVoiceURI: uri }));
+                        const updated: AppSettings = {
+                          ...localSettings,
+                          selectedVoiceURI: uri,
+                        };
+                        setLocalSettings(updated);
+                        onSaveSettings(updated);
                         soundManager.setVoicePreferences(
                           uri,
-                          localSettings.voicePitch || 1.0,
-                          localSettings.voiceRate || 0.95
+                          updated.voicePitch,
+                          updated.voiceRate,
+                          updated.voiceStyle || 'mascot'
                         );
                       }}
                       className="w-full px-3 py-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl text-xs font-semibold text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -463,12 +479,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          setLocalSettings((prev) => ({ ...prev, voiceRate: 0.88 }));
+                          const updated: AppSettings = { ...localSettings, voiceRate: 0.88 };
+                          setLocalSettings(updated);
+                          onSaveSettings(updated);
                           soundManager.setVoicePreferences(
-                            localSettings.selectedVoiceURI,
-                            localSettings.voicePitch,
+                            updated.selectedVoiceURI,
+                            updated.voicePitch,
                             0.88,
-                            localSettings.voiceStyle || 'mascot'
+                            updated.voiceStyle || 'mascot'
                           );
                         }}
                         className={`py-1.5 px-2 rounded-xl text-xs font-bold border transition-colors ${
@@ -482,12 +500,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          setLocalSettings((prev) => ({ ...prev, voiceRate: 1.0 }));
+                          const updated: AppSettings = { ...localSettings, voiceRate: 1.0 };
+                          setLocalSettings(updated);
+                          onSaveSettings(updated);
                           soundManager.setVoicePreferences(
-                            localSettings.selectedVoiceURI,
-                            localSettings.voicePitch,
+                            updated.selectedVoiceURI,
+                            updated.voicePitch,
                             1.0,
-                            localSettings.voiceStyle || 'mascot'
+                            updated.voiceStyle || 'mascot'
                           );
                         }}
                         className={`py-1.5 px-2 rounded-xl text-xs font-bold border transition-colors ${

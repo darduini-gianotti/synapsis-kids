@@ -109,15 +109,6 @@ export default function App() {
     return () => window.removeEventListener('hashchange', checkHash);
   }, []);
 
-  // Synchronize speech preferences with soundManager
-  useEffect(() => {
-    soundManager.setVoicePreferences(
-      settings.selectedVoiceURI,
-      settings.voicePitch || 1.0,
-      settings.voiceRate || 0.95
-    );
-  }, [settings.selectedVoiceURI, settings.voicePitch, settings.voiceRate]);
-
   // Parental Lock State
   const [isParentUnlocked, setIsParentUnlocked] = useState<boolean>(() => !settings.childLockEnabled);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
