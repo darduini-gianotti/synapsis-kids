@@ -219,9 +219,9 @@ class AudioManager {
     this.voiceStyle = style;
 
     if (style === 'mascot') {
-      // Lively cartoon mascot pitch (1.35) and cheerful rate
-      this.preferredPitch = pitch !== undefined ? pitch : 1.35;
-      this.preferredRate = rate !== undefined ? rate : 1.0;
+      // Mascote Infantil em Cadência Mais Calma (Apoio TEA e sensorial)
+      this.preferredPitch = pitch !== undefined ? pitch : 1.28;
+      this.preferredRate = rate !== undefined ? rate : 0.88;
     } else if (style === 'gentle') {
       // Calm, reassuring, sensory-friendly tone for autism/TEA
       this.preferredPitch = pitch !== undefined ? pitch : 1.05;
@@ -235,6 +235,23 @@ class AudioManager {
 
   getVoiceStyle(): VoiceCharacterStyle {
     return this.voiceStyle;
+  }
+
+  /**
+   * Play base64 or URL audio recording (e.g. parents or therapist voice memo)
+   */
+  playRecording(audioDataUrl: string, volume = 1.0): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const audio = new Audio(audioDataUrl);
+        audio.volume = Math.min(Math.max(volume, 0.05), 1.0);
+        audio.onended = () => resolve();
+        audio.onerror = () => reject(new Error('Falha na reprodução do áudio gravado'));
+        audio.play().catch(reject);
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   /**

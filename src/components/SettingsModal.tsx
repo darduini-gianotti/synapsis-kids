@@ -100,8 +100,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   const handleVoiceStyleChange = (style: VoiceCharacterStyle) => {
-    let pitch = 1.35;
-    let rate = 1.0;
+    let pitch = 1.28;
+    let rate = 0.88;
     if (style === 'gentle') {
       pitch = 1.05;
       rate = 0.88;

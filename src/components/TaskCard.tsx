@@ -12,6 +12,7 @@ import {
   Timer,
   Plus,
   Lock,
+  Mic,
 } from 'lucide-react';
 import { RoutineTask } from '../types';
 import { TaskIcon, COLOR_THEMES } from './TaskIcon';
@@ -49,10 +50,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handlePlaySound = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (task.voicePhrase) {
+    if (task.audioRecording) {
+      soundManager.playRecording(task.audioRecording);
+    } else if (task.voicePhrase) {
       soundManager.speak(task.voicePhrase);
     } else {
-      soundManager.playSound(task.soundAlert || 'chime');
+      soundManager.speak(`Hora de: ${task.title}`);
     }
   };
 
@@ -132,11 +135,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 type="button"
                 onClick={handlePlaySound}
-                className="p-1 rounded-md text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-stone-100 dark:hover:bg-stone-700/60 transition-colors"
-                title="Ouvir lembrete sonoro"
+                className={`p-1 rounded-md transition-colors ${
+                  task.audioRecording
+                    ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 ring-1 ring-amber-300/80 dark:ring-amber-700'
+                    : 'text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-stone-100 dark:hover:bg-stone-700/60'
+                }`}
+                title={task.audioRecording ? 'Ouvir voz gravada dos pais' : 'Ouvir lembrete sonoro'}
                 aria-label="Tocar som da tarefa"
               >
-                <Volume2 className="w-3.5 h-3.5" />
+                {task.audioRecording ? (
+                  <Mic className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                ) : (
+                  <Volume2 className="w-3.5 h-3.5" />
+                )}
               </button>
 
               {/* Timer button */}

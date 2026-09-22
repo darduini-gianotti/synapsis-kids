@@ -370,8 +370,8 @@ export function loadSettings(): AppSettings {
     themeMode: 'light',
     enableLargeCards: true,
     voiceStyle: 'mascot',
-    voiceRate: 1.0,
-    voicePitch: 1.35,
+    voiceRate: 0.88,
+    voicePitch: 1.28,
   };
 
   if (typeof window === 'undefined') return defaults;

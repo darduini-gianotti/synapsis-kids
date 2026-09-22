@@ -35,6 +35,7 @@ export interface RoutineTask {
   subtasks: SubTask[];
   soundAlert: SoundAlert;
   voicePhrase?: string; // Custom phrase for voice prompt, e.g. "Hora de fazer as tarefas da casa!"
+  audioRecording?: string; // Gravação de áudio dos pais/terapeuta em base64 (data:audio/webm;base64,...)
   durationMinutes?: number;
   notes?: string;
   imageUrl?: string; // URL do pictograma ARASAAC ou imagem personalizada

@@ -8,6 +8,7 @@ import {
   Sparkles,
   Maximize2,
   Clock,
+  Mic,
 } from 'lucide-react';
 import { RoutineTask } from '../types';
 import { COLOR_THEMES } from './TaskIcon';
@@ -45,10 +46,12 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
 
   const handleQuickAudio = (e: React.MouseEvent, task: RoutineTask) => {
     e.stopPropagation();
-    if (task.voicePhrase) {
+    if (task.audioRecording) {
+      soundManager.playRecording(task.audioRecording);
+    } else if (task.voicePhrase) {
       soundManager.speak(task.voicePhrase);
     } else {
-      soundManager.speak(task.title);
+      soundManager.speak(`Hora de: ${task.title}`);
     }
   };
 
@@ -139,10 +142,18 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   <button
                     type="button"
                     onClick={(e) => handleQuickAudio(e, firstTask)}
-                    className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 transition-colors"
-                    title="Ouvir"
+                    className={`p-2 rounded-xl transition-colors ${
+                      firstTask.audioRecording
+                        ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 ring-1 ring-amber-400/80'
+                        : 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100'
+                    }`}
+                    title={firstTask.audioRecording ? 'Ouvir voz gravada dos pais' : 'Ouvir voz'}
                   >
-                    <Volume2 className="w-4 h-4" />
+                    {firstTask.audioRecording ? (
+                      <Mic className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    ) : (
+                      <Volume2 className="w-4 h-4" />
+                    )}
                   </button>
                   <button
                     type="button"
@@ -256,10 +267,18 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   <button
                     type="button"
                     onClick={(e) => handleQuickAudio(e, task)}
-                    className="p-1.5 rounded-full text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
-                    title="Ouvir voz da atividade"
+                    className={`p-1.5 rounded-full transition-colors ${
+                      task.audioRecording
+                        ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 ring-1 ring-amber-300 dark:ring-amber-700'
+                        : 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60'
+                    }`}
+                    title={task.audioRecording ? 'Ouvir voz gravada dos pais' : 'Ouvir voz da atividade'}
                   >
-                    <Volume2 className="w-3.5 h-3.5" />
+                    {task.audioRecording ? (
+                      <Mic className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                    ) : (
+                      <Volume2 className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
 
