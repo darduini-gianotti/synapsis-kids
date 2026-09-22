@@ -43,10 +43,6 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
   const handleComplete = () => {
     onToggleComplete(task.id);
-    if (!isCompleted) {
-      soundManager.playSuccess(0.9);
-      soundManager.speak(`Muito bem! Você completou: ${task.title}! Parabéns!`);
-    }
   };
 
   return (

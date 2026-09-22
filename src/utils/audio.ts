@@ -47,6 +47,7 @@ export function getCoreTaskAudioUrl(title: string): string | null {
 
 class AudioManager {
   private ctx: AudioContext | null = null;
+  private currentAudioElement: HTMLAudioElement | null = null;
 
   private getAudioContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -282,16 +283,41 @@ class AudioManager {
   }
 
   /**
-   * Play base64 or URL audio recording (e.g. parents or therapist voice memo)
+   * Play base64 or URL audio recording (e.g. parents or therapist voice memo, or mascot mp3)
    */
   playRecording(audioDataUrl: string, volume = 1.0): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        if (this.currentAudioElement) {
+          this.currentAudioElement.pause();
+          this.currentAudioElement.currentTime = 0;
+          this.currentAudioElement = null;
+        }
+
         const audio = new Audio(audioDataUrl);
+        this.currentAudioElement = audio;
         audio.volume = Math.min(Math.max(volume, 0.05), 1.0);
-        audio.onended = () => resolve();
-        audio.onerror = () => reject(new Error('Falha na reprodução do áudio gravado'));
-        audio.play().catch(reject);
+        audio.onended = () => {
+          if (this.currentAudioElement === audio) {
+            this.currentAudioElement = null;
+          }
+          resolve();
+        };
+        audio.onerror = () => {
+          if (this.currentAudioElement === audio) {
+            this.currentAudioElement = null;
+          }
+          reject(new Error('Falha na reprodução do áudio gravado'));
+        };
+        audio.play().catch((err) => {
+          if (this.currentAudioElement === audio) {
+            this.currentAudioElement = null;
+          }
+          reject(err);
+        });
       } catch (e) {
         reject(e);
       }
@@ -343,6 +369,11 @@ class AudioManager {
    * Speak friendly text in Portuguese using the highest quality natural voice
    */
   speak(text: string, volume = 0.9) {
+    if (this.currentAudioElement) {
+      this.currentAudioElement.pause();
+      this.currentAudioElement.currentTime = 0;
+      this.currentAudioElement = null;
+    }
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     try {
       window.speechSynthesis.cancel(); // Stop any pending speech
