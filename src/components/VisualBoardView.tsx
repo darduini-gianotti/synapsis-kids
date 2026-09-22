@@ -46,13 +46,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
 
   const handleQuickAudio = (e: React.MouseEvent, task: RoutineTask) => {
     e.stopPropagation();
-    if (task.audioRecording) {
-      soundManager.playRecording(task.audioRecording);
-    } else if (task.voicePhrase) {
-      soundManager.speak(task.voicePhrase);
-    } else {
-      soundManager.speak(`Hora de: ${task.title}`);
-    }
+    soundManager.playTaskAudio(task.title, task.voicePhrase, task.audioRecording);
   };
 
   return (

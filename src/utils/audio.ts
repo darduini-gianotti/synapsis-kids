@@ -1,6 +1,50 @@
 import confetti from 'canvas-confetti';
 import { SoundAlert, VoiceCharacterStyle } from '../types';
 
+export const CORE_TASK_AUDIO_MAP: Record<string, string> = {
+  'acordar': '/audio/task_acordar.mp3',
+  'espreguiçar': '/audio/task_acordar.mp3',
+  'escovar': '/audio/task_escovar_dentes.mp3',
+  'dente': '/audio/task_escovar_dentes.mp3',
+  'cafe': '/audio/task_cafe_manha.mp3',
+  'café': '/audio/task_cafe_manha.mp3',
+  'escola': '/audio/task_escola.mp3',
+  'aula': '/audio/task_escola.mp3',
+  'almoco': '/audio/task_almoco.mp3',
+  'almoço': '/audio/task_almoco.mp3',
+  'licao': '/audio/task_licao.mp3',
+  'lição': '/audio/task_licao.mp3',
+  'estudar': '/audio/task_licao.mp3',
+  'estudo': '/audio/task_licao.mp3',
+  'brincar': '/audio/task_brincar.mp3',
+  'brincadeira': '/audio/task_brincar.mp3',
+  'guardar': '/audio/task_guardar_brinquedos.mp3',
+  'brinquedo': '/audio/task_guardar_brinquedos.mp3',
+  'banho': '/audio/task_banho.mp3',
+  'jantar': '/audio/task_jantar.mp3',
+  'dormir': '/audio/task_dormir.mp3',
+  'sono': '/audio/task_dormir.mp3',
+  'xixi': '/audio/task_banheiro.mp3',
+  'banheiro': '/audio/task_banheiro.mp3',
+  'vaso': '/audio/task_banheiro.mp3',
+  'mochila': '/audio/task_mochila.mp3',
+  'terapia': '/audio/task_terapia.mp3',
+  'passeio': '/audio/task_passeio.mp3',
+  'parquinho': '/audio/task_passeio.mp3',
+};
+
+export function getCoreTaskAudioUrl(title: string): string | null {
+  if (!title) return null;
+  const normalized = title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  for (const [key, url] of Object.entries(CORE_TASK_AUDIO_MAP)) {
+    const normKey = key.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (normalized.includes(normKey)) {
+      return url;
+    }
+  }
+  return null;
+}
+
 class AudioManager {
   private ctx: AudioContext | null = null;
 
@@ -332,36 +376,48 @@ class AudioManager {
     }
   }
 
+
   /**
-   * Speak lively encouragement praise with positive reinforcement tailored for children
+   * Speak lively encouragement praise with positive reinforcement tailored for children.
+   * Plays studio pre-recorded MP3 when in mascot mode!
    */
   speakEncouragement(taskTitle: string, isAllCompleted = false, volume = 0.9) {
-    let phrase = '';
-
-    if (isAllCompleted) {
-      if (this.voiceStyle === 'mascot') {
-        const celebrations = [
-          'Uau, sensacional! Você terminou todas as tarefas de hoje! Você é um super campeão! Viva!',
-          'Eba! Missão cumprida! Concluímos todas as tarefas de hoje! Que orgulho de você!',
-          'Parabéns, nota dez! Você finalizou toda a rotina de hoje! Você arrasou!',
+    if (this.voiceStyle === 'mascot') {
+      if (isAllCompleted) {
+        const audioFiles = ['/audio/all_done.mp3', '/audio/all_done_2.mp3'];
+        const chosen = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+        this.playRecording(chosen, volume).catch(() => {
+          this.speak(
+            'Uau, sensacional! Você terminou todas as tarefas de hoje! Você é um super campeão! Viva!',
+            volume
+          );
+        });
+        return;
+      } else {
+        const audioFiles = [
+          '/audio/celebration_1.mp3',
+          '/audio/celebration_2.mp3',
+          '/audio/celebration_3.mp3',
+          '/audio/celebration_4.mp3',
+          '/audio/celebration_5.mp3',
         ];
-        phrase = celebrations[Math.floor(Math.random() * celebrations.length)];
-      } else if (this.voiceStyle === 'gentle') {
+        const chosen = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+        this.playRecording(chosen, volume).catch(() => {
+          this.speak(`Eba! Você concluiu: ${taskTitle}! Você é demais!`, volume);
+        });
+        return;
+      }
+    }
+
+    let phrase = '';
+    if (isAllCompleted) {
+      if (this.voiceStyle === 'gentle') {
         phrase = 'Muito bem. Você concluiu todas as tarefas com calma e dedicação hoje. Parabéns pelo seu dia.';
       } else {
         phrase = 'Parabéns! Todas as tarefas programadas para hoje foram concluídas com sucesso.';
       }
     } else {
-      if (this.voiceStyle === 'mascot') {
-        const praises = [
-          `Eba! Você concluiu: ${taskTitle}! Você é demais!`,
-          `Muito bem! Tarefa prontinha: ${taskTitle}! Que orgulho!`,
-          `Uau, que capricho! Tarefa concluída: ${taskTitle}!`,
-          `Show de bola! Concluímos: ${taskTitle}!`,
-          `Incrível! Parabéns por fazer: ${taskTitle}!`,
-        ];
-        phrase = praises[Math.floor(Math.random() * praises.length)];
-      } else if (this.voiceStyle === 'gentle') {
+      if (this.voiceStyle === 'gentle') {
         const praises = [
           `Muito bem. Você concluiu: ${taskTitle}.`,
           `Parabéns pelo capricho em: ${taskTitle}.`,
@@ -374,6 +430,47 @@ class AudioManager {
     }
 
     this.speak(phrase, volume);
+  }
+
+  /**
+   * Play studio intro speech for the Mascot
+   */
+  playMascotIntro(volume = 0.9): Promise<void> {
+    return this.playRecording('/audio/intro_mascote.mp3', volume).catch(() => {
+      this.speak(
+        'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
+        volume
+      );
+    });
+  }
+
+  /**
+   * Play task audio:
+   * 1. Voice Memo recorded by parents / therapist (if present)
+   * 2. Studio pre-recorded MP3 for core routine tasks (when in mascot mode)
+   * 3. Customized voice phrase or task title via Speech Synthesis
+   */
+  playTaskAudio(
+    title: string,
+    voicePhrase?: string,
+    audioRecording?: string,
+    volume = 0.9
+  ): Promise<void> {
+    if (audioRecording) {
+      return this.playRecording(audioRecording, volume);
+    }
+
+    if (this.voiceStyle === 'mascot') {
+      const coreAudio = getCoreTaskAudioUrl(title);
+      if (coreAudio) {
+        return this.playRecording(coreAudio, volume).catch(() => {
+          this.speak(voicePhrase || `Hora de: ${title}`, volume);
+        });
+      }
+    }
+
+    this.speak(voicePhrase || `Hora de: ${title}`, volume);
+    return Promise.resolve();
   }
 
   /**

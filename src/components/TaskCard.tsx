@@ -50,13 +50,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handlePlaySound = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (task.audioRecording) {
-      soundManager.playRecording(task.audioRecording);
-    } else if (task.voicePhrase) {
-      soundManager.speak(task.voicePhrase);
-    } else {
-      soundManager.speak(`Hora de: ${task.title}`);
-    }
+    soundManager.playTaskAudio(task.title, task.voicePhrase, task.audioRecording);
   };
 
   return (

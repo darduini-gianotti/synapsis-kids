@@ -142,10 +142,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       style
     );
     if (style === 'mascot') {
-      soundManager.speak(
-        'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
-        localSettings.soundVolume
-      );
+      soundManager.playMascotIntro(localSettings.soundVolume);
     } else if (style === 'gentle') {
       soundManager.speak(
         'Olá. Vamos realizar as atividades com calma e carinho, no seu ritmo.',
