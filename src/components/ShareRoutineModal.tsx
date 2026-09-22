@@ -3,17 +3,15 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
   Share2,
-  Download,
-  Upload,
   Copy,
   Check,
   MessageCircle,
-  FileCode,
-  AlertCircle,
   Sparkles,
-  Info,
   Link2,
   ExternalLink,
+  Calendar,
+  Clock,
+  ArrowRight,
 } from 'lucide-react';
 import { DayOfWeek, DayRoutine, RoutineTask } from '../types';
 import { DAY_NAMES } from '../utils/storage';
@@ -38,15 +36,14 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
   routines,
   onImportRoutine,
 }) => {
-  const [activeTab, setActiveTab] = useState<'export' | 'import'>('export');
   const [exportScope, setExportScope] = useState<'current' | 'all'>('current');
-  const [hasCopied, setHasCopied] = useState(false);
+  const [hasCopiedLink, setHasCopiedLink] = useState(false);
   const [hasCopiedWhatsApp, setHasCopiedWhatsApp] = useState(false);
 
-  // Import state
-  const [importText, setImportText] = useState('');
-  const [importError, setImportError] = useState<string | null>(null);
-  const [importSuccess, setImportSuccess] = useState<string | null>(null);
+  // Manual link open state (for opening a link received via text)
+  const [showManualOpen, setShowManualOpen] = useState(false);
+  const [manualLinkInput, setManualLinkInput] = useState('');
+  const [manualError, setManualError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -54,12 +51,11 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
   const currentTasks = routines[selectedDay]?.tasks || [];
 
   // Generate clean export payload
-  const getExportData = () => {
+  const getExportData = (): RoutinePayload => {
     if (exportScope === 'current') {
       return {
         app: 'SynapsisKids',
-        version: '2.0',
-        exportedAt: new Date().toISOString(),
+        version: '3.0',
         type: 'single_day',
         dayOfWeek: selectedDay,
         dayName: currentDayName,
@@ -68,67 +64,40 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
     } else {
       return {
         app: 'SynapsisKids',
-        version: '2.0',
-        exportedAt: new Date().toISOString(),
+        version: '3.0',
         type: 'all_week',
         routines: routines,
       };
     }
   };
 
-  const exportJsonString = JSON.stringify(getExportData(), null, 2);
-
-  // Download JSON file
-  const handleDownloadFile = () => {
-    const data = exportJsonString;
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    const filename =
-      exportScope === 'current'
-        ? `synapsis-kids-${DAY_NAMES[selectedDay].short.toLowerCase()}.json`
-        : 'synapsis-kids-semana-completa.json';
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    soundManager.playSound('chime', 0.8);
-  };
-
-  // Copy raw JSON
-  const handleCopyCode = async () => {
-    try {
-      await navigator.clipboard.writeText(exportJsonString);
-      setHasCopied(true);
-      soundManager.playSound('chime', 0.8);
-      setTimeout(() => setHasCopied(false), 2500);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const [hasCopiedLink, setHasCopiedLink] = useState(false);
-
-  // Generate 1-Click Magic Link (Compact & URL Safe)
+  // Generate 1-Click Magic Link (Ultra-Compact LZString)
   const getMagicLink = () => {
-    const base64Data = encodeRoutine(getExportData() as RoutinePayload);
+    const compressedCode = encodeRoutine(getExportData());
     const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}#rotina=${encodeURIComponent(base64Data)}`;
+    return `${baseUrl}#r=${compressedCode}`;
   };
 
-  // Generate WhatsApp Message with Magic Link
+  // Generate WhatsApp Message with Magic Link (Clean, human, friendly, NO code blocks!)
   const getWhatsAppMessage = () => {
-    const base64Data = encodeRoutine(getExportData() as RoutinePayload);
     const magicLink = getMagicLink();
 
-    const summary =
-      exportScope === 'current'
-        ? `📅 *Synapsis Kids — ${currentDayName}*\nTotal: ${currentTasks.length} atividades terapêuticas programadas.`
-        : `📅 *Synapsis Kids — Semana Completa*\nProgramação estruturada para todos os 7 dias da semana.`;
+    if (exportScope === 'current') {
+      const taskBullets = currentTasks
+        .slice(0, 10)
+        .map((t) => `• ${t.time} - ${t.title}`)
+        .join('\n');
+      const moreCount = currentTasks.length > 10 ? `\n• ... e mais ${currentTasks.length - 10} atividades` : '';
 
-    return `Olá! Segue a rotina personalizada estruturada no app *Synapsis Kids*:\n\n${summary}\n\n📲 *Para abrir e aplicar direto no celular/tablet:*\nBasta tocar no link abaixo:\n${magicLink}\n\n*(Se preferir importar manualmente pelo código no app:)*\n\`\`\`${base64Data}\`\`\`\n\nAbraços terapêuticos • Synapsis Kids ✨`;
+      return `Olá! Segue a rotina personalizada estruturada no app *Synapsis Kids* 🧸\n\n📅 *Rotina — ${currentDayName} (${currentTasks.length} atividades)*\n${taskBullets}${moreCount}\n\n📲 *Para abrir no celular ou tablet, toque no link:*\n${magicLink}\n\n*(A rotina carrega automaticamente com 1 toque)*\n\nCom carinho • Synapsis Kids ✨`;
+    } else {
+      let totalTasks = 0;
+      Object.values(routines).forEach((r) => {
+        totalTasks += r.tasks.length;
+      });
+
+      return `Olá! Segue a rotina semanal completa estruturada no app *Synapsis Kids* 🧸\n\n📅 *Programação da Semana Completa (7 dias)*\nTotal de ${totalTasks} atividades organizadas de Segunda a Domingo.\n\n📲 *Para abrir no celular ou tablet, toque no link:*\n${magicLink}\n\n*(A rotina carrega automaticamente com 1 toque)*\n\nCom carinho • Synapsis Kids ✨`;
+    }
   };
 
   // Open WhatsApp directly
@@ -139,7 +108,7 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
     soundManager.playSound('harp', 0.8);
   };
 
-  // Copy WhatsApp friendly message with encoded payload
+  // Copy WhatsApp friendly message
   const handleCopyWhatsApp = async () => {
     const text = getWhatsAppMessage();
     try {
@@ -165,56 +134,37 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
     }
   };
 
-  // Handle file upload for import
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const content = event.target?.result as string;
-      setImportText(content);
-      processImport(content);
-    };
-    reader.readAsText(file);
-  };
-
-  // Process text or base64 import
-  const processImport = (rawInput: string) => {
-    setImportError(null);
-    setImportSuccess(null);
-
-    let clean = rawInput.trim();
+  // Handle manual link open
+  const handleProcessManualLink = () => {
+    setManualError(null);
+    let clean = manualLinkInput.trim();
     if (!clean) {
-      setImportError('Por favor, cole o código ou selecione um arquivo.');
+      setManualError('Por favor, cole o link recebido.');
       return;
     }
 
-    // Try extracting from WhatsApp block if present (```BASE64```)
-    const blockMatch = clean.match(/```([A-Za-z0-9+/=_-]+)```/);
-    if (blockMatch && blockMatch[1]) {
-      clean = blockMatch[1].trim();
+    // Extract code from #r= or #rotina= or #import= if a full URL was pasted
+    const hashMatch = clean.match(/#(r|rotina|import)=([^&]+)/);
+    if (hashMatch && hashMatch[2]) {
+      clean = decodeURIComponent(hashMatch[2]);
     }
 
     const parsed = decodeRoutine(clean);
     if (!parsed) {
-      setImportError('Formato inválido. Certifique-se de colar o código gerado pelo app.');
+      setManualError('Link não reconhecido. Certifique-se de colar o link do Synapsis Kids.');
       return;
     }
 
-    // Determine type: single day or all week
     if (parsed.type === 'all_week' && parsed.routines) {
       onImportRoutine({ type: 'all', routines: parsed.routines }, selectedDay);
-      setImportSuccess('Rotina de toda a semana importada com sucesso!');
       soundManager.playSound('marimba', 0.8);
-      setTimeout(() => onClose(), 1500);
+      onClose();
     } else if (Array.isArray(parsed.tasks)) {
       onImportRoutine({ type: 'single', tasks: parsed.tasks }, selectedDay);
-      setImportSuccess(`${parsed.tasks.length} atividades importadas para ${currentDayName}!`);
       soundManager.playSound('marimba', 0.8);
-      setTimeout(() => onClose(), 1500);
+      onClose();
     } else {
-      setImportError('Não foi possível encontrar a lista de tarefas no código informado.');
+      setManualError('Não foi possível carregar as tarefas do link.');
     }
   };
 
@@ -226,311 +176,254 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: '100%', opacity: 0 }}
           transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-          className="w-full max-w-xl bg-white dark:bg-stone-900 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-stone-200 dark:border-stone-800"
+          className="w-full max-w-lg bg-white dark:bg-stone-900 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-stone-200 dark:border-stone-800"
           id="share-routine-modal"
         >
           {/* Header */}
-          <div className="p-4 sm:p-5 bg-stone-50 dark:bg-stone-850 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
+          <div className="p-4 sm:p-5 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
-                <Share2 className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center shadow-inner">
+                <Share2 className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="font-extrabold text-stone-900 dark:text-stone-100 text-base sm:text-lg leading-tight">
-                  Compartilhar & Importar Rotinas
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-200 block">
+                  Link Mágico de 1 Toque ✨
+                </span>
+                <h3 className="font-extrabold text-base sm:text-lg leading-tight">
+                  Compartilhar Rotina
                 </h3>
-                <p className="text-xs text-stone-500 dark:text-stone-400">
-                  Transfira a rotina entre consultório e o celular dos pais
-                </p>
               </div>
             </div>
 
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+              className="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Navigation Tabs (Exportar vs Importar) */}
-          <div className="flex border-b border-stone-200 dark:border-stone-800 bg-stone-100/60 dark:bg-stone-850/60 p-1">
-            <button
-              type="button"
-              onClick={() => setActiveTab('export')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
-                activeTab === 'export'
-                  ? 'bg-white dark:bg-stone-900 text-indigo-700 dark:text-indigo-300 shadow-2xs'
-                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-800'
-              }`}
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Exportar / Enviar para os Pais</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('import')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
-                activeTab === 'import'
-                  ? 'bg-white dark:bg-stone-900 text-indigo-700 dark:text-indigo-300 shadow-2xs'
-                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-800'
-              }`}
-            >
-              <Upload className="w-3.5 h-3.5" />
-              <span>Importar Rotina no Celular</span>
-            </button>
-          </div>
-
           {/* Body Content */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 overscroll-contain">
-            {activeTab === 'export' ? (
-              /* TAB 1: EXPORTAR */
-              <div className="space-y-4">
-                {/* Scope selector */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2">
-                    O que você deseja exportar?
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setExportScope('current')}
-                      className={`p-3 rounded-2xl border text-left transition-all ${
-                        exportScope === 'current'
-                          ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold'
-                          : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400'
-                      }`}
-                    >
-                      <span className="text-xs block font-bold">Dia Atual ({currentDayName})</span>
-                      <span className="text-[10px] opacity-75">{currentTasks.length} tarefas</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setExportScope('all')}
-                      className={`p-3 rounded-2xl border text-left transition-all ${
-                        exportScope === 'all'
-                          ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/40 text-indigo-900 dark:text-indigo-200 font-bold'
-                          : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400'
-                      }`}
-                    >
-                      <span className="text-xs block font-bold">Semana Completa</span>
-                      <span className="text-[10px] opacity-75">Todos os 7 dias</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Primary Action: Send to WhatsApp with 1-Click Magic Link */}
-                <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl space-y-3">
-                  <div className="flex items-center justify-between gap-2 text-emerald-800 dark:text-emerald-300">
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                      <h4 className="text-xs font-extrabold uppercase tracking-wide">
-                        Enviar para os Pais via WhatsApp
-                      </h4>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700">
-                      Link Mágico de 1 Clique ✨
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-emerald-700 dark:text-emerald-400 leading-relaxed">
-                    A família só precisará <strong>tocar no link no WhatsApp</strong> do celular ou tablet para a rotina carregar automaticamente no app, sem precisar digitar nem colar códigos!
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={handleOpenWhatsAppDirect}
-                      className="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-xs active:scale-98 transition-all"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Abrir WhatsApp Agora</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleCopyWhatsApp}
-                      className="py-2.5 px-3 bg-white dark:bg-stone-800 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-extrabold flex items-center justify-center gap-1.5 active:scale-98 transition-all"
-                    >
-                      {hasCopiedWhatsApp ? (
-                        <>
-                          <Check className="w-4 h-4 text-emerald-600" />
-                          <span>Mensagem Copiada!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 text-emerald-600" />
-                          <span>Copiar Mensagem</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleCopyMagicLink}
-                    className="w-full py-2 px-3 rounded-xl bg-emerald-100/70 dark:bg-emerald-900/40 hover:bg-emerald-200/70 dark:hover:bg-emerald-900/70 text-emerald-900 dark:text-emerald-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <Link2 className="w-3.5 h-3.5" />
-                    <span>{hasCopiedLink ? 'Link Mágico Copiado para Área de Transferência!' : 'Copiar Apenas o Link Mágico (URL)'}</span>
-                  </button>
-
-                  {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
-                    <p className="text-[10.5px] text-emerald-800 dark:text-emerald-300 bg-emerald-100/60 dark:bg-emerald-950/50 p-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 leading-relaxed">
-                      💡 <strong>Nota sobre o teste no celular:</strong> Como estamos em ambiente de desenvolvimento local (<code>localhost</code>), o WhatsApp não o reconhece como link público de internet. Para testar o Link Mágico no computador agora, cole-o em uma <strong>nova aba do seu navegador</strong>! Quando o app for publicado na internet (ex: <code>kids.synapsisclinico.com.br</code>), o WhatsApp tornará o link 100% clicável com visualização de cartão no celular.
-                    </p>
-                  )}
-                </div>
-
-                {/* Secondary Action: Download .JSON File */}
-                <div className="p-3.5 bg-stone-50 dark:bg-stone-850 border border-stone-200 dark:border-stone-800 rounded-2xl flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <FileCode className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
-                    <div>
-                      <span className="text-xs font-bold text-stone-800 dark:text-stone-200 block truncate">
-                        Baixar Arquivo da Rotina (.json)
-                      </span>
-                      <span className="text-[10px] text-stone-400">
-                        Útil para anexar por e-mail ou guardar backup
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleDownloadFile}
-                    className="px-3 py-1.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-700 hover:border-indigo-400 text-xs font-bold text-stone-700 dark:text-stone-200 flex items-center gap-1.5 transition-colors shrink-0"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Baixar</span>
-                  </button>
-                </div>
-
-                {/* Raw Code Copy */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
-                      Código Técnico:
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopyCode}
-                      className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
-                    >
-                      {hasCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span>{hasCopied ? 'Copiado!' : 'Copiar JSON'}</span>
-                    </button>
-                  </div>
-                  <pre className="p-3 bg-stone-100 dark:bg-stone-800 rounded-xl text-[10px] font-mono text-stone-600 dark:text-stone-300 max-h-28 overflow-y-auto border border-stone-200 dark:border-stone-700">
-                    {exportJsonString}
-                  </pre>
-                </div>
-
-                {/* Synapsis Clínico Lead Magnet Banner for Psychologists */}
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-teal-900 via-slate-900 to-indigo-950 text-white border border-teal-500/30 space-y-2.5 shadow-sm">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="/assets/synapsi_brain1.png"
-                        alt="Synapsis Logo"
-                        className="w-6 h-6 object-contain"
-                      />
-                      <span className="text-xs font-black tracking-tight text-teal-300">
-                        Synapsis Clínico
-                      </span>
-                    </div>
-                    <span className="text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40">
-                      Para Profissionais
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-slate-200 leading-relaxed">
-                    Você atende pacientes no consultório? Conheça o <strong>Synapsis Clínico</strong>: prontuário eletrônico completo, anamnese neuropsicológica, gestão financeira e agenda.
-                  </p>
-
-                  <a
-                    href="https://synapsisclinico.com.br"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white text-xs font-bold shadow-xs active:scale-98 transition-all"
-                  >
-                    <span>Conhecer o Programa Synapsis Clínico</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            ) : (
-              /* TAB 2: IMPORTAR */
-              <div className="space-y-4">
-                <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-2xl flex items-start gap-2.5 text-xs text-indigo-800 dark:text-indigo-300">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                  <p>
-                    Selecione o arquivo <code>.json</code> enviado pela terapeuta ou cole abaixo o código recebido no WhatsApp.
-                  </p>
-                </div>
-
-                {/* File input button */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
-                    Opção 1: Selecionar Arquivo do Celular
-                  </label>
-                  <label className="w-full py-3 px-4 border-2 border-dashed border-stone-300 dark:border-stone-700 hover:border-indigo-400 rounded-2xl flex items-center justify-center gap-2 cursor-pointer bg-stone-50 dark:bg-stone-850 transition-colors">
-                    <Upload className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                    <span className="text-xs font-bold text-stone-700 dark:text-stone-200">
-                      Escolher arquivo .json
-                    </span>
-                    <input
-                      type="file"
-                      accept=".json,application/json"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-
-                {/* Paste box */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-1.5">
-                    Opção 2: Colar Mensagem ou Código Recebido
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={importText}
-                    onChange={(e) => setImportText(e.target.value)}
-                    placeholder="Cole aqui o texto do WhatsApp ou o código copiado..."
-                    className="w-full p-3 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl text-xs font-mono text-stone-800 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-stone-400"
-                  />
-                </div>
-
-                {/* Error message */}
-                {importError && (
-                  <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 rounded-xl flex items-center gap-2 text-xs text-rose-700 dark:text-rose-300">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{importError}</span>
-                  </div>
-                )}
-
-                {/* Success message */}
-                {importSuccess && (
-                  <div className="p-3 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-900 rounded-xl flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300">
-                    <Check className="w-4 h-4 shrink-0" />
-                    <span>{importSuccess}</span>
-                  </div>
-                )}
-
-                {/* Import Action Button */}
+            {/* Scope selector */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2">
+                O que você deseja compartilhar?
+              </label>
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => processImport(importText)}
-                  disabled={!importText.trim()}
-                  className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-2xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all"
+                  onClick={() => setExportScope('current')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    exportScope === 'current'
+                      ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 ring-2 ring-emerald-500/40 font-bold'
+                      : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'
+                  }`}
                 >
-                  <Upload className="w-4 h-4" />
-                  <span>Carregar e Aplicar Rotina</span>
+                  <span className="text-xs block font-extrabold">Dia Atual</span>
+                  <span className="text-[11px] opacity-80 block">{currentDayName} ({currentTasks.length} tarefas)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setExportScope('all')}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    exportScope === 'all'
+                      ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 ring-2 ring-emerald-500/40 font-bold'
+                      : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'
+                  }`}
+                >
+                  <span className="text-xs block font-extrabold">Semana Completa</span>
+                  <span className="text-[11px] opacity-80 block">Segunda a Domingo (7 dias)</span>
                 </button>
               </div>
-            )}
+            </div>
+
+            {/* Routine Preview Card */}
+            <div className="p-3.5 bg-stone-50 dark:bg-stone-800/80 rounded-2xl border border-stone-200 dark:border-stone-700/80 space-y-2">
+              <div className="flex items-center justify-between text-xs text-stone-700 dark:text-stone-300">
+                <span className="font-bold flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  {exportScope === 'current' ? `Rotina de ${currentDayName}` : 'Rotina da Semana Completa'}
+                </span>
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
+                  {exportScope === 'current' ? `${currentTasks.length} tarefas` : '7 dias organizados'}
+                </span>
+              </div>
+
+              {exportScope === 'current' && currentTasks.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {currentTasks.slice(0, 4).map((t, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1 text-[11px] font-medium bg-white dark:bg-stone-700/70 border border-stone-200 dark:border-stone-600 px-2 py-0.5 rounded-lg text-stone-600 dark:text-stone-300 truncate max-w-[160px]"
+                    >
+                      <Clock className="w-2.5 h-2.5 text-stone-400 shrink-0" />
+                      <span className="truncate">{t.title}</span>
+                    </span>
+                  ))}
+                  {currentTasks.length > 4 && (
+                    <span className="text-[10px] text-stone-400 self-center">
+                      +{currentTasks.length - 4} mais
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Primary Action Box: WhatsApp & 1-Click Magic Link */}
+            <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl space-y-3">
+              <div className="flex items-center justify-between gap-2 text-emerald-800 dark:text-emerald-300">
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <h4 className="text-xs font-extrabold uppercase tracking-wide">
+                    Enviar para os Pais via WhatsApp
+                  </h4>
+                </div>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700">
+                  1 Toque ✨
+                </span>
+              </div>
+
+              <p className="text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed">
+                A família só precisará <strong>tocar no link no WhatsApp</strong> do celular ou tablet. A rotina abre e se aplica automaticamente no app, sem formulários nem complicações!
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleOpenWhatsAppDirect}
+                  className="py-3 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-xs active:scale-98 transition-all cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Enviar no WhatsApp</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopyWhatsApp}
+                  className="py-3 px-3 bg-white dark:bg-stone-800 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer"
+                >
+                  {hasCopiedWhatsApp ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-600" />
+                      <span>Mensagem Copiada!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-emerald-600" />
+                      <span>Copiar Mensagem</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCopyMagicLink}
+                className="w-full py-2.5 px-3 rounded-xl bg-emerald-100/70 dark:bg-emerald-900/40 hover:bg-emerald-200/70 dark:hover:bg-emerald-900/70 text-emerald-900 dark:text-emerald-200 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              >
+                <Link2 className="w-3.5 h-3.5" />
+                <span>
+                  {hasCopiedLink ? '✓ Link Mágico Copiado com Sucesso!' : 'Copiar Apenas o Link Mágico (URL Curta)'}
+                </span>
+              </button>
+            </div>
+
+            {/* Friendly Explanation Card */}
+            <div className="p-3 bg-stone-50 dark:bg-stone-800/60 rounded-xl border border-stone-200/80 dark:border-stone-700/80 text-[11px] text-stone-500 dark:text-stone-400 space-y-1">
+              <div className="flex items-center gap-1.5 font-bold text-stone-700 dark:text-stone-300">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Sem senhas e 100% seguro</span>
+              </div>
+              <p className="leading-snug">
+                As tarefas são compactadas de forma segura diretamente no link. Ao tocar nele, os pais não precisam fazer cadastro nem login.
+              </p>
+            </div>
+
+            {/* Optional Manual Paste Drawer (Subtle, for who received a link) */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setShowManualOpen(!showManualOpen)}
+                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1 mx-auto"
+              >
+                <span>{showManualOpen ? 'Ocultar abertura manual' : 'Recebeu um link e deseja abrir manualmente?'}</span>
+              </button>
+
+              {showManualOpen && (
+                <div className="mt-2.5 p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700 space-y-2">
+                  <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400">
+                    Cole o Link Mágico recebido:
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="https://synapsis-kids.vercel.app/#r=..."
+                      value={manualLinkInput}
+                      onChange={(e) => setManualLinkInput(e.target.value)}
+                      className="flex-1 px-3 py-1.5 text-xs bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg text-stone-800 dark:text-stone-100"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleProcessManualLink}
+                      className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold hover:bg-indigo-700 flex items-center gap-1 shrink-0"
+                    >
+                      <span>Abrir</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                  {manualError && (
+                    <p className="text-[11px] text-rose-600 font-semibold">{manualError}</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Synapsis Clínico Lead Magnet Banner for Psychologists */}
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-teal-900 via-slate-900 to-indigo-950 text-white border border-teal-500/30 space-y-2 shadow-sm">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <img
+                    src="/assets/synapsi_brain1.png"
+                    alt="Synapsis Logo"
+                    className="w-5 h-5 object-contain"
+                  />
+                  <span className="text-xs font-black tracking-tight text-teal-300">
+                    Synapsis Clínico
+                  </span>
+                </div>
+                <span className="text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40">
+                  Para Terapeutas
+                </span>
+              </div>
+
+              <p className="text-[11.5px] text-slate-300 leading-snug">
+                Atende em consultório? Conheça o <strong>Synapsis Clínico</strong>: prontuário digital, anamnese neuropsicológica e gestão da clínica.
+              </p>
+
+              <a
+                href="https://synapsisclinico.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white text-xs font-bold shadow-xs active:scale-98 transition-all"
+              >
+                <span>Conhecer o Programa Synapsis Clínico</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-3 bg-stone-50 dark:bg-stone-850 border-t border-stone-200 dark:border-stone-800 flex justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              className="py-2 px-5 rounded-xl font-bold text-xs text-stone-600 dark:text-stone-300 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors cursor-pointer"
+            >
+              Fechar
+            </button>
           </div>
         </motion.div>
       </div>

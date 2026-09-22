@@ -84,15 +84,15 @@ export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [incomingRoutineData, setIncomingRoutineData] = useState<IncomingRoutineData | null>(null);
 
-  // Listen for WhatsApp 1-Click Magic Link (#rotina=... or #import=...)
+  // Listen for WhatsApp 1-Click Magic Link (#r=... or #rotina=... or #import=...)
   useEffect(() => {
     const checkHash = () => {
       const hash = window.location.hash;
-      if (!hash || (!hash.startsWith('#rotina=') && !hash.startsWith('#import='))) {
+      if (!hash || (!hash.startsWith('#rotina=') && !hash.startsWith('#import=') && !hash.startsWith('#r='))) {
         return;
       }
       try {
-        const raw = hash.replace(/^#(rotina|import)=/, '');
+        const raw = hash.replace(/^#(rotina|import|r)=/, '');
         const clean = decodeURIComponent(raw);
         const parsed = decodeRoutine(clean) as IncomingRoutineData;
         if (parsed) {
