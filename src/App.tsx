@@ -769,13 +769,8 @@ export default function App() {
         }`}
         id="app-shell"
       >
-        {/* Autism Spectrum / Neurodiversity Awareness Top Strip when in Large Cards mode */}
-        {viewMode === 'board' && (
-          <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 via-amber-400 via-rose-500 to-emerald-500 shrink-0 shadow-2xs" />
-        )}
-
-        {/* Minimalist Top App Bar */}
-        <header className="px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex flex-col gap-2.5 transition-colors">
+        {/* Minimalist Top App Bar with iOS Safe Area Inset Support */}
+        <header className="header-safe-top px-3.5 pb-2.5 sm:px-4 sm:pb-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex flex-col gap-2.5 transition-colors">
           {/* Linha 1: Identidade da Marca (Esquerda) + Progresso de Tarefas (Direita) */}
           <div className="flex items-center justify-between gap-2">
             {/* Esquerda: Logo + Nome + Powered by */}
@@ -959,6 +954,11 @@ export default function App() {
             </div>
           </div>
         </header>
+
+        {/* Autism Spectrum / Neurodiversity Awareness Top Strip when in Large Cards mode */}
+        {viewMode === 'board' && (
+          <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 via-amber-400 via-rose-500 to-emerald-500 shrink-0 shadow-2xs" />
+        )}
 
         {/* Reassuring Parental Lock status banner */}
         {settings.childLockEnabled && (
@@ -1411,7 +1411,7 @@ export default function App() {
         )}
 
         {/* Professional & Clinic Branding Footer (Synapsis Clínico & ARASAAC) */}
-        <footer className="mt-auto px-4 py-5 border-t border-stone-200/80 dark:border-stone-800 text-center bg-stone-50/80 dark:bg-stone-900/60 space-y-2.5">
+        <footer className="mt-auto px-4 pt-5 footer-safe-bottom border-t border-stone-200/80 dark:border-stone-800 text-center bg-stone-50/80 dark:bg-stone-900/60 space-y-2.5">
           <a
             href="https://synapsisclinico.com.br"
             target="_blank"

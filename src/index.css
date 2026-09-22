@@ -14,3 +14,12 @@
   }
 }
 
+/* iOS Safe Area Padding for Notch, Dynamic Island, and Home Indicator */
+.header-safe-top {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.625rem);
+}
+
+.footer-safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+}
+
