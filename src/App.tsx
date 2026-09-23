@@ -778,53 +778,28 @@ export default function App() {
         <header className="header-safe-top px-3.5 pb-2.5 sm:px-4 sm:pb-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex flex-col gap-2.5 transition-colors">
           {/* Linha 1: Identidade da Marca (Esquerda) + Progresso de Tarefas (Direita) */}
           <div className="flex items-center justify-between gap-2">
-            {/* Esquerda: Logo Oficial Synapsis Kids + Powered by */}
+            {/* Esquerda: Logo Oficial Synapsis Kids em Destaque */}
             <div className="flex items-center gap-2 min-w-0">
-              <div className="min-w-0 flex flex-col justify-center">
-                <div className="flex items-center gap-1.5">
-                  <a href="/" className="inline-block shrink-0 focus:outline-hidden">
-                    {/* Logo para Modo Claro (Texto escuro) */}
-                    <img
-                      src="/assets/synapsis_kids_light.png"
-                      alt="Synapsis Kids"
-                      className="h-8 sm:h-9 w-auto object-contain dark:hidden drop-shadow-xs"
-                    />
-                    {/* Logo para Modo Escuro (Texto branco) */}
-                    <img
-                      src="/assets/synapsis_kids_dark.png"
-                      alt="Synapsis Kids"
-                      className="h-8 sm:h-9 w-auto object-contain hidden dark:block drop-shadow-xs"
-                    />
-                  </a>
+              <a href="/" className="inline-flex items-center gap-1.5 shrink-0 focus:outline-hidden" title="Synapsis Kids">
+                {/* Logo para Modo Claro (Texto escuro) */}
+                <img
+                  src="/assets/synapsis_kids_light.png"
+                  alt="Synapsis Kids"
+                  className="h-10 sm:h-11 md:h-12 w-auto object-contain dark:hidden drop-shadow-xs"
+                />
+                {/* Logo para Modo Escuro (Texto branco) */}
+                <img
+                  src="/assets/synapsis_kids_dark.png"
+                  alt="Synapsis Kids"
+                  className="h-10 sm:h-11 md:h-12 w-auto object-contain hidden dark:block drop-shadow-xs"
+                />
 
-                  {viewMode === 'board' && (
-                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0 self-center">
-                      TEA
-                    </span>
-                  )}
-                </div>
-
-                {/* Powered by Synapsis posicionado elegantemente abaixo do nome */}
-                <a
-                  href="https://synapsisclinico.com.br"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-0.5"
-                  title="Conhecer o ecossistema Synapsis Clínico"
-                >
-                  <img
-                    src="/assets/synapsi_brain1.png"
-                    alt="Synapsis Logo"
-                    className="w-2.5 h-2.5 object-contain"
-                  />
-                  <span className="text-[8.5px] font-medium text-slate-300">
-                    powered by
+                {viewMode === 'board' && (
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0 self-center shadow-2xs">
+                    TEA
                   </span>
-                  <span className="text-[9px] font-extrabold text-teal-400 group-hover:text-teal-300 transition-colors">
-                    Synapsis
-                  </span>
-                </a>
-              </div>
+                )}
+              </a>
             </div>
 
             {/* Direita: "xx de xx tarefas feitas (x%)" */}
