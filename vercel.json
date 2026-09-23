@@ -5,6 +5,22 @@
       "destination": "/manual.html"
     },
     {
+      "source": "/inicio",
+      "destination": "/landing.html"
+    },
+    {
+      "source": "/lp",
+      "destination": "/landing.html"
+    },
+    {
+      "source": "/kids",
+      "destination": "/landing.html"
+    },
+    {
+      "source": "/sobre",
+      "destination": "/landing.html"
+    },
+    {
       "source": "/((?!assets/|.*\\..*).*)",
       "destination": "/index.html"
     }

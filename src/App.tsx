@@ -778,30 +778,27 @@ export default function App() {
         <header className="header-safe-top px-3.5 pb-2.5 sm:px-4 sm:pb-3 border-b border-stone-200 dark:border-stone-800 bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs sticky top-0 z-30 flex flex-col gap-2.5 transition-colors">
           {/* Linha 1: Identidade da Marca (Esquerda) + Progresso de Tarefas (Direita) */}
           <div className="flex items-center justify-between gap-2">
-            {/* Esquerda: Logo + Nome + Powered by */}
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs overflow-hidden transition-all bg-white dark:bg-slate-900 border border-stone-200/90 dark:border-slate-800 ${
-                  viewMode === 'board'
-                    ? 'ring-2 ring-amber-400'
-                    : ''
-                }`}
-              >
-                <img
-                  src="/assets/synapsi_brain1.png"
-                  alt="Synapsis Logo"
-                  className="w-7 h-7 object-contain drop-shadow-2xs"
-                />
-              </div>
-
+            {/* Esquerda: Logo Oficial Synapsis Kids + Powered by */}
+            <div className="flex items-center gap-2 min-w-0">
               <div className="min-w-0 flex flex-col justify-center">
                 <div className="flex items-center gap-1.5">
-                  <h1 className="text-base sm:text-lg font-black text-stone-900 dark:text-stone-100 tracking-tight whitespace-nowrap leading-none">
-                    Synapsis Kids
-                  </h1>
+                  <a href="/" className="inline-block shrink-0 focus:outline-hidden">
+                    {/* Logo para Modo Claro (Texto escuro) */}
+                    <img
+                      src="/assets/synapsis_kids_light.png"
+                      alt="Synapsis Kids"
+                      className="h-8 sm:h-9 w-auto object-contain dark:hidden drop-shadow-xs"
+                    />
+                    {/* Logo para Modo Escuro (Texto branco) */}
+                    <img
+                      src="/assets/synapsis_kids_dark.png"
+                      alt="Synapsis Kids"
+                      className="h-8 sm:h-9 w-auto object-contain hidden dark:block drop-shadow-xs"
+                    />
+                  </a>
 
                   {viewMode === 'board' && (
-                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0">
+                    <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-800 shrink-0 self-center">
                       TEA
                     </span>
                   )}
@@ -812,7 +809,7 @@ export default function App() {
                   href="https://synapsisclinico.com.br"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-1"
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-900 dark:bg-slate-950 text-white border border-slate-700/80 shadow-2xs hover:border-teal-400 transition-all cursor-pointer group shrink-0 w-fit mt-0.5"
                   title="Conhecer o ecossistema Synapsis Clínico"
                 >
                   <img
