@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor Visual de Marcadores — Synapsis Kids</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #3730A3;
+      --bg: #0B0F17;
+      --surface: #1E293B;
+      --surface-light: #334155;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --border: #334155;
+      --accent: #10B981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* TOP BAR */
+    header {
+      background: #0F172A;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, #4F46E5, #06B6D4);
+      color: white;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .header-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      font-size: 0.85rem;
+    }
+    .btn-secondary:hover {
+      background: var(--surface-light);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background: #059669;
+      color: white;
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+    .btn-success:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    /* ZOOM CONTROLS IN HEADER */
+    .zoom-group {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2px 6px;
+      gap: 4px;
+    }
+    .zoom-btn {
+      background: transparent;
+      color: var(--text);
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+    .zoom-btn:hover {
+      background: var(--surface-light);
+    }
+    .zoom-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 42px;
+      text-align: center;
+    }
+
+    /* MAIN WORKSPACE */
+    .workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* LEFT SIDEBAR: FIGURE TABS & ITEMS */
+    .sidebar {
+      width: 380px;
+      background: #0F172A;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .sidebar-section-title {
+      padding: 12px 16px 6px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .fig-buttons {
+      padding: 0 12px 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .fig-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .fig-btn:hover {
+      background: var(--surface-light);
+      border-color: #6366F1;
+    }
+    .fig-btn.active {
+      background: #312E81;
+      border-color: #818CF8;
+      color: #FFFFFF;
+      box-shadow: 0 0 0 1px #818CF8;
+    }
+    .fig-btn.full-width {
+      grid-column: span 2;
+    }
+
+    .items-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .item-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .item-card:hover {
+      background: var(--surface-light);
+      border-color: #4F46E5;
+    }
+    .item-card.active {
+      background: #312E81;
+      border-color: #818CF8;
+      box-shadow: 0 0 0 1px #818CF8;
+    }
+    .item-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .item-coords {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
+    /* CANVAS STAGE (CENTER) */
+    .stage-wrapper {
+      flex: 1;
+      background: #020617;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* CRUCIAL: never clips the top */
+      padding: 24px 24px 80px;
+      position: relative;
+    }
+    .zoom-wrapper {
+      transform-origin: top center;
+      transition: transform 0.15s ease-out;
+      margin: 0 auto;
+    }
+    .canvas-container {
+      position: relative;
+      width: 582px;
+      height: 968px;
+      background: #0F172A;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+      border: 1px solid #1E293B;
+      flex-shrink: 0;
+    }
+    .phone-mockup {
+      position: absolute;
+      left: 85px;
+      top: 38px;
+      width: 412px;
+      height: 892px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+    .phone-mockup img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    svg.interactive-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    /* SVG INTERACTIVE HANDLERS */
+    .svg-line-bg {
+      stroke: rgba(0,0,0,0.6);
+      stroke-width: 4.5px;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+    .svg-line-fg {
+      stroke-width: 2.2px;
+      stroke-linecap: round;
+      pointer-events: none;
+    }
+    .svg-target-handle {
+      cursor: crosshair;
+    }
+    .svg-target-handle:hover circle.pulse {
+      stroke: #38BDF8;
+      stroke-width: 3px;
+    }
+    .svg-badge-handle {
+      cursor: grab;
+    }
+    .svg-badge-handle:active, .svg-target-handle:active {
+      cursor: grabbing;
+    }
+    .badge-label {
+      pointer-events: none;
+      font-size: 12px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      text-anchor: middle;
+      fill: #FFFFFF;
+    }
+
+    /* FLOATING TIP BANNER */
+    .tip-banner {
+      position: fixed;
+      bottom: 20px;
+      left: calc(380px + (100vw - 380px) / 2);
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid #334155;
+      padding: 9px 18px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 50;
+      pointer-events: none;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10B981;
+    }
+
+    /* TOAST */
+    #toast {
+      position: fixed;
+      top: 65px;
+      right: 24px;
+      background: #059669;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      display: none;
+      z-index: 9999;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <span class="logo-badge">SYNAPSIS KIDS</span>
+      <h1 class="header-title" id="top-title">Editor Visual de Marcadores</h1>
+    </div>
+
+    <!-- ZOOM CONTROLS -->
+    <div class="zoom-group">
+      <button class="zoom-btn" onclick="setZoom(zoomLevel - 0.1)">➖</button>
+      <span class="zoom-label" id="zoom-label">80%</span>
+      <button class="zoom-btn" onclick="setZoom(zoomLevel + 0.1)">➕</button>
+      <button class="zoom-btn" onclick="fitScreen()">Ajustar</button>
+      <button class="zoom-btn" onclick="setZoom(1.0)">100%</button>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-secondary" onclick="resetCurrentFigure()">
+        🔄 Restaurar Padrões
+      </button>
+      <button class="btn-secondary" onclick="copyJsonConfig()">
+        📋 Copiar JSON
+      </button>
+      <button class="btn-success" onclick="downloadCurrentFigurePng()">
+        💾 Baixar PNG Desta Figura
+      </button>
+      <button class="btn-primary" onclick="downloadAllFiguresPng()">
+        📦 Baixar Todas as 7
+      </button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section-title">Escolha a Figura para Editar:</div>
+      <div class="fig-buttons" id="fig-buttons">
+        <button class="fig-btn active" id="btn-fig1" onclick="switchFigure('fig1')">📱 1. Principal</button>
+        <button class="fig-btn" id="btn-fig2" onclick="switchFigure('fig2')">🧩 2. Prancha TEA</button>
+        <button class="fig-btn" id="btn-fig3" onclick="switchFigure('fig3')">🔍 3. Foco e Passos</button>
+        <button class="fig-btn" id="btn-fig4" onclick="switchFigure('fig4')">💬 4. WhatsApp</button>
+        <button class="fig-btn" id="btn-fig4b" onclick="switchFigure('fig4b')">📥 4b. Importar</button>
+        <button class="fig-btn" id="btn-fig5" onclick="switchFigure('fig5')">⏰ 5. Calendário</button>
+        <button class="fig-btn full-width" id="btn-fig6" onclick="switchFigure('fig6')">⚙️ 6. Configurações & Vozes</button>
+      </div>
+
+      <div class="sidebar-section-title" id="items-count-title">Itens da Figura:</div>
+      <div class="items-container" id="items-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- CANVAS STAGE -->
+    <div class="stage-wrapper" id="stage-wrapper">
+      <div class="zoom-wrapper" id="zoom-wrapper">
+        <div class="canvas-container" id="canvas-container">
+          <div class="phone-mockup">
+            <img id="mockup-img" src="" alt="Tela">
+          </div>
+          <svg class="interactive-svg" id="svg-canvas"></svg>
+        </div>
+      </div>
+
+      <div class="tip-banner">
+        <div class="pulse-dot"></div>
+        <span><strong>Como editar:</strong> Clique e arraste o <strong>ponto alvo (início da linha)</strong> até o elemento no celular!</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <!-- SCRIPT -->
+  <script>
+    const MARGIN_LEFT = 85;
+    const MARGIN_TOP = 38;
+    const TOTAL_WIDTH = 582;
+    const TOTAL_HEIGHT = 968;
+
+    // FIGURES CONFIGURATION
+    const DEFAULT_CONFIG = {
+  "fig1": {
+    "id": "fig1",
+    "title": "Figura 1: Tela Principal",
+    "filename": "manual_figura_1_tela_principal.png",
+    "image": "./clean_screens/01_tela_principal.png",
+    "color": "#4F46E5",
+    "items": [
+      {
+        "num": 1,
+        "name": "Identidade & Logo",
+        "tx": 49,
+        "ty": 20,
+        "bx": 42,
+        "by": 56
+      },
+      {
+        "num": 2,
+        "name": "Contador de Progresso (2/5)",
+        "tx": 402,
+        "ty": 20,
+        "bx": 540,
+        "by": 56
+      },
+      {
+        "num": 3,
+        "name": "Botão + Nova Tarefa",
+        "tx": 15,
+        "ty": 82,
+        "bx": 42,
+        "by": 120
+      },
+      {
+        "num": 4,
+        "name": "Alternador Tema (Sol/Lua)",
+        "tx": 273,
+        "ty": 66,
+        "bx": 274,
+        "by": 17
+      },
+      {
+        "num": 5,
+        "name": "Controle Geral de Som",
+        "tx": 309,
+        "ty": 66,
+        "bx": 320,
+        "by": 17
+      },
+      {
+        "num": 6,
+        "name": "Bloqueio Parental (PIN)",
+        "tx": 345,
+        "ty": 66,
+        "bx": 364,
+        "by": 20
+      },
+      {
+        "num": 7,
+        "name": "Menu de Configurações",
+        "tx": 397,
+        "ty": 82,
+        "bx": 540,
+        "by": 120
+      },
+      {
+        "num": 8,
+        "name": "Modelos Clínicos Prontos",
+        "tx": 17,
+        "ty": 158,
+        "bx": 42,
+        "by": 196
+      },
+      {
+        "num": 9,
+        "name": "Enviar / Importar Rotinas",
+        "tx": 182,
+        "ty": 147,
+        "bx": 320,
+        "by": 150
+      },
+      {
+        "num": 10,
+        "name": "Sincronizar Calendário (.ics)",
+        "tx": 260,
+        "ty": 147,
+        "bx": 540,
+        "by": 157
+      },
+      {
+        "num": 11,
+        "name": "Copiar Programação",
+        "tx": 294,
+        "ty": 165,
+        "bx": 540,
+        "by": 245
+      },
+      {
+        "num": 12,
+        "name": "Seletor de Dias (Hoje/Ter)",
+        "tx": 72,
+        "ty": 205,
+        "bx": 42,
+        "by": 243
+      },
+      {
+        "num": 13,
+        "name": "Alternador de Visualização",
+        "tx": 390,
+        "ty": 278,
+        "bx": 540,
+        "by": 316
+      },
+      {
+        "num": 14,
+        "name": "Bloco Primeiro / Depois",
+        "tx": 17,
+        "ty": 366,
+        "bx": 42,
+        "by": 404
+      },
+      {
+        "num": 15,
+        "name": "Cartão de Tarefa Interativo",
+        "tx": 17,
+        "ty": 530,
+        "bx": 42,
+        "by": 568
+      }
+    ]
+  },
+  "fig2": {
+    "id": "fig2",
+    "title": "Figura 2: Prancha Visual TEA",
+    "filename": "manual_figura_2_prancha_tea.png",
+    "image": "./clean_screens/02_prancha_tea.png",
+    "color": "#059669",
+    "items": [
+      {
+        "num": 1,
+        "name": "Seletor Modo Visual (Cartões vs 1º/Depois)",
+        "tx": 159,
+        "ty": 330,
+        "bx": 42,
+        "by": 324
+      },
+      {
+        "num": 2,
+        "name": "Selo Modo TEA Ativo",
+        "tx": 381,
+        "ty": 348,
+        "bx": 540,
+        "by": 386
+      },
+      {
+        "num": 3,
+        "name": "Horário da Atividade (07:00)",
+        "tx": 33,
+        "ty": 432,
+        "bx": 42,
+        "by": 470
+      },
+      {
+        "num": 4,
+        "name": "Ouvir Instrução por Voz",
+        "tx": 184,
+        "ty": 432,
+        "bx": 540,
+        "by": 547
+      },
+      {
+        "num": 5,
+        "name": "Pictograma Visual CAA / PECS",
+        "tx": 72,
+        "ty": 515,
+        "bx": 42,
+        "by": 568
+      },
+      {
+        "num": 6,
+        "name": "Título da Atividade em Fonte Grande",
+        "tx": 60,
+        "ty": 595,
+        "bx": 42,
+        "by": 668
+      },
+      {
+        "num": 7,
+        "name": "Botão Concluir Tarefa",
+        "tx": 65,
+        "ty": 660,
+        "bx": 39,
+        "by": 785
+      }
+    ]
+  },
+  "fig3": {
+    "id": "fig3",
+    "title": "Figura 3: Modal de Foco e Passos",
+    "filename": "manual_figura_3_modal_foco_passos.png",
+    "image": "./clean_screens/03_modal_foco_passos.png",
+    "color": "#D97706",
+    "items": [
+      {
+        "num": 1,
+        "name": "Botão Voltar à Prancha",
+        "tx": 35,
+        "ty": 62,
+        "bx": 42,
+        "by": 83
+      },
+      {
+        "num": 2,
+        "name": "Horário Programado",
+        "tx": 340,
+        "ty": 64,
+        "bx": 540,
+        "by": 83
+      },
+      {
+        "num": 3,
+        "name": "Desenho Central & Toque de Áudio",
+        "tx": 160,
+        "ty": 270,
+        "bx": 42,
+        "by": 258
+      },
+      {
+        "num": 4,
+        "name": "Título da Atividade em Destaque",
+        "tx": 105,
+        "ty": 429,
+        "bx": 42,
+        "by": 468
+      },
+      {
+        "num": 5,
+        "name": "Painel de Micro-Passos (Checklist)",
+        "tx": 202,
+        "ty": 547,
+        "bx": 42,
+        "by": 558
+      },
+      {
+        "num": 6,
+        "name": "Número e Descrição do Passo",
+        "tx": 45,
+        "ty": 649,
+        "bx": 42,
+        "by": 638
+      },
+      {
+        "num": 7,
+        "name": "Checkbox Tátil de Conclusão",
+        "tx": 349,
+        "ty": 574,
+        "bx": 540,
+        "by": 638
+      },
+      {
+        "num": 8,
+        "name": "Botão \"Tudo Feito! Concluir Atividade\"",
+        "tx": 217,
+        "ty": 795,
+        "bx": 42,
+        "by": 782
+      }
+    ]
+  },
+  "fig4": {
+    "id": "fig4",
+    "title": "Figura 4: Compartilhar no WhatsApp",
+    "filename": "manual_figura_4_compartilhar_link.png",
+    "image": "./clean_screens/04_compartilhar_link.png",
+    "color": "#0D9488",
+    "items": [
+      {
+        "num": 1,
+        "name": "Aba \"Compartilhar Rotina\"",
+        "tx": 124,
+        "ty": 139,
+        "bx": 220,
+        "by": 18
+      },
+      {
+        "num": 2,
+        "name": "Aba \"Importar no Meu App\"",
+        "tx": 322,
+        "ty": 144,
+        "bx": 360,
+        "by": 18
+      },
+      {
+        "num": 3,
+        "name": "Filtro (Dia Atual vs Semana)",
+        "tx": 207,
+        "ty": 239,
+        "bx": 524,
+        "by": 225
+      },
+      {
+        "num": 4,
+        "name": "Resumo Visual das Atividades",
+        "tx": 185,
+        "ty": 355,
+        "bx": 525,
+        "by": 313
+      },
+      {
+        "num": 5,
+        "name": "Botão \"Enviar no WhatsApp\"",
+        "tx": 115,
+        "ty": 585,
+        "bx": 42,
+        "by": 658
+      },
+      {
+        "num": 6,
+        "name": "Botão \"Copiar Mensagem\"",
+        "tx": 117,
+        "ty": 637,
+        "bx": 42,
+        "by": 738
+      },
+      {
+        "num": 7,
+        "name": "Copiar Apenas o Link Mágico",
+        "tx": 192,
+        "ty": 705,
+        "bx": 524,
+        "by": 808
+      }
+    ]
+  },
+  "fig4b": {
+    "id": "fig4b",
+    "title": "Figura 4b: Importar no Meu App",
+    "filename": "manual_figura_4b_importar_link.png",
+    "image": "./clean_screens/04b_importar_link.png",
+    "color": "#6366F1",
+    "items": [
+      {
+        "num": 1,
+        "name": "Aba Ativa \"Importar no Meu App\"",
+        "tx": 260,
+        "ty": 374,
+        "bx": 525,
+        "by": 255
+      },
+      {
+        "num": 2,
+        "name": "Botão \"Colar Link Copiado\"",
+        "tx": 75,
+        "ty": 580,
+        "bx": 42,
+        "by": 508
+      },
+      {
+        "num": 3,
+        "name": "Campo de Inserção de Link",
+        "tx": 144,
+        "ty": 662,
+        "bx": 50,
+        "by": 772
+      },
+      {
+        "num": 4,
+        "name": "Botão \"Verificar Link\"",
+        "tx": 387,
+        "ty": 650,
+        "bx": 540,
+        "by": 628
+      }
+    ]
+  },
+  "fig5": {
+    "id": "fig5",
+    "title": "Figura 5: Sincronização de Calendário",
+    "filename": "manual_figura_5_lembretes_celular.png",
+    "image": "./clean_screens/05_lembretes_celular.png",
+    "color": "#E11D48",
+    "items": [
+      {
+        "num": 1,
+        "name": "Opção \"Semana Toda\"",
+        "tx": 22,
+        "ty": 499,
+        "bx": 42,
+        "by": 478
+      },
+      {
+        "num": 2,
+        "name": "Opção \"Apenas Terça-feira\"",
+        "tx": 340,
+        "ty": 495,
+        "bx": 540,
+        "by": 478
+      },
+      {
+        "num": 3,
+        "name": "Configuração dos Alarmes (Antecedência)",
+        "tx": 220,
+        "ty": 589,
+        "bx": 532,
+        "by": 597
+      },
+      {
+        "num": 4,
+        "name": "Instruções para iPhone e Android",
+        "tx": 214,
+        "ty": 727,
+        "bx": 529,
+        "by": 713
+      },
+      {
+        "num": 5,
+        "name": "Botão \"Baixar e Abrir no Calendário\"",
+        "tx": 202,
+        "ty": 842,
+        "bx": 527,
+        "by": 813
+      }
+    ]
+  },
+  "fig6": {
+    "id": "fig6",
+    "title": "Figura 6: Configurações & Vozes",
+    "filename": "manual_figura_6_configuracoes_vozes.png",
+    "image": "./clean_screens/06_configuracoes.png",
+    "color": "#8B5CF6",
+    "items": [
+      {
+        "num": 1,
+        "name": "Tema Visual (Claro / Escuro / Sistema)",
+        "tx": 139,
+        "ty": 215,
+        "bx": 42,
+        "by": 217
+      },
+      {
+        "num": 2,
+        "name": "Volume dos Lembretes Sonoros (Slider)",
+        "tx": 140,
+        "ty": 317,
+        "bx": 49,
+        "by": 335
+      },
+      {
+        "num": 3,
+        "name": "Leitura por Voz dos Lembretes (TTS)",
+        "tx": 375,
+        "ty": 394,
+        "bx": 527,
+        "by": 338
+      },
+      {
+        "num": 4,
+        "name": "Seleção do Motor de Voz",
+        "tx": 39,
+        "ty": 495,
+        "bx": 42,
+        "by": 543
+      },
+      {
+        "num": 5,
+        "name": "Estilo do Locutor (Mascote vs Suave TEA)",
+        "tx": 25,
+        "ty": 587,
+        "bx": 42,
+        "by": 678
+      },
+      {
+        "num": 6,
+        "name": "Cadência da Fala (Calma vs Animada)",
+        "tx": 27,
+        "ty": 690,
+        "bx": 42,
+        "by": 768
+      },
+      {
+        "num": 7,
+        "name": "Botões de Teste Auditivo",
+        "tx": 32,
+        "ty": 770,
+        "bx": 42,
+        "by": 828
+      },
+      {
+        "num": 8,
+        "name": "Botão \"Salvar Preferências\"",
+        "tx": 310,
+        "ty": 845,
+        "bx": 524,
+        "by": 777
+      }
+    ]
+  }
+}
+;
+
+    // Load state
+    let config = DEFAULT_CONFIG;
+    try {
+      const saved = localStorage.getItem('synapsis_manual_config');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.fig1 && parsed.fig2 && parsed.fig6) {
+          config = parsed;
+        }
+      }
+    } catch(e) {
+      console.warn('Could not parse localStorage, using default:', e);
+    }
+
+    let currentFigKey = 'fig1';
+    let selectedItemNum = null;
+    let draggingTarget = null;
+    let zoomLevel = 0.8; // default 80% so entire canvas fits comfortably
+
+    function setZoom(lvl) {
+      zoomLevel = Math.max(0.4, Math.min(1.5, Math.round(lvl * 10) / 10));
+      document.getElementById('zoom-wrapper').style.transform = `scale(${zoomLevel})`;
+      document.getElementById('zoom-label').textContent = `${Math.round(zoomLevel * 100)}%`;
+    }
+
+    function fitScreen() {
+      const stage = document.getElementById('stage-wrapper');
+      const availableH = stage.clientHeight - 80;
+      const fitZoom = Math.min(1.0, Math.max(0.5, availableH / TOTAL_HEIGHT));
+      setZoom(fitZoom);
+    }
+
+    function saveState() {
+      localStorage.setItem('synapsis_manual_config', JSON.stringify(config));
+    }
+
+    function switchFigure(key) {
+      if (!config[key]) return;
+      currentFigKey = key;
+      selectedItemNum = null;
+
+      // Update active button state
+      document.querySelectorAll('.fig-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-${key}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('top-title').textContent = config[key].title;
+      render();
+    }
+
+    function selectItem(num) {
+      selectedItemNum = num;
+      renderSidebar();
+      renderSvg();
+    }
+
+    function resetCurrentFigure() {
+      if (confirm(`Deseja restaurar as coordenadas padrão da ${config[currentFigKey].title}?`)) {
+        config[currentFigKey] = JSON.parse(JSON.stringify(DEFAULT_CONFIG[currentFigKey]));
+        saveState();
+        render();
+        showToast('Coordenadas restauradas com sucesso!');
+      }
+    }
+
+    function onImgError() {
+      console.error('Image failed to load:', config[currentFigKey].image);
+      showToast('Aviso: Imagem da tela não encontrada no caminho especificado.');
+    }
+
+    function renderSidebar() {
+      const fig = config[currentFigKey];
+      document.getElementById('items-count-title').textContent = `Itens da Figura (${fig.items.length}):`;
+      const container = document.getElementById('items-list');
+      container.innerHTML = '';
+
+      fig.items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `item-card ${selectedItemNum === item.num ? 'active' : ''}`;
+        div.onclick = () => selectItem(item.num);
+
+        div.innerHTML = `
+          <div class="item-num" style="background: ${fig.color}">${item.num}</div>
+          <div class="item-info">
+            <div class="item-title">${item.name}</div>
+            <div class="item-coords">Alvo: (${Math.round(item.tx)}, ${Math.round(item.ty)}) • Badge: (${Math.round(item.bx)}, ${Math.round(item.by)})</div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function renderSvg() {
+      const fig = config[currentFigKey];
+      const svg = document.getElementById('svg-canvas');
+      svg.innerHTML = '';
+
+      fig.items.forEach(item => {
+        const isSelected = selectedItemNum === item.num;
+        const tx = MARGIN_LEFT + item.tx;
+        const ty = MARGIN_TOP + item.ty;
+        const bx = item.bx;
+        const by = item.by;
+
+        // 1. Shadow Line
+        const shadow = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        shadow.setAttribute('class', 'svg-line-bg');
+        shadow.setAttribute('x1', bx);
+        shadow.setAttribute('y1', by);
+        shadow.setAttribute('x2', tx);
+        shadow.setAttribute('y2', ty);
+        svg.appendChild(shadow);
+
+        // 2. Foreground Line
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('class', 'svg-line-fg');
+        line.setAttribute('x1', bx);
+        line.setAttribute('y1', by);
+        line.setAttribute('x2', tx);
+        line.setAttribute('y2', ty);
+        line.setAttribute('stroke', isSelected ? '#38BDF8' : fig.color);
+        if (isSelected) line.setAttribute('stroke-width', '3px');
+        svg.appendChild(line);
+
+        // 3. Target Dot (Draggable target!)
+        const targetG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        targetG.setAttribute('class', 'svg-target-handle');
+        targetG.setAttribute('data-num', item.num);
+
+        // Outer pulse circle
+        const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pulse.setAttribute('class', 'pulse');
+        pulse.setAttribute('cx', tx);
+        pulse.setAttribute('cy', ty);
+        pulse.setAttribute('r', isSelected ? '10' : '7');
+        pulse.setAttribute('fill', 'rgba(255,255,255,0.25)');
+        pulse.setAttribute('stroke', isSelected ? '#38BDF8' : '#000000');
+        pulse.setAttribute('stroke-width', '1.5');
+        targetG.appendChild(pulse);
+
+        // Center dot
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('cx', tx);
+        dot.setAttribute('cy', ty);
+        dot.setAttribute('r', '4');
+        dot.setAttribute('fill', isSelected ? '#38BDF8' : fig.color);
+        dot.setAttribute('stroke', '#FFFFFF');
+        dot.setAttribute('stroke-width', '1.5');
+        targetG.appendChild(dot);
+
+        // Tooltip title
+        const tTitle = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        tTitle.textContent = `${item.num}. ${item.name} (Arraste para reposicionar o alvo)`;
+        targetG.appendChild(tTitle);
+
+        // Drag listeners for Target
+        targetG.onmousedown = (e) => {
+          e.stopPropagation();
+          selectItem(item.num);
+          startDrag(item, 'target', e);
+        };
+
+        svg.appendChild(targetG);
+
+        // 4. Badge Circle (Draggable badge!)
+        const badgeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        badgeG.setAttribute('class', 'svg-badge-handle');
+        badgeG.setAttribute('data-num', item.num);
+
+        const bShadow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        bShadow.setAttribute('cx', bx);
+        bShadow.setAttribute('cy', by + 2.5);
+        bShadow.setAttribute('r', '15');
+        bShadow.setAttribute('fill', 'rgba(0,0,0,0.5)');
+        badgeG.appendChild(bShadow);
+
+        const bBorder = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        bBorder.setAttribute('cx', bx);
+        bBorder.setAttribute('cy', by);
+        bBorder.setAttribute('r', '15.5');
+        bBorder.setAttribute('fill', isSelected ? '#38BDF8' : '#FFFFFF');
+        badgeG.appendChild(bBorder);
+
+        const bMain = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        bMain.setAttribute('cx', bx);
+        bMain.setAttribute('cy', by);
+        bMain.setAttribute('r', '14');
+        bMain.setAttribute('fill', fig.color);
+        badgeG.appendChild(bMain);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('class', 'badge-label');
+        text.setAttribute('x', bx);
+        text.setAttribute('y', by + 4.5);
+        text.textContent = item.num;
+        badgeG.appendChild(text);
+
+        badgeG.onmousedown = (e) => {
+          e.stopPropagation();
+          selectItem(item.num);
+          startDrag(item, 'badge', e);
+        };
+
+        svg.appendChild(badgeG);
+      });
+    }
+
+    function render() {
+      const fig = config[currentFigKey];
+      const img = document.getElementById('mockup-img');
+      img.src = fig.image;
+      renderSidebar();
+      renderSvg();
+    }
+
+    // DRAG AND DROP WITH ACCURATE ZOOM COMPENSATION
+    function startDrag(item, type, e) {
+      draggingTarget = { item, type };
+      window.addEventListener('mousemove', onDragMove);
+      window.addEventListener('mouseup', onDragEnd);
+    }
+
+    function onDragMove(e) {
+      if (!draggingTarget) return;
+
+      const rect = document.getElementById('canvas-container').getBoundingClientRect();
+      // Account for current zoom level:
+      let mouseX = (e.clientX - rect.left) / zoomLevel;
+      let mouseY = (e.clientY - rect.top) / zoomLevel;
+
+      // Clamp within canvas
+      mouseX = Math.max(5, Math.min(TOTAL_WIDTH - 5, mouseX));
+      mouseY = Math.max(5, Math.min(TOTAL_HEIGHT - 5, mouseY));
+
+      if (draggingTarget.type === 'target') {
+        let sx = mouseX - MARGIN_LEFT;
+        let sy = mouseY - MARGIN_TOP;
+        sx = Math.max(0, Math.min(412, sx));
+        sy = Math.max(0, Math.min(892, sy));
+        draggingTarget.item.tx = Math.round(sx);
+        draggingTarget.item.ty = Math.round(sy);
+      } else {
+        draggingTarget.item.bx = Math.round(mouseX);
+        draggingTarget.item.by = Math.round(mouseY);
+      }
+
+      renderSvg();
+      renderSidebar();
+    }
+
+    function onDragEnd() {
+      if (draggingTarget) {
+        saveState();
+        draggingTarget = null;
+        window.removeEventListener('mousemove', onDragMove);
+        window.removeEventListener('mouseup', onDragEnd);
+      }
+    }
+
+    // EXPORT HIGH-RES 2X PNG VIA CANVAS
+    async function generateFigureCanvas(fig) {
+      const scale = 2; // retina 2x
+      const canvas = document.createElement('canvas');
+      canvas.width = TOTAL_WIDTH * scale;
+      canvas.height = TOTAL_HEIGHT * scale;
+      const ctx = canvas.getContext('2d');
+
+      // 1. Studio background
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 2. Draw Phone Mockup Image
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = fig.image;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = () => {
+          console.warn('Canvas image load fallback');
+          resolve();
+        };
+      });
+
+      // Phone shadow & clip
+      const px = MARGIN_LEFT * scale;
+      const py = MARGIN_TOP * scale;
+      const pw = 412 * scale;
+      const ph = 892 * scale;
+      const r = 24 * scale;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(px + r, py);
+      ctx.lineTo(px + pw - r, py);
+      ctx.quadraticCurveTo(px + pw, py, px + pw, py + r);
+      ctx.lineTo(px + pw, py + ph - r);
+      ctx.quadraticCurveTo(px + pw, py + ph, px + pw - r, py + ph);
+      ctx.lineTo(px + r, py + ph);
+      ctx.quadraticCurveTo(px, py + ph, px, py + ph - r);
+      ctx.lineTo(px, py + r);
+      ctx.quadraticCurveTo(px, py, px + r, py);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(img, px, py, pw, ph);
+      ctx.restore();
+
+      // Border around phone
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1.5 * scale;
+      ctx.beginPath();
+      ctx.moveTo(px + r, py);
+      ctx.lineTo(px + pw - r, py);
+      ctx.quadraticCurveTo(px + pw, py, px + pw, py + r);
+      ctx.lineTo(px + pw, py + ph - r);
+      ctx.quadraticCurveTo(px + pw, py + ph, px + pw - r, py + ph);
+      ctx.lineTo(px + r, py + ph);
+      ctx.quadraticCurveTo(px, py + ph, px, py + ph - r);
+      ctx.lineTo(px, py + r);
+      ctx.quadraticCurveTo(px, py, px + r, py);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+
+      // 3. Draw Callouts (Lines & Badges)
+      fig.items.forEach(item => {
+        const tx = (MARGIN_LEFT + item.tx) * scale;
+        const ty = (MARGIN_TOP + item.ty) * scale;
+        const bx = item.bx * scale;
+        const by = item.by * scale;
+
+        // Line Shadow
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.lineWidth = 4 * scale;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(bx, by);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+
+        // Line Color
+        ctx.strokeStyle = fig.color;
+        ctx.lineWidth = 2.2 * scale;
+        ctx.beginPath();
+        ctx.moveTo(bx, by);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+        ctx.restore();
+
+        // Target Dot on element
+        ctx.save();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(tx, ty, 4.5 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = fig.color;
+        ctx.beginPath();
+        ctx.arc(tx, ty, 2.8 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Badge Circle
+        const br = 14 * scale;
+        // Shadow
+        ctx.save();
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.beginPath();
+        ctx.arc(bx, by + 2.5 * scale, (14 + 1) * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // White border
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(bx, by, (14 + 1.5) * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Main colored circle
+        ctx.fillStyle = fig.color;
+        ctx.beginPath();
+        ctx.arc(bx, by, br, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Text
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `bold ${12 * scale}px "Plus Jakarta Sans", system-ui, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(item.num, bx, by + 1 * scale);
+        ctx.restore();
+      });
+
+      return canvas;
+    }
+
+    async function downloadCurrentFigurePng() {
+      const fig = config[currentFigKey];
+      showToast('Renderizando imagem em alta resolução...');
+      const canvas = await generateFigureCanvas(fig);
+      const a = document.createElement('a');
+      a.download = fig.filename;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      showToast(`Imagem ${fig.filename} baixada com sucesso!`);
+    }
+
+    async function downloadAllFiguresPng() {
+      showToast('Renderizando todas as 7 figuras...');
+      const keys = Object.keys(config);
+      for (const k of keys) {
+        const fig = config[k];
+        const canvas = await generateFigureCanvas(fig);
+        const a = document.createElement('a');
+        a.download = fig.filename;
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        await new Promise(r => setTimeout(r, 600));
+      }
+      showToast('Todas as 7 figuras foram exportadas!');
+    }
+
+    function copyJsonConfig() {
+      const json = JSON.stringify(config, null, 2);
+      navigator.clipboard.writeText(json).then(() => {
+        showToast('Configuração copiada para a área de transferência!');
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = '✨ ' + msg;
+      t.style.display = 'flex';
+      setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    // Initialize
+    window.onload = () => {
+      fitScreen();
+      render();
+    };
+  </script>
+</body>
+</html>

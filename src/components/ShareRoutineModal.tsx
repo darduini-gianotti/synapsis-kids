@@ -100,7 +100,7 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
       return `Olá! Segue a rotina personalizada estruturada no app *Synapsis Kids* 🧸\n\n📅 *Rotina — ${currentDayName} (${currentTasks.length} atividades)*\n${taskBullets}${moreCount}\n\n📲 *Para abrir no seu celular:*\n• Se já usa o app instalado: Copie o link e abra no Synapsis Kids em *Enviar / Importar* > *Colar Link*.\n• Ou toque direto no link para abrir:\n${magicLink}\n\nCom carinho • Synapsis Kids ✨`;
     } else {
       let totalTasks = 0;
-      Object.values(routines).forEach((r) => {
+      Object.values(routines).forEach((r: DayRoutine) => {
         totalTasks += r.tasks.length;
       });
 

@@ -1,0 +1,497 @@
+{
+  "fig1": {
+    "id": "fig1",
+    "title": "Figura 1: Tela Principal",
+    "filename": "manual_figura_1_tela_principal.png",
+    "image": "./clean_screens/01_tela_principal.png",
+    "color": "#4F46E5",
+    "items": [
+      {
+        "num": 1,
+        "name": "Identidade & Logo",
+        "tx": 49,
+        "ty": 20,
+        "bx": 42,
+        "by": 56
+      },
+      {
+        "num": 2,
+        "name": "Contador de Progresso (2/5)",
+        "tx": 402,
+        "ty": 20,
+        "bx": 540,
+        "by": 56
+      },
+      {
+        "num": 3,
+        "name": "Botão + Nova Tarefa",
+        "tx": 15,
+        "ty": 82,
+        "bx": 42,
+        "by": 120
+      },
+      {
+        "num": 4,
+        "name": "Alternador Tema (Sol/Lua)",
+        "tx": 273,
+        "ty": 66,
+        "bx": 274,
+        "by": 17
+      },
+      {
+        "num": 5,
+        "name": "Controle Geral de Som",
+        "tx": 309,
+        "ty": 66,
+        "bx": 320,
+        "by": 17
+      },
+      {
+        "num": 6,
+        "name": "Bloqueio Parental (PIN)",
+        "tx": 345,
+        "ty": 66,
+        "bx": 364,
+        "by": 20
+      },
+      {
+        "num": 7,
+        "name": "Menu de Configurações",
+        "tx": 397,
+        "ty": 82,
+        "bx": 540,
+        "by": 120
+      },
+      {
+        "num": 8,
+        "name": "Modelos Clínicos Prontos",
+        "tx": 17,
+        "ty": 158,
+        "bx": 42,
+        "by": 196
+      },
+      {
+        "num": 9,
+        "name": "Enviar / Importar Rotinas",
+        "tx": 182,
+        "ty": 147,
+        "bx": 320,
+        "by": 150
+      },
+      {
+        "num": 10,
+        "name": "Sincronizar Calendário (.ics)",
+        "tx": 260,
+        "ty": 147,
+        "bx": 540,
+        "by": 157
+      },
+      {
+        "num": 11,
+        "name": "Copiar Programação",
+        "tx": 294,
+        "ty": 165,
+        "bx": 540,
+        "by": 245
+      },
+      {
+        "num": 12,
+        "name": "Seletor de Dias (Hoje/Ter)",
+        "tx": 72,
+        "ty": 205,
+        "bx": 42,
+        "by": 243
+      },
+      {
+        "num": 13,
+        "name": "Alternador de Visualização",
+        "tx": 390,
+        "ty": 278,
+        "bx": 540,
+        "by": 316
+      },
+      {
+        "num": 14,
+        "name": "Bloco Primeiro / Depois",
+        "tx": 17,
+        "ty": 366,
+        "bx": 42,
+        "by": 404
+      },
+      {
+        "num": 15,
+        "name": "Cartão de Tarefa Interativo",
+        "tx": 17,
+        "ty": 530,
+        "bx": 42,
+        "by": 568
+      }
+    ]
+  },
+  "fig2": {
+    "id": "fig2",
+    "title": "Figura 2: Prancha Visual TEA",
+    "filename": "manual_figura_2_prancha_tea.png",
+    "image": "./clean_screens/02_prancha_tea.png",
+    "color": "#059669",
+    "items": [
+      {
+        "num": 1,
+        "name": "Seletor Modo Visual (Cartões vs 1º/Depois)",
+        "tx": 159,
+        "ty": 330,
+        "bx": 42,
+        "by": 324
+      },
+      {
+        "num": 2,
+        "name": "Selo Modo TEA Ativo",
+        "tx": 381,
+        "ty": 348,
+        "bx": 540,
+        "by": 386
+      },
+      {
+        "num": 3,
+        "name": "Horário da Atividade (07:00)",
+        "tx": 33,
+        "ty": 432,
+        "bx": 42,
+        "by": 470
+      },
+      {
+        "num": 4,
+        "name": "Ouvir Instrução por Voz",
+        "tx": 184,
+        "ty": 432,
+        "bx": 540,
+        "by": 547
+      },
+      {
+        "num": 5,
+        "name": "Pictograma Visual CAA / PECS",
+        "tx": 72,
+        "ty": 515,
+        "bx": 42,
+        "by": 568
+      },
+      {
+        "num": 6,
+        "name": "Título da Atividade em Fonte Grande",
+        "tx": 60,
+        "ty": 595,
+        "bx": 42,
+        "by": 668
+      },
+      {
+        "num": 7,
+        "name": "Botão Concluir Tarefa",
+        "tx": 65,
+        "ty": 660,
+        "bx": 39,
+        "by": 785
+      }
+    ]
+  },
+  "fig3": {
+    "id": "fig3",
+    "title": "Figura 3: Modal de Foco e Passos",
+    "filename": "manual_figura_3_modal_foco_passos.png",
+    "image": "./clean_screens/03_modal_foco_passos.png",
+    "color": "#D97706",
+    "items": [
+      {
+        "num": 1,
+        "name": "Botão Voltar à Prancha",
+        "tx": 35,
+        "ty": 62,
+        "bx": 42,
+        "by": 83
+      },
+      {
+        "num": 2,
+        "name": "Horário Programado",
+        "tx": 340,
+        "ty": 64,
+        "bx": 540,
+        "by": 83
+      },
+      {
+        "num": 3,
+        "name": "Desenho Central & Toque de Áudio",
+        "tx": 160,
+        "ty": 270,
+        "bx": 42,
+        "by": 258
+      },
+      {
+        "num": 4,
+        "name": "Título da Atividade em Destaque",
+        "tx": 105,
+        "ty": 429,
+        "bx": 42,
+        "by": 468
+      },
+      {
+        "num": 5,
+        "name": "Painel de Micro-Passos (Checklist)",
+        "tx": 202,
+        "ty": 547,
+        "bx": 42,
+        "by": 558
+      },
+      {
+        "num": 6,
+        "name": "Número e Descrição do Passo",
+        "tx": 45,
+        "ty": 649,
+        "bx": 42,
+        "by": 638
+      },
+      {
+        "num": 7,
+        "name": "Checkbox Tátil de Conclusão",
+        "tx": 349,
+        "ty": 574,
+        "bx": 540,
+        "by": 638
+      },
+      {
+        "num": 8,
+        "name": "Botão \"Tudo Feito! Concluir Atividade\"",
+        "tx": 217,
+        "ty": 795,
+        "bx": 42,
+        "by": 782
+      }
+    ]
+  },
+  "fig4": {
+    "id": "fig4",
+    "title": "Figura 4: Compartilhar no WhatsApp",
+    "filename": "manual_figura_4_compartilhar_link.png",
+    "image": "./clean_screens/04_compartilhar_link.png",
+    "color": "#0D9488",
+    "items": [
+      {
+        "num": 1,
+        "name": "Aba \"Compartilhar Rotina\"",
+        "tx": 124,
+        "ty": 139,
+        "bx": 220,
+        "by": 18
+      },
+      {
+        "num": 2,
+        "name": "Aba \"Importar no Meu App\"",
+        "tx": 322,
+        "ty": 144,
+        "bx": 360,
+        "by": 18
+      },
+      {
+        "num": 3,
+        "name": "Filtro (Dia Atual vs Semana)",
+        "tx": 207,
+        "ty": 239,
+        "bx": 524,
+        "by": 225
+      },
+      {
+        "num": 4,
+        "name": "Resumo Visual das Atividades",
+        "tx": 185,
+        "ty": 355,
+        "bx": 525,
+        "by": 313
+      },
+      {
+        "num": 5,
+        "name": "Botão \"Enviar no WhatsApp\"",
+        "tx": 115,
+        "ty": 585,
+        "bx": 42,
+        "by": 658
+      },
+      {
+        "num": 6,
+        "name": "Botão \"Copiar Mensagem\"",
+        "tx": 117,
+        "ty": 637,
+        "bx": 42,
+        "by": 738
+      },
+      {
+        "num": 7,
+        "name": "Copiar Apenas o Link Mágico",
+        "tx": 192,
+        "ty": 705,
+        "bx": 524,
+        "by": 808
+      }
+    ]
+  },
+  "fig4b": {
+    "id": "fig4b",
+    "title": "Figura 4b: Importar no Meu App",
+    "filename": "manual_figura_4b_importar_link.png",
+    "image": "./clean_screens/04b_importar_link.png",
+    "color": "#6366F1",
+    "items": [
+      {
+        "num": 1,
+        "name": "Aba Ativa \"Importar no Meu App\"",
+        "tx": 260,
+        "ty": 374,
+        "bx": 525,
+        "by": 255
+      },
+      {
+        "num": 2,
+        "name": "Botão \"Colar Link Copiado\"",
+        "tx": 75,
+        "ty": 580,
+        "bx": 42,
+        "by": 508
+      },
+      {
+        "num": 3,
+        "name": "Campo de Inserção de Link",
+        "tx": 144,
+        "ty": 662,
+        "bx": 50,
+        "by": 772
+      },
+      {
+        "num": 4,
+        "name": "Botão \"Verificar Link\"",
+        "tx": 387,
+        "ty": 650,
+        "bx": 540,
+        "by": 628
+      }
+    ]
+  },
+  "fig5": {
+    "id": "fig5",
+    "title": "Figura 5: Sincronização de Calendário",
+    "filename": "manual_figura_5_lembretes_celular.png",
+    "image": "./clean_screens/05_lembretes_celular.png",
+    "color": "#E11D48",
+    "items": [
+      {
+        "num": 1,
+        "name": "Opção \"Semana Toda\"",
+        "tx": 22,
+        "ty": 499,
+        "bx": 42,
+        "by": 478
+      },
+      {
+        "num": 2,
+        "name": "Opção \"Apenas Terça-feira\"",
+        "tx": 340,
+        "ty": 495,
+        "bx": 540,
+        "by": 478
+      },
+      {
+        "num": 3,
+        "name": "Configuração dos Alarmes (Antecedência)",
+        "tx": 220,
+        "ty": 589,
+        "bx": 532,
+        "by": 597
+      },
+      {
+        "num": 4,
+        "name": "Instruções para iPhone e Android",
+        "tx": 214,
+        "ty": 727,
+        "bx": 529,
+        "by": 713
+      },
+      {
+        "num": 5,
+        "name": "Botão \"Baixar e Abrir no Calendário\"",
+        "tx": 202,
+        "ty": 842,
+        "bx": 527,
+        "by": 813
+      }
+    ]
+  },
+  "fig6": {
+    "id": "fig6",
+    "title": "Figura 6: Configurações & Vozes",
+    "filename": "manual_figura_6_configuracoes_vozes.png",
+    "image": "./clean_screens/06_configuracoes.png",
+    "color": "#8B5CF6",
+    "items": [
+      {
+        "num": 1,
+        "name": "Tema Visual (Claro / Escuro / Sistema)",
+        "tx": 139,
+        "ty": 215,
+        "bx": 42,
+        "by": 217
+      },
+      {
+        "num": 2,
+        "name": "Volume dos Lembretes Sonoros (Slider)",
+        "tx": 140,
+        "ty": 317,
+        "bx": 49,
+        "by": 335
+      },
+      {
+        "num": 3,
+        "name": "Leitura por Voz dos Lembretes (TTS)",
+        "tx": 375,
+        "ty": 394,
+        "bx": 527,
+        "by": 338
+      },
+      {
+        "num": 4,
+        "name": "Seleção do Motor de Voz",
+        "tx": 39,
+        "ty": 495,
+        "bx": 42,
+        "by": 543
+      },
+      {
+        "num": 5,
+        "name": "Estilo do Locutor (Mascote vs Suave TEA)",
+        "tx": 25,
+        "ty": 587,
+        "bx": 42,
+        "by": 678
+      },
+      {
+        "num": 6,
+        "name": "Cadência da Fala (Calma vs Animada)",
+        "tx": 27,
+        "ty": 690,
+        "bx": 42,
+        "by": 768
+      },
+      {
+        "num": 7,
+        "name": "Botões de Teste Auditivo",
+        "tx": 32,
+        "ty": 770,
+        "bx": 42,
+        "by": 828
+      },
+      {
+        "num": 8,
+        "name": "Botão \"Salvar Preferências\"",
+        "tx": 310,
+        "ty": 845,
+        "bx": 524,
+        "by": 777
+      }
+    ]
+  }
+}

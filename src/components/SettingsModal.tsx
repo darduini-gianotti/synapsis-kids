@@ -18,6 +18,8 @@ import {
   Calendar,
   LayoutGrid,
   Sparkles,
+  BookOpen,
+  ExternalLink,
 } from 'lucide-react';
 import { AppSettings, ThemeMode, VoiceCharacterStyle } from '../types';
 import { soundManager } from '../utils/audio';
@@ -765,6 +767,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   Dica: anote a sua senha de 4 dígitos. Ela será necessária sempre que você quiser adicionar, editar ou excluir tarefas da rotina do seu filho.
                 </p>
               </div>
+            </div>
+
+            {/* Manual do Usuário & Guia Clínico */}
+            <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
+              <a
+                href="/manual.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                id="settings-open-manual-btn"
+                className="w-full py-2.5 px-3 bg-teal-50/80 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 text-teal-800 dark:text-teal-200 border border-teal-200/80 dark:border-teal-800/60 rounded-xl text-xs font-semibold flex items-center justify-between transition-all group no-underline"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-teal-600/10 dark:bg-teal-400/10 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0 group-hover:scale-105 transition-transform">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <div className="text-left">
+                    <span className="block font-bold leading-tight">Manual do Usuário & Guia Clínico</span>
+                    <span className="block text-[10px] text-teal-600/80 dark:text-teal-400/80 font-normal">Edição Oficial • Guia visual com opção para salvar em PDF</span>
+                  </div>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 text-teal-500 opacity-60 group-hover:opacity-100 transition-opacity shrink-0" />
+              </a>
             </div>
 
             {/* Export to Calendar / Reminders (iOS & Android) */}
