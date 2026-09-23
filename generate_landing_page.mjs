@@ -5,7 +5,6 @@ const DOCS_DIR = path.join(process.cwd(), 'docs');
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
 
 // Read logos as base64 for reliable, zero-latency rendering
-const logoIntegrareB64 = fs.readFileSync(path.join(DOCS_DIR, 'assets', 'logo_espaco_integrare.png')).toString('base64');
 const synapsiFullB64 = fs.readFileSync(path.join(PUBLIC_DIR, 'assets', 'synapsi_1_full.png')).toString('base64');
 const synapsiBrainB64 = fs.readFileSync(path.join(PUBLIC_DIR, 'assets', 'synapsi_brain1.png')).toString('base64');
 
@@ -132,17 +131,15 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ==================== NAVBAR ==================== -->
   <header class="sticky top-0 z-50 bg-[#090D16]/95 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-22 sm:h-24 md:h-28 flex items-center justify-between gap-4 lg:gap-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-22 md:h-24 flex items-center justify-between gap-6">
       
-      <!-- Logos Co-Branding -->
-      <a href="/" class="flex items-center gap-3 sm:gap-4 lg:gap-5 group shrink-0">
-        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-12 sm:h-14 md:h-16 lg:h-[70px] w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
-        <div class="hidden sm:block w-px h-10 sm:h-12 md:h-14 bg-slate-700"></div>
-        <img src="data:image/png;base64,${logoIntegrareB64}" alt="Espaço Integrare" class="hidden sm:block h-12 sm:h-14 md:h-16 lg:h-[70px] w-auto object-contain opacity-95 group-hover:opacity-100 transition-opacity">
+      <!-- Logo Oficial Synapsis Kids -->
+      <a href="/" class="flex items-center group shrink-0" title="Synapsis Kids">
+        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-12 sm:h-14 md:h-16 lg:h-[68px] w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
       </a>
 
       <!-- Menu Links Desktop (Cabeçalhos) -->
-      <nav class="hidden md:flex items-center gap-3.5 lg:gap-5 xl:gap-6 text-xs lg:text-sm font-semibold text-slate-300 shrink-0">
+      <nav class="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8 text-xs lg:text-sm font-semibold text-slate-300 shrink-0">
         <a href="#recursos" class="hover:text-teal-400 transition-colors">Recursos</a>
         <a href="#metodo" class="hover:text-teal-400 transition-colors">Método Clínico</a>
         <a href="#instalacao" class="hover:text-teal-400 transition-colors">Como Instalar</a>
@@ -150,7 +147,7 @@ const htmlContent = `<!DOCTYPE html>
           <span>Manual</span>
           <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
         </a>
-        <a href="#clinico" class="px-3.5 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-800 text-teal-300 border border-teal-500/30 text-xs font-bold transition flex items-center gap-1.5 shadow-sm hover:border-teal-400">
+        <a href="#clinico" class="px-4 py-2 rounded-full bg-slate-800/80 hover:bg-slate-800 text-teal-300 border border-teal-500/30 text-xs font-bold transition flex items-center gap-1.5 shadow-sm hover:border-teal-400">
           <span>💼 Para Clínicas & Terapeutas</span>
         </a>
       </nav>
@@ -227,22 +224,23 @@ const htmlContent = `<!DOCTYPE html>
             O <strong>Synapsis Kids</strong> não é apenas um cronômetro ou organizador genérico. Ele foi concebido a partir dos desafios reais vividos na prática clínica com crianças neurodivergentes e suas famílias.
           </p>
 
-          <!-- Card de Apresentação da Dra. Sandra -->
+          <!-- Card de Apresentação da Especialista -->
           <div class="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-4 shadow-xl">
-            <div class="flex items-center gap-4">
-              <img src="data:image/png;base64,${logoIntegrareB64}" alt="Espaço Integrare" class="h-14 sm:h-16 md:h-18 w-auto object-contain drop-shadow-[0_2px_12px_rgba(255,255,255,0.08)]">
-            </div>
-
-            <div>
-              <h3 class="text-lg font-bold text-white">Sandra Sorgatti D’Arduini</h3>
-              <p class="text-xs font-semibold text-teal-400">Psicóloga (CRP 06/162626) • Neuropsicóloga</p>
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+                🧠
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-white">Sandra Sorgatti D’Arduini</h3>
+                <p class="text-xs font-semibold text-teal-400">Psicóloga (CRP 06/162626) • Neuropsicóloga</p>
+              </div>
             </div>
 
             <ul class="text-xs text-slate-300 space-y-1.5 border-t border-slate-700 pt-3">
               <li>• Especialista em Terapia Cognitivo-Comportamental (TCC)</li>
               <li>• Especialista em Transtornos do Neurodesenvolvimento (TEA e TDAH)</li>
               <li>• Especialista em Neuropsicologia e Reabilitação Cognitiva</li>
-              <li>• Fundadora e Responsável Técnica — <strong>Espaço Integrare</strong></li>
+              <li>• Curadoria Clínica & Protocolos de Rotina Visual Estruturada</li>
             </ul>
 
             <blockquote class="italic text-xs text-slate-400 border-l-2 border-teal-500 pl-3">
@@ -673,13 +671,11 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="bg-slate-950 border-t border-slate-800/80 py-8 sm:py-10 text-slate-400 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800">
-        <div class="flex items-center gap-4 sm:gap-6">
-          <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-12 sm:h-16 w-auto object-contain">
-          <div class="w-px h-10 sm:h-12 bg-slate-800"></div>
-          <img src="data:image/png;base64,${logoIntegrareB64}" alt="Espaço Integrare" class="h-12 sm:h-16 w-auto object-contain opacity-95 hover:opacity-100 transition">
+        <div class="flex items-center">
+          <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-10 sm:h-12 w-auto object-contain">
         </div>
 
         <div class="flex items-center gap-6">
@@ -693,7 +689,7 @@ const htmlContent = `<!DOCTYPE html>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-[11px] text-slate-500">
         <div>
           <p>© 2026 <strong>Synapsis Kids</strong> • Ecossistema Synapsis Clínico & SD Engenharia.</p>
-          <p>Concepção Clínica & Curadoria Neuropsicológica: <strong>Espaço Integrare (Sandra Sorgatti D'Arduini — CRP 06/162626)</strong>.</p>
+          <p>Concepção Clínica & Curadoria Neuropsicológica: <strong>Sandra Sorgatti D'Arduini (CRP 06/162626)</strong>.</p>
         </div>
         <div>
           <p>Desenvolvido para apoio familiar e educacional. 100% gratuito e sem fins de rastreamento de dados.</p>
