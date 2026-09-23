@@ -36,7 +36,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-d1', title: 'Perceber a vontade de xixi ou cocô', completed: false },
           { id: 'st-d2', title: 'Caminhar calmamente até o banheiro', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/5921/5921_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/4880/4880_300.png',
       },
       {
         title: 'Preparar a Roupa',
@@ -51,7 +51,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-d3', title: 'Abaixar a bermuda/calça', completed: false },
           { id: 'st-d4', title: 'Abaixar a cueca ou calcinha', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/32464/32464_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/37817/37817_300.png',
       },
       {
         title: 'Sentar no Vaso Sanitário',
@@ -68,7 +68,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-d6', title: 'Relaxar a barriguinha e respirar fundo', completed: false },
           { id: 'st-d7', title: 'Fazer o xixi ou cocô no vaso', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/5921/5921_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/2430/2430_300.png',
       },
       {
         title: 'Limpar e Dar a Descarga',
@@ -85,7 +85,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-d10', title: 'Subir a roupa íntima e o short', completed: false },
           { id: 'st-d11', title: 'Apertar a descarga', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/6280/6280_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/10184/10184_300.png',
       },
       {
         title: 'Lavar e Secar as Mãos',
@@ -102,7 +102,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-d14', title: 'Enxaguar toda a espuminha', completed: false },
           { id: 'st-d15', title: 'Secar bem na toalha', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2445/2445_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/8975/8975_300.png',
       },
     ],
   },
@@ -130,7 +130,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m2', title: 'Espreguiçar braços e pernas', completed: false },
           { id: 'st-m3', title: 'Levantar da cama', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/6049/6049_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/8989/8989_300.png',
       },
       {
         title: 'Ir ao Banheiro e Lavar o Rosto',
@@ -145,7 +145,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m4', title: 'Fazer xixi no vaso', completed: false },
           { id: 'st-m5', title: 'Lavar o rosto e mãos', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/5921/5921_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/34611/34611_300.png',
       },
       {
         title: 'Vestir a Roupa do Dia',
@@ -161,7 +161,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m7', title: 'Vestir a camiseta e bermuda ou calça', completed: false },
           { id: 'st-m8', title: 'Colocar as meias', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/6879/6879_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/6627/6627_300.png',
       },
       {
         title: 'Café da Manhã Gostoso',
@@ -177,7 +177,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m10', title: 'Comer a fruta e o pãozinho', completed: false },
           { id: 'st-m11', title: 'Beber leite ou suco', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2381/2381_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/4626/4626_300.png',
       },
       {
         title: 'Escovar os Dentinhos',
@@ -193,7 +193,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m13', title: 'Escovar em cima, embaixo e atrás', completed: false },
           { id: 'st-m14', title: 'Enxaguar a boquinha', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2443/2443_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/2326/2326_300.png',
       },
       {
         title: 'Conferir Mochila e Calçar Sapatos',
@@ -208,7 +208,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-m15', title: 'Conferir garrafinha e estojo', completed: false },
           { id: 'st-m16', title: 'Calçar o tênis', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2573/2573_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/2475/2475_300.png',
       },
     ],
   },
@@ -235,7 +235,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-n1', title: 'Desligar celular, tablet e TV', completed: false },
           { id: 'st-n2', title: 'Guardar os brinquedos', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/32462/32462_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/9813/9813_300.png',
       },
       {
         title: 'Banho Morno Relaxante',
@@ -251,7 +251,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-n4', title: 'Lavar o corpinho com sabonete', completed: false },
           { id: 'st-n5', title: 'Secar bem na toalha fofinha', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2444/2444_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/6058/6058_300.png',
       },
       {
         title: 'Colocar o Pijama Confortável',
@@ -266,7 +266,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-n6', title: 'Vestir a calça do pijama', completed: false },
           { id: 'st-n7', title: 'Vestir a blusa do pijama', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/6879/6879_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/2522/2522_300.png',
       },
       {
         title: 'Escovar os Dentes e Xixi da Noite',
@@ -281,7 +281,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-n8', title: 'Escovar bem todos os dentes', completed: false },
           { id: 'st-n9', title: 'Fazer o último xixi da noite', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2443/2443_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/2326/2326_300.png',
       },
       {
         title: 'História Calma e Dormir',
@@ -297,7 +297,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-n11', title: 'Ouvir uma historinha ou música calma', completed: false },
           { id: 'st-n12', title: 'Fechar os olhinhos e dormir', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2571/2571_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/6479/6479_300.png',
       },
     ],
   },
@@ -325,7 +325,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-t2', title: 'Tirar sapatos ou mochila no cantinho', completed: false },
           { id: 'st-t3', title: 'Olhar a prancha da sessão de hoje', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/37191/37191_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/6522/6522_300.png',
       },
       {
         title: 'Atividade 1: Foco na Mesa',
@@ -341,7 +341,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-t5', title: 'Fazer o pareamento ou atividade cognitiva', completed: false },
           { id: 'st-t6', title: 'Guardar o material da mesa', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/6871/6871_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/6495/6495_300.png',
       },
       {
         title: 'Pausa de Movimento / Sensorial',
@@ -356,7 +356,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-t7', title: 'Circuito motor ou massinha sensorial', completed: false },
           { id: 'st-t8', title: 'Beber um golinho de água', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2344/2344_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/39052/39052_300.png',
       },
       {
         title: 'Atividade 2: Jogo Social / Lúdico',
@@ -371,7 +371,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-t9', title: 'Esperar a sua vez na brincadeira', completed: false },
           { id: 'st-t10', title: 'Comunicação e trocas sociais', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/2343/2343_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/23392/23392_300.png',
       },
       {
         title: 'Organizar e Despedida com Reforço Positivo',
@@ -387,7 +387,7 @@ export const CLINICAL_TEMPLATES: ClinicalRoutineTemplate[] = [
           { id: 'st-t12', title: 'Ganhar carimbo, adesivo ou elogio', completed: false },
           { id: 'st-t13', title: 'Dar tchau para a terapeuta', completed: false },
         ],
-        imageUrl: 'https://static.arasaac.org/pictograms/32462/32462_300.png',
+        imageUrl: 'https://static.arasaac.org/pictograms/21793/21793_300.png',
       },
     ],
   },
