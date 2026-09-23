@@ -5,7 +5,6 @@ const DOCS_DIR = path.join(process.cwd(), 'docs');
 const ARTIFACT_DIR = 'C:/Users/Sergio DArduini/.gemini/antigravity/brain/54b764e2-1d67-424b-bc3e-76b1f5d7b46c';
 
 // Read logos as base64
-const logoIntegrareB64 = fs.readFileSync(path.join(DOCS_DIR, 'assets', 'logo_espaco_integrare.png')).toString('base64');
 const synapsiFullB64 = fs.readFileSync(path.join(process.cwd(), 'public', 'assets', 'synapsi_1_full.png')).toString('base64');
 const synapsiBrainB64 = fs.readFileSync(path.join(process.cwd(), 'public', 'assets', 'synapsi_brain1.png')).toString('base64');
 
@@ -14,7 +13,7 @@ const htmlContent = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual do Usuário — Synapsis Kids & Espaço Integrare</title>
+  <title>Manual do Usuário — Synapsis Kids</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -536,16 +535,10 @@ const htmlContent = `<!DOCTYPE html>
 
     <!-- COVER HEADER -->
     <div class="cover-header">
-      <!-- HERO CO-BRANDING SECTION COM AMBAS AS LOGOS BEM MAIORES -->
-      <div class="cover-logos-hero">
-        <div class="logo-hero-item logo-hero-synapsis">
+      <!-- HERO SECTION COM A LOGO OFICIAL SYNAPSIS KIDS -->
+      <div class="cover-logos-hero" style="justify-content: center;">
+        <div class="logo-hero-item logo-hero-synapsis" style="max-width: 520px;">
           <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids — Rotina Visual" class="full-logo">
-        </div>
-
-        <div class="logos-hero-divider"></div>
-
-        <div class="logo-hero-item logo-hero-integrare">
-          <img src="data:image/png;base64,${logoIntegrareB64}" alt="Espaço Integrare — Psicologia e Neuropsicologia">
         </div>
       </div>
 
@@ -596,7 +589,7 @@ const htmlContent = `<!DOCTYPE html>
             <span>• Especialista em Terapia Cognitivo-Comportamental (TCC)</span>
             <span>• Especialista em Transtornos do Neurodesenvolvimento</span>
             <span>• Especialista em Neuropsicologia e Reabilitação Cognitiva</span>
-            <span style="color: #2DD4BF; margin-top: 6px; font-weight: 700;">Espaço Integrare — Psicologia e Neuropsicologia</span>
+            <span style="color: #2DD4BF; margin-top: 6px; font-weight: 700;">Curadoria Clínica & Protocolos em Neurodesenvolvimento</span>
           </div>
         </div>
 
@@ -1234,7 +1227,7 @@ const htmlContent = `<!DOCTYPE html>
     <div class="manual-footer">
       <div class="footer-left">
         <strong>Synapsis Kids • Rotina Visual, Autonomia e Previsibilidade</strong>
-        <span>Desenvolvido em parceria com o <strong>Espaço Integrare — Psicologia e Neuropsicologia</strong></span>
+        <span>Concepção e validação neuropsicológica por <strong>Sandra Sorgatti D'Arduini (CRP 06/162626)</strong></span>
       </div>
       <div>
         <span>Manual Oficial • Versão 2.0 (2026)</span>

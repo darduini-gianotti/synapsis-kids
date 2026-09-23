@@ -38,6 +38,8 @@ import {
   DAY_NAMES,
 } from './utils/storage';
 import { soundManager } from './utils/audio';
+import logoKidsLight from './assets/synapsis_kids_light.png';
+import logoKidsDark from './assets/synapsis_kids_dark.png';
 
 import { TaskCard } from './components/TaskCard';
 import { SubtaskListModal } from './components/SubtaskListModal';
@@ -783,13 +785,13 @@ export default function App() {
               <a href="/" className="inline-flex items-center gap-1.5 shrink-0 focus:outline-hidden" title="Synapsis Kids">
                 {/* Logo para Modo Claro (Texto escuro) */}
                 <img
-                  src="/assets/synapsis_kids_light.png"
+                  src={logoKidsLight}
                   alt="Synapsis Kids"
                   className="h-10 sm:h-11 md:h-12 w-auto object-contain dark:hidden drop-shadow-xs"
                 />
                 {/* Logo para Modo Escuro (Texto branco) */}
                 <img
-                  src="/assets/synapsis_kids_dark.png"
+                  src={logoKidsDark}
                   alt="Synapsis Kids"
                   className="h-10 sm:h-11 md:h-12 w-auto object-contain hidden dark:block drop-shadow-xs"
                 />
