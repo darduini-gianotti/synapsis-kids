@@ -26,7 +26,7 @@ const htmlContent = `<!DOCTYPE html>
 <html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Synapsis Kids — Rotina Visual, Previsibilidade e Autonomia para Crianças com TEA e TDAH</title>
   <meta name="description" content="Aplicativo gratuito de rotina visual baseado em ABA, TEACCH e CAA/PECS. Promove autonomia, previsibilidade e autorregulação em crianças no Espectro Autista e TDAH. Sem anúncios e 100% offline.">
 
@@ -82,6 +82,14 @@ const htmlContent = `<!DOCTYPE html>
     }
   </script>
   <style>
+    :root {
+      --sat: env(safe-area-inset-top, 0px);
+      --sab: env(safe-area-inset-bottom, 0px);
+    }
+    html {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
     .glow-teal {
       box-shadow: 0 0 60px -15px rgba(20, 184, 166, 0.35);
     }
@@ -95,50 +103,81 @@ const htmlContent = `<!DOCTYPE html>
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.6; transform: scale(0.95); }
     }
+    /* Menu Gaveta Mobile */
+    #mobile-drawer {
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #mobile-drawer.drawer-open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    #mobile-drawer.drawer-closed {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+    }
+    /* Barra Flutuante Mobile (Sticky Dock) */
+    #sticky-dock {
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    #sticky-dock.dock-hidden {
+      transform: translateY(110%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #sticky-dock.dock-visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Modal de Zoom Touch-Friendly */
     #zoom-modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(9, 13, 22, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(9, 13, 22, 0.96);
+      backdrop-filter: blur(10px);
       z-index: 99999;
       align-items: center;
       justify-content: center;
       cursor: zoom-out;
+      padding: 1rem;
     }
     #zoom-modal img {
-      max-width: 95%;
-      max-height: 92vh;
+      max-width: 96vw;
+      max-height: 88vh;
       border-radius: 16px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9);
       border: 1px solid rgba(255, 255, 255, 0.15);
+      object-fit: contain;
     }
   </style>
 </head>
 <body class="bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-teal-500 selection:text-white">
 
   <!-- ==================== BANNER SUPERIOR INFORMATIVO ==================== -->
-  <div class="bg-gradient-to-r from-teal-900/60 via-slate-900 to-indigo-950/60 border-b border-teal-500/20 text-xs py-2 px-4 text-center">
-    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 flex-wrap">
-      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-bold text-[11px]">
+  <div class="bg-gradient-to-r from-teal-900/60 via-slate-900 to-indigo-950/60 border-b border-teal-500/20 text-[11px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 text-center">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+      <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-bold text-[10px] sm:text-[11px]">
         🌿 PROTOCOLO CLÍNICO & FAMILIAR
       </span>
-      <span class="text-slate-300">
+      <span class="text-slate-300 leading-snug">
         Desenvolvido com validação neuropsicológica especializada em TEA & TDAH • <strong>100% Gratuito & Sem Anúncios</strong>
       </span>
     </div>
   </div>
 
-  <!-- ==================== NAVBAR ==================== -->
+  <!-- ==================== NAVBAR RESPONSIVA (DESKTOP + MOBILE FIRST) ==================== -->
   <header class="sticky top-0 z-50 bg-[#090D16]/95 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-22 md:h-24 flex items-center justify-between gap-6">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 md:h-22 flex items-center justify-between gap-3">
       
       <!-- Logo Oficial Synapsis Kids -->
       <a href="/" class="flex items-center group shrink-0" title="Synapsis Kids">
-        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-12 sm:h-14 md:h-16 lg:h-[68px] w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
+        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
       </a>
 
-      <!-- Menu Links Desktop (Cabeçalhos) -->
+      <!-- Menu Links Desktop -->
       <nav class="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8 text-xs lg:text-sm font-semibold text-slate-300 shrink-0">
         <a href="#recursos" class="hover:text-teal-400 transition-colors">Recursos</a>
         <a href="#metodo" class="hover:text-teal-400 transition-colors">Método Clínico</a>
@@ -151,54 +190,105 @@ const htmlContent = `<!DOCTYPE html>
           <span>💼 Para Clínicas & Terapeutas</span>
         </a>
       </nav>
+
+      <!-- Ações Mobile (Botão Abrir App + Botão Hambúrguer) -->
+      <div class="flex md:hidden items-center gap-2">
+        <a href="/" class="px-3 py-1.5 rounded-full bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-[11px] shadow-sm flex items-center gap-1">
+          <span>Abrir App</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" class="w-10 h-10 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-teal-400">
+          <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Gaveta Mobile (Dropdown Suave) -->
+    <div id="mobile-drawer" class="drawer-closed md:hidden border-b border-slate-800 bg-[#090D16]/98 px-4 py-4 space-y-3 shadow-2xl backdrop-blur-xl">
+      <nav class="flex flex-col space-y-1 text-sm font-semibold text-slate-200">
+        <a href="#recursos" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-slate-800/80 active:bg-slate-800 transition flex items-center justify-between">
+          <span>✨ Recursos do Aplicativo</span>
+          <span class="text-xs text-slate-500">➔</span>
+        </a>
+        <a href="#metodo" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-slate-800/80 active:bg-slate-800 transition flex items-center justify-between">
+          <span>🧠 Concepção Clínica & Especialista</span>
+          <span class="text-xs text-slate-500">➔</span>
+        </a>
+        <a href="#instalacao" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl hover:bg-slate-800/80 active:bg-slate-800 transition flex items-center justify-between">
+          <span>📲 Como Instalar na Tela Inicial (PWA)</span>
+          <span class="text-xs text-slate-500">➔</span>
+        </a>
+        <a href="/manual.html" target="_blank" class="px-3.5 py-2.5 rounded-xl hover:bg-slate-800/80 active:bg-slate-800 transition flex items-center justify-between text-teal-300">
+          <span class="flex items-center gap-1.5">📖 Manual do Usuário (com PDF)</span>
+          <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+        <a href="#clinico" onclick="closeMobileMenu()" class="px-3.5 py-2.5 rounded-xl bg-teal-950/40 border border-teal-500/30 text-teal-300 hover:bg-teal-900/40 transition flex items-center justify-between mt-1">
+          <span>💼 Para Clínicas & Terapeutas</span>
+          <span class="text-xs">➔</span>
+        </a>
+      </nav>
+
+      <div class="pt-2 border-t border-slate-800/80">
+        <a href="/" class="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-[0.98] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2">
+          <span>🚀 Começar a Usar Agora (Grátis)</span>
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- ==================== HERO SECTION ==================== -->
-  <section class="relative pt-8 pb-12 sm:pt-12 sm:pb-14 overflow-hidden">
+  <section class="relative pt-6 pb-10 sm:pt-12 sm:pb-14 overflow-hidden">
     <!-- Luzes de Fundo -->
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="text-center max-w-4xl mx-auto space-y-5">
+      <div class="text-center max-w-4xl mx-auto space-y-4 sm:space-y-5">
         
         <!-- Selo de Início -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/90 border border-teal-500/30 text-teal-300 text-xs font-bold shadow-inner">
+        <div class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-slate-800/90 border border-teal-500/30 text-teal-300 text-[11px] sm:text-xs font-bold shadow-inner">
           <span class="flex h-2 w-2 rounded-full bg-teal-400 badge-pulse"></span>
           <span>Rotina Visual Estruturada • Foco, Previsibilidade & Gestão do Tempo</span>
         </div>
 
-        <!-- Headline Principal (Opção 1) -->
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12]">
+        <!-- Headline Principal Responsiva -->
+        <h1 class="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.2] sm:leading-[1.12]">
           Mais Previsibilidade, Menos Ansiedade: <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-emerald-200 to-indigo-400">A Rotina Visual que Traz Clareza e Acolhe o seu Dia.</span>
         </h1>
 
-        <!-- Subheadline (Equilíbrio e Gestão da Rotina e do Tempo) -->
-        <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal">
+        <!-- Subheadline -->
+        <p class="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal px-2">
           Desenvolvido com validação neuropsicológica para transformar tarefas diárias e repetitivas em passos simples e organizados. A ferramenta ideal para quem busca equilíbrio no gerenciamento do tempo, autonomia e uma rotina sem sobrecarga mental.
         </p>
 
-        <!-- Botões de Ação -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
-          <a href="/" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-black text-base shadow-2xl shadow-teal-500/30 transition transform hover:-translate-y-0.5">
+        <!-- Botões de Ação com Toque Ergonômico -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 sm:pt-3">
+          <a href="/" class="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 active:scale-[0.98] text-white font-black text-sm sm:text-base shadow-2xl shadow-teal-500/30 transition transform">
             <span>🚀 Começar a Usar Agora (Grátis)</span>
           </a>
-          <a href="#instalacao" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-750 text-slate-200 border border-slate-700 font-bold text-sm transition">
+          <a href="#instalacao" class="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-750 active:scale-[0.98] text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm transition">
             <span>📲 Como Instalar na Tela Inicial</span>
             <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </a>
         </div>
 
-        <!-- Badges de Confiança em 1 Linha -->
-        <div class="pt-5 flex items-center justify-center gap-2.5 sm:gap-4 md:gap-6 flex-nowrap overflow-x-auto whitespace-nowrap text-xs sm:text-sm md:text-[15px] font-semibold text-slate-200">
-          <span class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> 100% Gratuito</span>
-          <span class="text-slate-600 select-none">•</span>
-          <span class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Sem Propagandas</span>
-          <span class="text-slate-600 select-none">•</span>
-          <span class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Funciona Offline</span>
-          <span class="text-slate-600 select-none">•</span>
-          <span class="flex items-center gap-1.5"><span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Privacidade Total (Zero Coleta)</span>
+        <!-- Badges de Confiança: Grid 2x2 no mobile, linha única no desktop -->
+        <div class="pt-3 sm:pt-5 max-w-xl mx-auto">
+          <div class="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-2 sm:gap-4 md:gap-6 text-xs sm:text-sm md:text-[15px] font-semibold text-slate-200">
+            <div class="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-800/60 sm:bg-transparent border border-slate-700/60 sm:border-0 shadow-sm sm:shadow-none">
+              <span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> 100% Gratuito
+            </div>
+            <div class="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-800/60 sm:bg-transparent border border-slate-700/60 sm:border-0 shadow-sm sm:shadow-none">
+              <span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Sem Anúncios
+            </div>
+            <div class="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-800/60 sm:bg-transparent border border-slate-700/60 sm:border-0 shadow-sm sm:shadow-none">
+              <span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Funciona Offline
+            </div>
+            <div class="flex items-center justify-center gap-1.5 p-2 rounded-xl bg-slate-800/60 sm:bg-transparent border border-slate-700/60 sm:border-0 shadow-sm sm:shadow-none">
+              <span class="text-emerald-400 font-bold text-sm sm:text-base">✓</span> Privacidade Total
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -572,91 +662,105 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- CARDS DE INSTALAÇÃO: IPHONE VS ANDROID -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    <!-- CARDS DE INSTALAÇÃO: SELETOR DE ABAS MOBILE-FIRST -->
+    <div class="max-w-4xl mx-auto space-y-6">
       
+      <!-- Seletor Interativo de Plataforma (com toque ergonômico) -->
+      <div class="flex items-center justify-center p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl max-w-sm mx-auto shadow-lg">
+        <button id="tab-btn-ios" onclick="switchInstallTab('ios')" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-indigo-600 text-white shadow-md active:scale-95">
+          <span>🍎 iPhone / iPad</span>
+        </button>
+        <button id="tab-btn-android" onclick="switchInstallTab('android')" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-400 hover:text-white transition flex items-center justify-center gap-2 active:scale-95">
+          <span>🤖 Android</span>
+        </button>
+      </div>
+
       <!-- Card iPhone (iOS) -->
-      <div class="p-8 rounded-3xl bg-slate-800/60 border border-slate-700/80 space-y-6 shadow-xl relative overflow-hidden">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">
-            🍎
+      <div id="tab-content-ios" class="block">
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/60 border border-slate-700/80 space-y-6 shadow-xl relative overflow-hidden">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl shrink-0">
+              🍎
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-white">No iPhone ou iPad (iOS)</h3>
+              <p class="text-xs text-slate-400">Utilize o navegador nativo <strong>Safari</strong></p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-lg font-bold text-white">No iPhone ou iPad (iOS)</h3>
-            <p class="text-xs text-slate-400">Utilize o navegador <strong>Safari</strong></p>
+
+          <ol class="space-y-4 text-xs sm:text-sm text-slate-200">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
+              <span>Abra este site no navegador <strong>Safari</strong> do seu iPhone ou iPad.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
+              <span>Toque no botão <strong>Compartilhar</strong> (ícone de um quadrado com uma seta para cima na barra inferior do Safari).</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
+              <span>Role a lista para baixo e selecione <strong>"Adicionar à Tela de Início"</strong>.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">4</span>
+              <span>Toque em <strong>"Adicionar"</strong> no canto superior direito. Pronto! O ícone do Synapsis Kids estará salvo junto aos seus outros aplicativos.</span>
+            </li>
+          </ol>
+
+          <div class="pt-2">
+            <a href="/" class="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-500 active:scale-[0.98] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-teal-500/20">
+              <span>Abrir no Navegador Agora</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
           </div>
-        </div>
-
-        <ol class="space-y-4 text-xs sm:text-sm text-slate-200">
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
-            <span>Abra o link no navegador <strong>Safari</strong> do seu iPhone.</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
-            <span>Toque no botão <strong>Compartilhar</strong> (ícone de um quadrado com uma seta para cima no rodapé do Safari).</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
-            <span>Role para baixo e selecione <strong>"Adicionar à Tela de Início"</strong>.</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-300 font-bold flex items-center justify-center shrink-0 text-xs">4</span>
-            <span>Toque em <strong>"Adicionar"</strong> no canto superior direito. Pronto! O ícone do Synapsis Kids estará no seu celular.</span>
-          </li>
-        </ol>
-
-        <div class="pt-2">
-          <a href="/" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
-            <span>Abrir no Navegador Agora</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </a>
         </div>
       </div>
 
       <!-- Card Android -->
-      <div class="p-8 rounded-3xl bg-slate-800/60 border border-slate-700/80 space-y-6 shadow-xl relative overflow-hidden">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl">
-            🤖
+      <div id="tab-content-android" class="hidden">
+        <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/60 border border-slate-700/80 space-y-6 shadow-xl relative overflow-hidden">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-2xl shrink-0">
+              🤖
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-white">No Android (Samsung, Xiaomi, Motorola...)</h3>
+              <p class="text-xs text-slate-400">Utilize o navegador <strong>Google Chrome</strong></p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-lg font-bold text-white">No Android (Samsung, Xiaomi, Motorola...)</h3>
-            <p class="text-xs text-slate-400">Utilize o navegador <strong>Google Chrome</strong></p>
+
+          <ol class="space-y-4 text-xs sm:text-sm text-slate-200">
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
+              <span>Abra o link no navegador <strong>Google Chrome</strong>.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
+              <span>Toque nos <strong>três pontinhos verticais (⋮)</strong> no canto superior direito da tela.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
+              <span>Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">4</span>
+              <span>Confirme em <strong>"Instalar"</strong>. O aplicativo funcionará em tela cheia e offline!</span>
+            </li>
+          </ol>
+
+          <div class="pt-2">
+            <a href="/" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-500/20">
+              <span>Abrir no Navegador Agora</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
           </div>
-        </div>
-
-        <ol class="space-y-4 text-xs sm:text-sm text-slate-200">
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">1</span>
-            <span>Abra o link no navegador <strong>Google Chrome</strong>.</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">2</span>
-            <span>Toque nos <strong>três pontinhos verticais (⋮)</strong> no canto superior direito da tela.</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">3</span>
-            <span>Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold flex items-center justify-center shrink-0 text-xs">4</span>
-            <span>Confirme em <strong>"Instalar"</strong>. O aplicativo funcionará em tela cheia e offline!</span>
-          </li>
-        </ol>
-
-        <div class="pt-2">
-          <a href="/" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition">
-            <span>Abrir no Navegador Agora</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </a>
         </div>
       </div>
 
     </div>
 
     <!-- LINK PARA O MANUAL DO USUÁRIO -->
-    <div class="mt-12 text-center">
+    <div class="mt-10 sm:mt-12 text-center px-4">
       <a href="/manual.html" target="_blank" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-teal-400 hover:text-teal-300 underline underline-offset-4">
         <span>📖 Quer entender cada botão em detalhes? Consulte o Manual do Usuário Oficial com opção em PDF ➔</span>
       </a>
@@ -664,13 +768,37 @@ const htmlContent = `<!DOCTYPE html>
 
   </section>
 
-  <!-- ==================== MODAL DE ZOOM (LIGHTBOX) ==================== -->
-  <div id="zoom-modal" onclick="this.style.display='none'">
-    <img id="zoom-img" src="" alt="Tela Ampliada">
+  <!-- ==================== MODAL DE ZOOM (LIGHTBOX TOUCH-FRIENDLY) ==================== -->
+  <div id="zoom-modal" onclick="closeZoom()" class="fixed inset-0 z-[99999] bg-[#090D16]/95 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 cursor-zoom-out">
+    <button onclick="closeZoom(event)" aria-label="Fechar zoom da imagem" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-slate-800 text-white border border-slate-600 flex items-center justify-center text-lg font-bold shadow-2xl active:scale-90 hover:bg-slate-700 transition z-50">
+      ✕
+    </button>
+    <div class="relative max-w-full max-h-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+      <img id="zoom-img" src="" alt="Tela Ampliada" class="max-w-[96vw] max-h-[84vh] object-contain rounded-2xl shadow-2xl border border-white/15">
+      <div class="mt-3 flex items-center gap-2">
+        <button onclick="closeZoom(event)" class="px-4 py-1.5 rounded-full bg-slate-800/90 text-xs text-slate-300 font-semibold border border-slate-700 hover:text-white flex items-center gap-1.5 shadow">
+          <span>Toque para fechar</span> ✕
+        </button>
+      </div>
+    </div>
   </div>
 
+  <!-- ==================== BARRA FLUTUANTE MOBILE (STICKY ACTION DOCK) ==================== -->
+  <aside id="sticky-dock" class="dock-hidden md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090D16]/95 backdrop-blur-xl border-t border-slate-800 px-4 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.6)] flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+      <div class="truncate">
+        <span class="text-xs font-extrabold text-white block truncate">Synapsis Kids</span>
+        <span class="text-[10px] text-teal-300 block truncate font-medium">100% Gratuito & Sem Anúncios</span>
+      </div>
+    </div>
+    <a href="/" class="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-xs shadow-md flex items-center gap-1.5">
+      <span>🚀 Abrir App</span>
+    </a>
+  </aside>
+
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-slate-950 border-t border-slate-800/80 py-8 sm:py-10 text-slate-400 text-xs">
+  <footer class="bg-slate-950 border-t border-slate-800/80 py-8 sm:py-10 text-slate-400 text-xs pb-16 md:pb-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800">
@@ -678,7 +806,7 @@ const htmlContent = `<!DOCTYPE html>
           <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-10 sm:h-12 w-auto object-contain">
         </div>
 
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-4 sm:gap-6 flex-wrap justify-center text-xs">
           <a href="/" class="hover:text-white transition">Aplicativo</a>
           <a href="/manual.html" target="_blank" class="hover:text-white transition">Manual do Usuário</a>
           <a href="#instalacao" class="hover:text-white transition">Como Instalar</a>
@@ -700,12 +828,110 @@ const htmlContent = `<!DOCTYPE html>
   </footer>
 
   <script>
+    // Menu Mobile Drawer
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-drawer');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+      const btn = document.getElementById('mobile-menu-btn');
+      const isOpen = drawer.classList.contains('drawer-open');
+      
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        drawer.classList.remove('drawer-closed');
+        drawer.classList.add('drawer-open');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobile-drawer');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+      const btn = document.getElementById('mobile-menu-btn');
+      drawer.classList.remove('drawer-open');
+      drawer.classList.add('drawer-closed');
+      hamburgerIcon.classList.remove('hidden');
+      closeIcon.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Seletor de Abas de Instalação (PWA)
+    function switchInstallTab(os) {
+      const tabIos = document.getElementById('tab-btn-ios');
+      const tabAndroid = document.getElementById('tab-btn-android');
+      const contentIos = document.getElementById('tab-content-ios');
+      const contentAndroid = document.getElementById('tab-content-android');
+      if (!tabIos || !tabAndroid) return;
+
+      if (os === 'ios') {
+        tabIos.className = 'flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-indigo-600 text-white shadow-md active:scale-95';
+        tabAndroid.className = 'flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-400 hover:text-white transition flex items-center justify-center gap-2 active:scale-95';
+        contentIos.classList.remove('hidden');
+        contentAndroid.classList.add('hidden');
+      } else {
+        tabAndroid.className = 'flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-indigo-600 text-white shadow-md active:scale-95';
+        tabIos.className = 'flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-slate-400 hover:text-white transition flex items-center justify-center gap-2 active:scale-95';
+        contentAndroid.classList.remove('hidden');
+        contentIos.classList.add('hidden');
+      }
+    }
+
+    // Detecção Inteligente de Sistema Operacional
+    function detectOS() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+      if (/android/i.test(ua)) {
+        switchInstallTab('android');
+      } else {
+        switchInstallTab('ios');
+      }
+    }
+
+    // Modal de Zoom (Lightbox)
     function zoomImage(img) {
       if (!img) return;
       const modal = document.getElementById('zoom-modal');
       const zoomImg = document.getElementById('zoom-img');
       zoomImg.src = img.src;
       modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('zoom-modal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeZoom();
+        closeMobileMenu();
+      }
+    });
+
+    // Sticky Bottom Dock no Mobile (após rolar 200px)
+    window.addEventListener('scroll', function() {
+      const dock = document.getElementById('sticky-dock');
+      if (!dock) return;
+      if (window.scrollY > 200) {
+        dock.classList.remove('dock-hidden');
+        dock.classList.add('dock-visible');
+      } else {
+        dock.classList.remove('dock-visible');
+        dock.classList.add('dock-hidden');
+      }
+    }, { passive: true });
+
+    // Inicializar detecção
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', detectOS);
+    } else {
+      detectOS();
     }
   </script>
 
