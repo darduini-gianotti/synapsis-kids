@@ -159,8 +159,8 @@ const htmlContent = `<!DOCTYPE html>
 </head>
 <body class="bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-teal-500 selection:text-white">
 
-  <!-- ==================== BANNER SUPERIOR INFORMATIVO ==================== -->
-  <div class="bg-gradient-to-r from-teal-900/60 via-slate-900 to-indigo-950/60 border-b border-teal-500/20 text-[11px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 text-center">
+  <!-- ==================== BANNER SUPERIOR INFORMATIVO (desktop only) ==================== -->
+  <div class="hidden sm:block bg-gradient-to-r from-teal-900/60 via-slate-900 to-indigo-950/60 border-b border-teal-500/20 text-[11px] sm:text-xs py-1.5 sm:py-2 px-3 sm:px-4 text-center">
     <div class="max-w-7xl mx-auto flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
       <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 font-bold text-[10px] sm:text-[11px]">
         🌿 PROTOCOLO CLÍNICO & FAMILIAR
@@ -232,12 +232,12 @@ const htmlContent = `<!DOCTYPE html>
   </header>
 
   <!-- ==================== HERO SECTION ==================== -->
-  <section class="relative pt-2 pb-10 sm:pt-12 sm:pb-14 overflow-hidden">
+  <section class="relative pt-0 pb-10 sm:pt-12 sm:pb-14 overflow-hidden">
     <!-- Luzes de Fundo -->
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-4 sm:pt-0">
       <div class="text-center max-w-4xl mx-auto space-y-4 sm:space-y-5">
         
         <!-- Selo de Início -->
