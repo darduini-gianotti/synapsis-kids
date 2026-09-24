@@ -194,12 +194,8 @@ const htmlContent = `<!DOCTYPE html>
         </a>
       </nav>
 
-      <!-- Ações Mobile (Botão Abrir App + Botão Hambúrguer) -->
+      <!-- Ações Mobile (apenas hambúrguer) -->
       <div class="flex md:hidden items-center gap-2">
-        <a href="/" class="px-3 py-1.5 rounded-full bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-[11px] shadow-sm flex items-center gap-1">
-          <span>Abrir App</span>
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </a>
         <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" class="w-10 h-10 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-teal-400">
           <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -232,16 +228,11 @@ const htmlContent = `<!DOCTYPE html>
         </a>
       </nav>
 
-      <div class="pt-2 border-t border-slate-800/80">
-        <a href="/" class="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-[0.98] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2">
-          <span>🚀 Começar a Usar Agora (Grátis)</span>
-        </a>
-      </div>
     </div>
   </header>
 
   <!-- ==================== HERO SECTION ==================== -->
-  <section class="relative pt-6 pb-10 sm:pt-12 sm:pb-14 overflow-hidden">
+  <section class="relative pt-2 pb-10 sm:pt-12 sm:pb-14 overflow-hidden">
     <!-- Luzes de Fundo -->
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute top-1/3 right-10 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -264,17 +255,6 @@ const htmlContent = `<!DOCTYPE html>
         <p class="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto font-normal px-2">
           Desenvolvido com validação neuropsicológica para transformar tarefas diárias e repetitivas em passos simples e organizados. A ferramenta ideal para quem busca equilíbrio no gerenciamento do tempo, autonomia e uma rotina sem sobrecarga mental.
         </p>
-
-        <!-- Botões de Ação com Toque Ergonômico -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 sm:pt-3">
-          <a href="/" class="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 active:scale-[0.98] text-white font-black text-sm sm:text-base shadow-2xl shadow-teal-500/30 transition transform">
-            <span>🚀 Começar a Usar Agora (Grátis)</span>
-          </a>
-          <a href="#instalacao" class="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-750 active:scale-[0.98] text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm transition">
-            <span>📲 Como Instalar na Tela Inicial</span>
-            <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </a>
-        </div>
 
         <!-- Badges de Confiança: Grid 2x2 no mobile, linha única no desktop -->
         <div class="pt-3 sm:pt-5 max-w-xl mx-auto">
@@ -795,8 +775,8 @@ const htmlContent = `<!DOCTYPE html>
         <span class="text-[10px] text-teal-300 block truncate font-medium">100% Gratuito & Sem Anúncios</span>
       </div>
     </div>
-    <a href="/" class="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-xs shadow-md flex items-center gap-1.5">
-      <span>🚀 Abrir App</span>
+    <a href="#instalacao" class="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-xs shadow-md flex items-center gap-1.5">
+      <span>📲 Instalar</span>
     </a>
   </aside>
 
