@@ -120,20 +120,6 @@ const htmlContent = `<!DOCTYPE html>
       transform: translateY(-10px);
       max-height: 0;
     }
-    /* Barra Flutuante Mobile (Sticky Dock) */
-    #sticky-dock {
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-    }
-    #sticky-dock.dock-hidden {
-      transform: translateY(110%);
-      opacity: 0;
-      pointer-events: none;
-    }
-    #sticky-dock.dock-visible {
-      transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
     /* Modal de Zoom Touch-Friendly */
     #zoom-modal {
       display: none;
@@ -766,22 +752,8 @@ const htmlContent = `<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- ==================== BARRA FLUTUANTE MOBILE (STICKY ACTION DOCK) ==================== -->
-  <aside id="sticky-dock" class="dock-hidden md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090D16]/95 backdrop-blur-xl border-t border-slate-800 px-4 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.6)] flex items-center justify-between gap-3">
-    <div class="flex items-center gap-2.5 min-w-0">
-      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
-      <div class="truncate">
-        <span class="text-xs font-extrabold text-white block truncate">Synapsis Kids</span>
-        <span class="text-[10px] text-teal-300 block truncate font-medium">100% Gratuito & Sem Anúncios</span>
-      </div>
-    </div>
-    <a href="#instalacao" class="shrink-0 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 active:scale-95 text-white font-bold text-xs shadow-md flex items-center gap-1.5">
-      <span>📲 Instalar</span>
-    </a>
-  </aside>
-
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-slate-950 border-t border-slate-800/80 py-8 sm:py-10 text-slate-400 text-xs pb-16 md:pb-10">
+  <footer class="bg-slate-950 border-t border-slate-800/80 py-8 sm:py-10 text-slate-400 text-xs">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800">
@@ -896,19 +868,6 @@ const htmlContent = `<!DOCTYPE html>
         closeMobileMenu();
       }
     });
-
-    // Sticky Bottom Dock no Mobile (após rolar 200px)
-    window.addEventListener('scroll', function() {
-      const dock = document.getElementById('sticky-dock');
-      if (!dock) return;
-      if (window.scrollY > 200) {
-        dock.classList.remove('dock-hidden');
-        dock.classList.add('dock-visible');
-      } else {
-        dock.classList.remove('dock-visible');
-        dock.classList.add('dock-hidden');
-      }
-    }, { passive: true });
 
     // Inicializar detecção
     if (document.readyState === 'loading') {
