@@ -159,11 +159,11 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ==================== NAVBAR RESPONSIVA (DESKTOP + MOBILE FIRST) ==================== -->
   <header class="sticky top-0 z-50 bg-[#090D16]/95 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 md:h-22 flex items-center justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-12 sm:h-20 md:h-22 flex items-center justify-between gap-3">
       
       <!-- Logo Oficial Synapsis Kids -->
       <a href="/" class="flex items-center group shrink-0" title="Synapsis Kids">
-        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
+        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-8 sm:h-12 md:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
       </a>
 
       <!-- Menu Links Desktop -->
