@@ -159,11 +159,11 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ==================== NAVBAR RESPONSIVA (DESKTOP + MOBILE FIRST) ==================== -->
   <header class="sticky top-0 z-50 bg-[#090D16]/95 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-12 sm:h-20 md:h-22 flex items-center justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-12 sm:h-20 md:h-22 flex items-center justify-between gap-2">
       
       <!-- Logo Oficial Synapsis Kids -->
       <a href="/" class="flex items-center group shrink-0" title="Synapsis Kids">
-        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-8 sm:h-12 md:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
+        <img src="data:image/png;base64,${synapsiFullB64}" alt="Synapsis Kids" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(79,70,229,0.35)] group-hover:scale-105 transition-transform">
       </a>
 
       <!-- Menu Links Desktop -->
@@ -180,9 +180,13 @@ const htmlContent = `<!DOCTYPE html>
         </a>
       </nav>
 
-      <!-- Ações Mobile (apenas hambúrguer) -->
-      <div class="flex md:hidden items-center gap-2">
-        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" class="w-10 h-10 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-teal-400">
+      <!-- Ações Mobile: botão Clínicas compacto + hambúrguer -->
+      <div class="flex md:hidden items-center gap-2 ml-auto">
+        <a href="#clinico" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-800/80 border border-teal-500/30 text-teal-300 font-bold text-[10px] active:scale-95 transition shadow-sm whitespace-nowrap">
+          <span>💼</span>
+          <span>Para Clínicas</span>
+        </a>
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menu de navegação" aria-expanded="false" class="w-9 h-9 rounded-xl bg-slate-800/80 active:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-teal-400 shrink-0">
           <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
