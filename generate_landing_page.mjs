@@ -105,17 +105,20 @@ const htmlContent = `<!DOCTYPE html>
     }
     /* Menu Gaveta Mobile */
     #mobile-drawer {
-      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
     }
     #mobile-drawer.drawer-open {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
+      max-height: 600px;
     }
     #mobile-drawer.drawer-closed {
       opacity: 0;
       pointer-events: none;
       transform: translateY(-10px);
+      max-height: 0;
     }
     /* Barra Flutuante Mobile (Sticky Dock) */
     #sticky-dock {
