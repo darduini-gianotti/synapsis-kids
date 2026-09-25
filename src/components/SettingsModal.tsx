@@ -20,6 +20,7 @@ import {
   Sparkles,
   BookOpen,
   ExternalLink,
+  HelpCircle,
 } from 'lucide-react';
 import { AppSettings, ThemeMode, VoiceCharacterStyle } from '../types';
 import { soundManager } from '../utils/audio';
@@ -31,6 +32,8 @@ interface SettingsModalProps {
   onSaveSettings: (settings: AppSettings) => void;
   onResetAllToFactory: () => void;
   onOpenExportCalendar?: () => void;
+  isInspectorMode?: boolean;
+  onToggleInspectorMode?: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -40,6 +43,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onSaveSettings,
   onResetAllToFactory,
   onOpenExportCalendar,
+  isInspectorMode,
+  onToggleInspectorMode,
 }) => {
   const [localSettings, setLocalSettings] = useState<AppSettings>({
     ...settings,
@@ -262,19 +267,37 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         >
           {/* Header */}
           <div className="p-4 bg-stone-50 dark:bg-stone-800/80 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
-            <h3 className="font-bold text-stone-900 dark:text-stone-100 text-base">Configurações do Aplicativo</h3>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <h3 className="font-bold text-stone-900 dark:text-stone-100 text-base">Configurações</h3>
+            <div className="flex items-center gap-1.5">
+              {onToggleInspectorMode && (
+                <button
+                  type="button"
+                  id="settings-toggle-inspector-btn"
+                  onClick={onToggleInspectorMode}
+                  className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+                    isInspectorMode
+                      ? 'bg-teal-500 text-stone-950 font-black ring-2 ring-teal-400'
+                      : 'text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/50'
+                  }`}
+                  title={isInspectorMode ? 'Sair do Modo Ajuda' : 'Ativar Modo Inspetor (Explicar Botões)'}
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  <span className="text-[11px] font-bold">Ajuda</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           <div className="p-4 overflow-y-auto space-y-4 text-sm overscroll-contain">
             {/* Theme Mode Selector (Claro / Escuro / Sistema) */}
-            <div className="space-y-2">
+            <div className="space-y-2" data-help-id="settings-theme">
               <div className="flex items-center justify-between text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">
                 <span>Tema Visual (Claro / Escuro)</span>
               </div>
@@ -324,7 +347,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
 
             {/* Audio Volume */}
-            <div className="space-y-2 pt-2 border-t border-stone-200 dark:border-stone-800">
+            <div className="space-y-2 pt-2 border-t border-stone-200 dark:border-stone-800" data-help-id="settings-volume">
               <div className="flex items-center justify-between text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">
                 <span className="flex items-center gap-1.5">
                   <Volume2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -362,7 +385,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
 
             {/* Voice support & Natural Voice Picker */}
-            <div className="p-3.5 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-2xl space-y-3">
+            <div className="p-3.5 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-2xl space-y-3" data-help-id="settings-voice-toggle">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-xs font-bold text-stone-800 dark:text-stone-200">
@@ -387,7 +410,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {localSettings.voiceEnabled && (
                 <div className="pt-2 border-t border-stone-200/70 dark:border-stone-700/60 space-y-3">
                   {/* Voice Selector Dropdown */}
-                  <div>
+                  <div data-help-id="settings-voice-selector">
                     <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1">
                       Estilo de Voz do Aparelho
                     </label>
@@ -423,7 +446,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
 
                   {/* Personagem & Estilo da Voz */}
-                  <div>
+                  <div data-help-id="settings-voice-character">
                     <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                       Personagem & Estilo da Voz
                     </label>
@@ -473,7 +496,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
 
                   {/* Speech Pace / Speed */}
-                  <div>
+                  <div data-help-id="settings-voice-cadence">
                     <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                       Cadência da Fala
                     </label>
@@ -524,7 +547,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
 
                   {/* Action & Test Voice Buttons */}
-                  <div className="pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-stone-200/60 dark:border-stone-700/60">
+                  <div className="pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-stone-200/60 dark:border-stone-700/60" data-help-id="settings-voice-tests">
                     <button
                       type="button"
                       onClick={handleTestVoice}
@@ -549,7 +572,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
 
             {/* Modo Cartões Grandes (CAA / PECS) */}
-            <div className="p-3 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-xl space-y-2">
+            <div className="p-3 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-xl space-y-2" data-help-id="settings-large-cards">
               <div className="flex items-center justify-between">
                 <div className="flex items-start gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -586,7 +609,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
 
             {/* Área dos Pais & Bloqueio com Senha */}
-            <div className="p-3.5 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-2xl space-y-3.5">
+            <div className="p-3.5 bg-stone-50 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700/80 rounded-2xl space-y-3.5" data-help-id="settings-child-lock">
               <div className="flex items-center justify-between">
                 <div className="flex items-start gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
@@ -628,7 +651,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
 
               {/* Gerenciamento do PIN / Senha de 4 Dígitos */}
-              <div className="pt-3 border-t border-stone-200 dark:border-stone-700/80 space-y-2.5">
+              <div className="pt-3 border-t border-stone-200 dark:border-stone-700/80 space-y-2.5" data-help-id="settings-parent-pin">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
                     <KeyRound className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
@@ -776,6 +799,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 id="settings-open-manual-btn"
+                data-help-id="settings-open-manual"
                 className="w-full py-2.5 px-3 bg-teal-50/80 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50 text-teal-800 dark:text-teal-200 border border-teal-200/80 dark:border-teal-800/60 rounded-xl text-xs font-semibold flex items-center justify-between transition-all group no-underline"
               >
                 <div className="flex items-center gap-2.5">
@@ -813,6 +837,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
               <button
                 type="button"
+                data-help-id="settings-factory-reset"
                 onClick={() => {
                   if (
                     confirm(

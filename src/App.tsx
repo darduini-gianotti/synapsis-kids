@@ -1372,6 +1372,8 @@ export default function App() {
             }}
             onResetAllToFactory={handleResetAllToFactory}
             onOpenExportCalendar={() => setIsExportModalOpen(true)}
+            isInspectorMode={isInspectorMode}
+            onToggleInspectorMode={() => setIsInspectorMode(prev => !prev)}
           />
         )}
 

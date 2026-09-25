@@ -71,7 +71,7 @@ export const InspectorExplanationSheet: React.FC<InspectorExplanationSheetProps>
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-xs animate-fade-in"
+      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-xs animate-fade-in"
       onClick={onClose}
     >
       <div
