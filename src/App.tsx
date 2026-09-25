@@ -17,6 +17,7 @@ import {
   Unlock,
   ShieldCheck,
   LayoutGrid,
+  HelpCircle,
 } from 'lucide-react';
 
 import {
@@ -57,6 +58,12 @@ import { ClinicalTemplatesModal } from './components/ClinicalTemplatesModal';
 import { ShareRoutineModal } from './components/ShareRoutineModal';
 import { IncomingRoutineModal, IncomingRoutineData } from './components/IncomingRoutineModal';
 import { decodeRoutine } from './utils/routineCodec';
+import {
+  HelpModal,
+  QuickGuideModal,
+  InspectorExplanationSheet,
+  InspectorBanner,
+} from './components/Help';
 
 export default function App() {
   // Current real date & day
@@ -85,6 +92,38 @@ export default function App() {
   const [isClinicalTemplatesOpen, setIsClinicalTemplatesOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [incomingRoutineData, setIncomingRoutineData] = useState<IncomingRoutineData | null>(null);
+
+  // Interactive Help Hub & Inspector Mode State
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isQuickGuideOpen, setIsQuickGuideOpen] = useState(false);
+  const [isInspectorMode, setIsInspectorMode] = useState(false);
+  const [inspectedItemId, setInspectedItemId] = useState<string | null>(null);
+
+  // Inspector Mode Global Click Interceptor (Captures touch/click on elements with data-help-id)
+  useEffect(() => {
+    if (!isInspectorMode) return;
+
+    const handleGlobalHelpCapture = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('[data-help-id]');
+      if (target) {
+        e.preventDefault();
+        e.stopPropagation();
+        const helpId = target.getAttribute('data-help-id');
+        if (helpId) {
+          setInspectedItemId(helpId);
+          soundManager.playSound('bell', 0.5);
+        }
+      }
+    };
+
+    window.addEventListener('click', handleGlobalHelpCapture, true);
+    document.body.classList.add('inspector-mode-active');
+
+    return () => {
+      window.removeEventListener('click', handleGlobalHelpCapture, true);
+      document.body.classList.remove('inspector-mode-active');
+    };
+  }, [isInspectorMode]);
 
   // Listen for WhatsApp 1-Click Magic Link (#r=... or #rotina=... or #import=...)
   useEffect(() => {
@@ -815,12 +854,13 @@ export default function App() {
             </div>
           </div>
 
-          {/* Linha 2: Botão Nova Tarefa + Botões de Utilidade (Tema, Som, Trava, Configurações) */}
+          {/* Linha 2: Botão Nova Tarefa + Botões de Utilidade (Tema, Som, Trava, Configurações, Ajuda) */}
           <div className="flex items-center justify-between gap-2 pt-1 border-t border-stone-100 dark:border-stone-800/60">
             {/* Botão Nova Tarefa em destaque */}
             <button
               type="button"
               id="header-new-task-btn"
+              data-help-id="new-task"
               onClick={() =>
                 handleRequirePin(
                   () => setIsNewTaskModalOpen(true),
@@ -849,6 +889,7 @@ export default function App() {
               <button
                 type="button"
                 id="quick-theme-toggle-btn"
+                data-help-id="theme-toggle"
                 onClick={handleToggleTheme}
                 className="p-2 rounded-xl text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
                 title={isDarkMode ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
@@ -864,6 +905,7 @@ export default function App() {
               {/* Quick sound toggle */}
               <button
                 type="button"
+                data-help-id="sound-toggle"
                 onClick={() => {
                   const nextVol = settings.soundVolume > 0 ? 0 : 0.8;
                   setSettings((s) => ({ ...s, soundVolume: nextVol }));
@@ -887,6 +929,7 @@ export default function App() {
               <button
                 type="button"
                 id="parent-lock-status-btn"
+                data-help-id="parent-lock"
                 onClick={handleToggleLockStatus}
                 className={`p-2 rounded-xl flex items-center gap-1 transition-all ${
                   settings.childLockEnabled
@@ -918,6 +961,7 @@ export default function App() {
               <button
                 type="button"
                 id="open-settings-modal-btn"
+                data-help-id="settings"
                 onClick={() =>
                   handleRequirePin(
                     () => setIsSettingsOpen(true),
@@ -930,9 +974,26 @@ export default function App() {
               >
                 <Settings className="w-4 h-4" />
               </button>
+
+              {/* Botão Central de Ajuda & Guia Rápido */}
+              <button
+                type="button"
+                id="open-help-modal-btn"
+                onClick={() => setIsHelpModalOpen(true)}
+                className="p-2 rounded-xl text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/50 transition-colors"
+                title="Ajuda e Guia Rápido"
+                aria-label="Abrir central de ajuda e guia rápido"
+              >
+                <HelpCircle className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </header>
+
+        {/* Banner do Modo Inspetor de Ajuda Ativado */}
+        {isInspectorMode && (
+          <InspectorBanner onExit={() => setIsInspectorMode(false)} />
+        )}
 
         {/* Autism Spectrum / Neurodiversity Awareness Top Strip when in Large Cards mode */}
         {viewMode === 'board' && (
@@ -1021,6 +1082,7 @@ export default function App() {
               <button
                 type="button"
                 id="view-mode-list-btn"
+                data-help-id="view-mode-list"
                 onClick={() => setViewMode('list')}
                 className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                   viewMode === 'list'
@@ -1035,6 +1097,7 @@ export default function App() {
               <button
                 type="button"
                 id="view-mode-board-btn"
+                data-help-id="view-mode-board"
                 onClick={() => {
                   setViewMode('board');
                   soundManager.playSound('chime', 0.4);
@@ -1386,6 +1449,37 @@ export default function App() {
             onClose={handleCloseIncomingRoutine}
             onApply={handleApplyIncomingRoutine}
             isParentLocked={isEditLocked}
+          />
+        )}
+
+        {/* 12. Interactive Help Hub Modal */}
+        {isHelpModalOpen && (
+          <HelpModal
+            isOpen={isHelpModalOpen}
+            onClose={() => setIsHelpModalOpen(false)}
+            onStartInspectorMode={() => setIsInspectorMode(true)}
+            onStartQuickGuide={() => setIsQuickGuideOpen(true)}
+          />
+        )}
+
+        {/* 13. Quick Guide 1-Minute Walkthrough Modal */}
+        {isQuickGuideOpen && (
+          <QuickGuideModal
+            isOpen={isQuickGuideOpen}
+            onClose={() => setIsQuickGuideOpen(false)}
+            onOpenInspectorMode={() => setIsInspectorMode(true)}
+          />
+        )}
+
+        {/* 14. Inspector Mode Explanation Bottom Sheet */}
+        {inspectedItemId && (
+          <InspectorExplanationSheet
+            itemId={inspectedItemId}
+            onClose={() => setInspectedItemId(null)}
+            onExitInspectorMode={() => {
+              setInspectedItemId(null);
+              setIsInspectorMode(false);
+            }}
           />
         )}
 

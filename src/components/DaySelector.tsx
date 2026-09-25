@@ -50,6 +50,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
             <button
               type="button"
               id="open-clinical-templates-btn"
+              data-help-id="clinical-templates"
               onClick={onOpenClinicalTemplates}
               className="px-2 py-1 text-xs font-bold text-amber-800 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-300/80 dark:border-amber-800 rounded-lg flex items-center gap-1 transition-all shadow-2xs"
               title="Carregar modelos clínicos (Desfralde, Rotina Matinal, Terapia, Sono)"
@@ -63,6 +64,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
             <button
               type="button"
               id="open-share-routine-btn"
+              data-help-id="share-routine"
               onClick={onOpenShareModal}
               className="px-2 py-1 text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 rounded-lg flex items-center gap-1 transition-all shadow-2xs"
               title="Compartilhar rotina via WhatsApp ou importar do consultório"
@@ -76,6 +78,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
             <button
               type="button"
               id="open-export-calendar-btn"
+              data-help-id="calendar-export"
               onClick={onOpenExportModal}
               className="p-1.5 text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
               title="Sincronizar alarmes no Calendário do Celular (iOS/Android)"
@@ -87,6 +90,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           <button
             type="button"
             id="open-copy-routine-modal-btn"
+            data-help-id="copy-routine"
             onClick={onOpenCopyModal}
             className="p-1.5 text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors"
             title="Copiar rotina deste dia para outros dias"
@@ -108,7 +112,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
       </div>
 
       {/* Weekday Pills row */}
-      <div className="grid grid-cols-7 gap-1.5">
+      <div className="grid grid-cols-7 gap-1.5" data-help-id="day-selector">
         {days.map((day) => {
           const isSelected = selectedDay === day;
           const isToday = todayDayOfWeek === day;

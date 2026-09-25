@@ -23,3 +23,17 @@
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
 }
 
+/* Modo Inspetor de Ajuda Interativo */
+body.inspector-mode-active [data-help-id] {
+  position: relative;
+  outline: 2px dashed rgba(20, 184, 166, 0.8) !important;
+  outline-offset: 2px !important;
+  cursor: help !important;
+  animation: inspectorPulse 2s infinite ease-in-out;
+}
+
+@keyframes inspectorPulse {
+  0%, 100% { outline-color: rgba(20, 184, 166, 0.8); }
+  50% { outline-color: rgba(99, 102, 241, 0.8); }
+}
+
