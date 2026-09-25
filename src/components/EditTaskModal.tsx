@@ -14,6 +14,7 @@ import {
   Mic,
   Square,
   Sparkles,
+  HelpCircle,
 } from 'lucide-react';
 import { RoutineTask, SoundAlert, TaskCategory, SubTask } from '../types';
 import { TaskIcon, AVAILABLE_ICONS, COLOR_THEMES } from './TaskIcon';
@@ -26,6 +27,8 @@ interface EditTaskModalProps {
   onSave: (task: RoutineTask) => void;
   initialTask?: RoutineTask | null;
   dayName: string;
+  isInspectorMode?: boolean;
+  onToggleInspectorMode?: () => void;
 }
 
 const CATEGORIES: { id: TaskCategory; label: string }[] = [
@@ -65,6 +68,8 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   onSave,
   initialTask,
   dayName,
+  isInspectorMode,
+  onToggleInspectorMode,
 }) => {
   const isEditing = Boolean(initialTask);
 
@@ -253,21 +258,39 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 </p>
               </div>
             </div>
-            <button
-              type="button"
-              id="close-edit-task-modal-btn"
-              onClick={onClose}
-              className="p-2 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1.5">
+              {onToggleInspectorMode && (
+                <button
+                  type="button"
+                  id="task-edit-toggle-inspector-btn"
+                  onClick={onToggleInspectorMode}
+                  className={`p-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
+                    isInspectorMode
+                      ? 'bg-teal-500 text-stone-950 font-black ring-2 ring-teal-400'
+                      : 'text-teal-600 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/50'
+                  }`}
+                  title={isInspectorMode ? 'Sair do Modo Ajuda' : 'Ativar Modo Inspetor (Explicar Botões)'}
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  <span className="text-[11px] font-bold">Ajuda</span>
+                </button>
+              )}
+              <button
+                type="button"
+                id="close-edit-task-modal-btn"
+                onClick={onClose}
+                className="p-2 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-700/60 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Form Body */}
           <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-sm overscroll-contain">
             {/* Title & Time */}
             <div className="space-y-3">
-              <div>
+              <div data-help-id="task-edit-title">
                 <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1">
                   Nome da Tarefa *
                 </label>
@@ -283,7 +306,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div>
+                <div data-help-id="task-edit-time">
                   <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     Horário
@@ -297,7 +320,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                   />
                 </div>
 
-                <div>
+                <div data-help-id="task-edit-duration">
                   <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1">
                     Duração estimada
                   </label>
@@ -317,7 +340,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* PASSOS DA TAREFA (Subtasks) - Highlighted and easy! */}
-            <div className="p-3.5 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl space-y-2.5">
+            <div className="p-3.5 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl space-y-2.5" data-help-id="task-edit-subtasks">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <ListChecks className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -409,7 +432,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* ARASAAC Pictogram Selection Section (CAA) */}
-            <div className="p-3.5 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl space-y-2.5">
+            <div className="p-3.5 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl space-y-2.5" data-help-id="task-edit-arasaac">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <ImageIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -478,7 +501,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* Icon Picker */}
-            <div>
+            <div data-help-id="task-edit-icon">
               <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                 Ícone Visual Alternativo (Se não usar ARASAAC)
               </label>
@@ -502,7 +525,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* Category */}
-            <div>
+            <div data-help-id="task-edit-category">
               <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                 Categoria
               </label>
@@ -525,7 +548,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* Color Selector */}
-            <div>
+            <div data-help-id="task-edit-color">
               <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                 Cor Visual
               </label>
@@ -551,7 +574,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
             {/* Sound & Voice Reminders */}
             <div className="pt-2 border-t border-stone-200 dark:border-stone-800 space-y-3">
-              <div>
+              <div data-help-id="task-edit-sound">
                 <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1.5">
                   Som de Lembrete
                 </label>
@@ -587,7 +610,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 </div>
               </div>
 
-              <div>
+              <div data-help-id="task-edit-voice-phrase">
                 <label className="block text-xs font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1 flex items-center justify-between">
                   <span>Frase Falada (Opcional)</span>
                   <button
@@ -609,7 +632,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
               </div>
 
               {/* Gravação da Voz do Papai / Mamãe / Terapeuta (Voice Memo) */}
-              <div className="p-3 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 rounded-2xl space-y-2">
+              <div className="p-3 bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/60 rounded-2xl space-y-2" data-help-id="task-edit-voice-memo">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-base">🎙️</span>
@@ -710,6 +733,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             <button
               type="button"
               id="save-task-btn"
+              data-help-id="task-edit-save"
               onClick={handleSave}
               disabled={!title.trim()}
               className="flex-1 py-2.5 px-4 rounded-xl font-semibold text-xs sm:text-sm text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 flex items-center justify-center gap-1.5 transition-colors"

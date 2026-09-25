@@ -821,6 +821,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <button
                   type="button"
                   id="settings-open-export-calendar-btn"
+                  data-help-id="settings-sync-calendar"
                   onClick={() => {
                     onClose();
                     onOpenExportCalendar();

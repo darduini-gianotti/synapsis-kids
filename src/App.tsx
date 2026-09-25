@@ -1345,6 +1345,8 @@ export default function App() {
             onSave={handleSaveTask}
             initialTask={editingTask}
             dayName={DAY_NAMES[selectedDay].full}
+            isInspectorMode={isInspectorMode}
+            onToggleInspectorMode={() => setIsInspectorMode((prev) => !prev)}
           />
         )}
 
