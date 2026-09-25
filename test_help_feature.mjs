@@ -14,61 +14,34 @@ async function run() {
   const page = await browser.newPage();
   await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
 
-  // Abre o app
   await page.goto('http://localhost:4174/', { waitUntil: 'networkidle0', timeout: 30000 });
-  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'help_test_1_main_screen.png') });
-  console.log('1. Main screen captured');
 
-  // Clica no botão de ajuda para abrir o HelpModal
+  // 1. Clica no botão ? para ativar diretamente o Modo Inspetor
   await page.click('#open-help-modal-btn');
   await new Promise((r) => setTimeout(r, 600));
-  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'help_test_2_help_modal.png') });
-  console.log('2. Help modal captured');
+  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'inspector_direct_1_all_buttons.png') });
+  console.log('1. Inspector active direct - all buttons outlined');
 
-  // Clica no Modo Inspetor
-  const inspectorBtn = await page.evaluateHandle(() => {
-    const buttons = Array.from(document.querySelectorAll('button'));
-    return buttons.find(b => b.textContent && b.textContent.includes('Modo Inspetor'));
-  });
-  if (inspectorBtn) {
-    await inspectorBtn.click();
+  // 2. Toca no botão de áudio da primeira tarefa
+  const audioBtn = await page.$('[data-help-id="task-audio"]');
+  if (audioBtn) {
+    await audioBtn.click();
+    await new Promise((r) => setTimeout(r, 600));
+    await page.screenshot({ path: path.join(ARTIFACT_DIR, 'inspector_direct_2_task_audio.png') });
+    console.log('2. Task audio bottom sheet captured');
   }
-  await new Promise((r) => setTimeout(r, 600));
-  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'help_test_3_inspector_active.png') });
-  console.log('3. Inspector mode active captured');
 
-  // Clica no botão Nova Tarefa para abrir o Bottom Sheet
-  await page.click('#header-new-task-btn');
-  await new Promise((r) => setTimeout(r, 600));
-  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'help_test_4_explanation_sheet.png') });
-  console.log('4. Explanation bottom sheet captured');
-
-  // Fecha o bottom sheet e o modo inspetor
-  const closeSheetBtn = await page.evaluateHandle(() => {
-    const buttons = Array.from(document.querySelectorAll('button'));
-    return buttons.find(b => b.textContent && b.textContent.includes('Encerrar Modo Ajuda'));
-  });
-  if (closeSheetBtn) {
-    await closeSheetBtn.click();
+  // 3. Toca no botão de check da tarefa
+  const checkBtn = await page.$('[data-help-id="task-check"]');
+  if (checkBtn) {
+    await checkBtn.click();
+    await new Promise((r) => setTimeout(r, 600));
+    await page.screenshot({ path: path.join(ARTIFACT_DIR, 'inspector_direct_3_task_check.png') });
+    console.log('3. Task check bottom sheet captured');
   }
-  await new Promise((r) => setTimeout(r, 500));
-
-  // Reabre o menu de ajuda e clica em Guia Rápido
-  await page.click('#open-help-modal-btn');
-  await new Promise((r) => setTimeout(r, 500));
-  const quickGuideBtn = await page.evaluateHandle(() => {
-    const buttons = Array.from(document.querySelectorAll('button'));
-    return buttons.find(b => b.textContent && b.textContent.includes('Guia Rápido'));
-  });
-  if (quickGuideBtn) {
-    await quickGuideBtn.click();
-  }
-  await new Promise((r) => setTimeout(r, 600));
-  await page.screenshot({ path: path.join(ARTIFACT_DIR, 'help_test_5_quick_guide.png') });
-  console.log('5. Quick guide captured');
 
   await browser.close();
-  console.log('Done all captures!');
+  console.log('All tests passed!');
 }
 
 run().catch(err => {

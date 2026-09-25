@@ -35,6 +35,7 @@ export const FirstThenCard: React.FC<FirstThenCardProps> = ({
     <div
       className="bg-stone-50 dark:bg-stone-850 dark:bg-stone-900/60 border border-stone-200/80 dark:border-stone-800 rounded-2xl p-3"
       id="first-then-card"
+      data-help-id="first-then"
     >
       <div className="flex items-center justify-between text-[10px] font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-2 px-0.5">
         <span>Guia: Primeiro / Depois</span>

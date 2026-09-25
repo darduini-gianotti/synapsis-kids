@@ -49,7 +49,10 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
     <div className="space-y-3.5">
       {/* Streamlined View Switcher Bar (Prancha vs Primeiro/Depois) */}
       <div className="flex items-center justify-between gap-2 px-0.5">
-        <div className="flex items-center gap-1 p-1 bg-stone-100 dark:bg-stone-800 rounded-2xl border border-stone-200/80 dark:border-stone-700/80 shadow-2xs">
+        <div
+          data-help-id="board-switcher"
+          className="flex items-center gap-1 p-1 bg-stone-100 dark:bg-stone-800 rounded-2xl border border-stone-200/80 dark:border-stone-700/80 shadow-2xs"
+        >
           <button
             type="button"
             onClick={() => onSetSubtype('board')}
@@ -74,7 +77,10 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
           </button>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-stone-700/60 text-[11px] font-bold text-stone-600 dark:text-stone-300">
+        <div
+          data-help-id="tea-mode-badge"
+          className="flex items-center gap-1.5 bg-stone-50 dark:bg-stone-800/60 px-2.5 py-1 rounded-xl border border-stone-200/60 dark:border-stone-700/60 text-[11px] font-bold text-stone-600 dark:text-stone-300"
+        >
           <div className="flex items-center -space-x-1">
             <span className="w-2 h-2 rounded-full bg-blue-500" />
             <span className="w-2 h-2 rounded-full bg-amber-400" />

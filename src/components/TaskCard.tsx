@@ -128,6 +128,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               {/* Audio button */}
               <button
                 type="button"
+                data-help-id="task-audio"
                 onClick={handlePlaySound}
                 className={`p-1 rounded-md transition-colors ${
                   task.audioRecording
@@ -148,6 +149,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               {onOpenTimer && task.durationMinutes && !isCompleted && (
                 <button
                   type="button"
+                  data-help-id="task-timer"
                   onClick={() => onOpenTimer(task)}
                   className="p-1 rounded-md text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors"
                   title="Abrir temporizador visual"
@@ -162,6 +164,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <button
                   type="button"
                   id={`edit-task-btn-${task.id}`}
+                  data-help-id="task-edit"
                   onClick={() => {
                     if (isLocked && onRequestUnlock) {
                       onRequestUnlock();
@@ -186,6 +189,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 <button
                   type="button"
                   id={`delete-task-btn-${task.id}`}
+                  data-help-id="task-delete"
                   onClick={() => {
                     if (isLocked && onRequestUnlock) {
                       onRequestUnlock();
@@ -227,6 +231,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 type="button"
                 id={`open-subtasks-btn-${task.id}`}
+                data-help-id="task-subtasks"
                 onClick={() => onOpenSubtasks(task)}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
                   completedSubtasks === totalSubtasks
@@ -245,6 +250,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 type="button"
                 id={`add-steps-btn-${task.id}`}
+                data-help-id="task-subtasks"
                 onClick={() => onOpenSubtasks(task)}
                 className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-stone-100 dark:hover:bg-stone-700/60 px-2 py-0.5 rounded-md transition-colors"
                 title="Dividir esta tarefa em passos (ex: Guardar brinquedos, Arrumar cama)"
@@ -260,6 +266,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <button
           type="button"
           id={`toggle-complete-btn-${task.id}`}
+          data-help-id="task-check"
           onClick={() => onToggleComplete(task.id)}
           className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform active:scale-90 ${
             isCompleted

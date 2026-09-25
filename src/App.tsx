@@ -844,7 +844,7 @@ export default function App() {
             </div>
 
             {/* Direita: "xx de xx tarefas feitas (x%)" */}
-            <div className="text-right shrink-0">
+            <div className="text-right shrink-0" data-help-id="app-progress">
               <span className="text-xs font-bold text-stone-700 dark:text-stone-200 block">
                 {completedDayTasks} de {totalDayTasks} feitas
               </span>
@@ -975,14 +975,24 @@ export default function App() {
                 <Settings className="w-4 h-4" />
               </button>
 
-              {/* Botão Central de Ajuda & Guia Rápido */}
+              {/* Botão Modo Inspetor Direto ("O que é cada botão?") */}
               <button
                 type="button"
                 id="open-help-modal-btn"
-                onClick={() => setIsHelpModalOpen(true)}
-                className="p-2 rounded-xl text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/50 transition-colors"
-                title="Ajuda e Guia Rápido"
-                aria-label="Abrir central de ajuda e guia rápido"
+                onClick={() => {
+                  const nextState = !isInspectorMode;
+                  setIsInspectorMode(nextState);
+                  if (nextState) {
+                    soundManager.playSound('chime', 0.5);
+                  }
+                }}
+                className={`p-2 rounded-xl transition-all ${
+                  isInspectorMode
+                    ? 'bg-teal-500 text-stone-950 font-black ring-2 ring-teal-400 shadow-md scale-105'
+                    : 'text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/50'
+                }`}
+                title={isInspectorMode ? 'Sair do Modo Ajuda' : 'Ativar Modo Inspetor (Explicar Botões)'}
+                aria-label="Alternar modo inspetor de ajuda"
               >
                 <HelpCircle className="w-4 h-4" />
               </button>
