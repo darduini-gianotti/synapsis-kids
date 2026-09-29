@@ -3,7 +3,6 @@ import {
   X,
   Search,
   Sparkles,
-  FileText,
   HelpCircle,
   ChevronRight,
   ShieldCheck,
@@ -120,21 +119,15 @@ export const HelpModal: React.FC<HelpModalProps> = ({
           </button>
         </div>
 
-        {/* Rodapé com link para manual em PDF */}
+        {/* Rodapé informativo */}
         <div className="pt-3 border-t border-stone-800 flex items-center justify-between text-xs text-stone-400">
           <span className="flex items-center gap-1 text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
             100% Gratuito & Validado
           </span>
-          <a
-            href="/manual.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-teal-400 hover:text-teal-300 underline font-semibold text-[11px]"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Manual Técnico (PDF)</span>
-          </a>
+          <span className="text-[11px] text-stone-500">
+            Synapsis Clínico • D'Arduini
+          </span>
         </div>
       </div>
     </div>

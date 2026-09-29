@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/manual",
-      "destination": "/manual.html"
+      "destination": "/"
     },
     {
       "source": "/inicio",

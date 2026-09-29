@@ -9,7 +9,6 @@ import {
   Share2,
   ShieldCheck,
   CheckCircle2,
-  FileText,
   Sparkles,
 } from 'lucide-react';
 import { QUICK_GUIDE_STEPS } from './helpData';
@@ -165,15 +164,7 @@ export const QuickGuideModal: React.FC<QuickGuideModalProps> = ({
             <span>Voltar</span>
           </button>
 
-          <a
-            href="/manual.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-1 text-[11px] text-stone-400 hover:text-teal-300 transition-colors"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Manual PDF</span>
-          </a>
+
 
           <button
             type="button"

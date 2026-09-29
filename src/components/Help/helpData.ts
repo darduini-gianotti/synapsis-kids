@@ -338,14 +338,6 @@ export const INSPECTOR_ITEMS: Record<string, InspectorItem> = {
     clinicalTip: 'Escolha uma senha fácil para os pais e cuidadores lembrarem, mas que a criança não decore.',
     iconName: 'Lock',
   },
-  'settings-open-manual': {
-    id: 'settings-open-manual',
-    title: 'Manual do Usuário & Guia Clínico',
-    category: 'rotina',
-    description: 'Abre a documentação técnica aprofundada com opção para imprimir ou salvar em arquivo PDF.',
-    clinicalTip: 'Ideal para profissionais de saúde e educação consultarem os fundamentos neuropsicológicos do app.',
-    iconName: 'CheckSquare',
-  },
   'settings-factory-reset': {
     id: 'settings-factory-reset',
     title: 'Restaurar Rotinas Padrão',
