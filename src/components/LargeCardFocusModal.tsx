@@ -189,28 +189,38 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
           {/* Bottom Huge Tactile Completion Bar */}
           <div className="p-4 bg-stone-50 dark:bg-stone-800/80 border-t border-stone-200 dark:border-stone-800">
-            <button
-              type="button"
-              id="large-card-complete-btn"
-              onClick={handleComplete}
-              className={`w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-95 ${
-                isCompleted
-                  ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-              }`}
-            >
-              {isCompleted ? (
-                <>
+            {isCompleted ? (
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  id="large-card-complete-btn"
+                  onClick={onClose}
+                  className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-95 bg-emerald-600 text-white hover:bg-emerald-700"
+                >
                   <CheckCircle2 className="w-7 h-7" />
-                  <span>Concluído! Toque para desmarcar</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-7 h-7 text-amber-300" />
-                  <span>Tudo Feito! Concluir Atividade</span>
-                </>
-              )}
-            </button>
+                  <span>Concluído! Voltar às Rotinas</span>
+                </button>
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={handleComplete}
+                    className="text-xs text-stone-400 dark:text-stone-500 hover:text-rose-600 dark:hover:text-rose-400 underline transition-colors py-1"
+                  >
+                    Desmarcar esta atividade
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                id="large-card-complete-btn"
+                onClick={handleComplete}
+                className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-95 bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                <Sparkles className="w-7 h-7 text-amber-300" />
+                <span>Tudo Feito! Concluir Atividade</span>
+              </button>
+            )}
           </div>
         </motion.div>
       </div>
