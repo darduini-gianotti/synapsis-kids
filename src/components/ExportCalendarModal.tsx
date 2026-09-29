@@ -49,7 +49,7 @@ export const ExportCalendarModal: React.FC<ExportCalendarModalProps> = ({
       selectedDay,
       alertAtStart,
       alert5MinBefore,
-      recurringWeekly: scope === 'week' ? recurringWeekly : false,
+      recurringWeekly,
     };
 
     downloadCalendarIcs(routines, options);
@@ -181,31 +181,36 @@ export const ExportCalendarModal: React.FC<ExportCalendarModalProps> = ({
                 <span>Aviso prévio 5 min antes (facilita a transição da criança)</span>
               </label>
 
-              {scope === 'week' && (
-                <label className="flex items-center gap-2.5 cursor-pointer text-xs text-stone-700 dark:text-stone-300 pt-1 border-t border-stone-200 dark:border-stone-700/60">
-                  <input
-                    type="checkbox"
-                    checked={recurringWeekly}
-                    onChange={(e) => setRecurringWeekly(e.target.checked)}
-                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-stone-300 dark:border-stone-600"
-                  />
-                  <span>Repetir automaticamente toda semana</span>
-                </label>
-              )}
+              <label className="flex items-center gap-2.5 cursor-pointer text-xs text-stone-700 dark:text-stone-300 pt-1 border-t border-stone-200 dark:border-stone-700/60">
+                <input
+                  type="checkbox"
+                  checked={recurringWeekly}
+                  onChange={(e) => setRecurringWeekly(e.target.checked)}
+                  className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-stone-300 dark:border-stone-600"
+                />
+                <span>
+                  {scope === 'week'
+                    ? 'Repetir automaticamente toda semana (Seg a Dom)'
+                    : `Repetir automaticamente toda ${DAY_NAMES[selectedDay].full}`}
+                </span>
+              </label>
             </div>
 
             {/* How to import instructions */}
-            <div className="p-3 bg-amber-50/70 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-900/60 text-[11px] text-amber-900 dark:text-amber-200 space-y-1">
+            <div className="p-3 bg-amber-50/70 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-900/60 text-[11px] text-amber-900 dark:text-amber-200 space-y-1.5">
               <div className="font-bold flex items-center gap-1 text-amber-800 dark:text-amber-300">
                 <Info className="w-3.5 h-3.5" />
                 Como adicionar ao celular:
               </div>
-              <ul className="list-disc pl-4 space-y-0.5 text-stone-600 dark:text-stone-400">
+              <ul className="list-disc pl-4 space-y-1 text-stone-600 dark:text-stone-400">
                 <li>
-                  <strong>No iPhone (Safari):</strong> Toque no arquivo baixado e clique em <em>"Adicionar Todos"</em>.
+                  <strong>No iPhone (Safari):</strong> Ao baixar, toque na notificação de download do Safari e selecione <em>"Adicionar Todos"</em> no topo do Calendário da Apple.
                 </li>
                 <li>
-                  <strong>No Android:</strong> Abra o arquivo com o <em>Google Agenda</em> e confirme a importação.
+                  <strong>No Android:</strong> Abra o arquivo baixado com o <em>Google Agenda</em> e confirme a sincronização.
+                </li>
+                <li>
+                  <strong>Horário Fiel:</strong> Os alarmes tocam no minuto exato configurado na rotina, sincronizados com o relógio do seu celular.
                 </li>
               </ul>
             </div>

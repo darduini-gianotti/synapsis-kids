@@ -19,10 +19,51 @@ const ICS_DAY_CODES: Record<DayOfWeek, string> = {
   6: 'SA',
 };
 
+export interface TimeZoneInfo {
+  timeZone: string;
+  offsetString: string;
+  tzName: string;
+}
+
 /**
- * Formats a Date object as YYYYMMDDTHHMMSS (local floating time for reliable device scheduling)
+ * Detects the user device's IANA time zone (e.g. America/Sao_Paulo) and standard UTC offset
  */
-function formatIcsDateTime(date: Date): string {
+export function getDeviceTimeZoneInfo(): TimeZoneInfo {
+  let timeZone = 'America/Sao_Paulo';
+  let tzName = 'BRT';
+
+  try {
+    const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (detected) timeZone = detected;
+  } catch {
+    // fallback
+  }
+
+  // Offset in minutes between local and UTC
+  const offsetMinutes = -new Date().getTimezoneOffset();
+  const sign = offsetMinutes >= 0 ? '+' : '-';
+  const absMin = Math.abs(offsetMinutes);
+  const hours = String(Math.floor(absMin / 60)).padStart(2, '0');
+  const mins = String(absMin % 60).padStart(2, '0');
+  const offsetString = `${sign}${hours}${mins}`;
+
+  try {
+    const parts = new Intl.DateTimeFormat('pt-BR', { timeZoneName: 'short' }).formatToParts(new Date());
+    const tzPart = parts.find((p) => p.type === 'timeZoneName');
+    if (tzPart && tzPart.value) {
+      tzName = tzPart.value.replace(/[^A-Za-z0-9]/g, '') || 'BRT';
+    }
+  } catch {
+    // fallback
+  }
+
+  return { timeZone, offsetString, tzName };
+}
+
+/**
+ * Formats a Date object as local YYYYMMDDTHHMMSS
+ */
+function formatIcsLocal(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
   const year = date.getFullYear();
   const month = pad(date.getMonth() + 1);
@@ -31,6 +72,13 @@ function formatIcsDateTime(date: Date): string {
   const minutes = pad(date.getMinutes());
   const seconds = pad(date.getSeconds());
   return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+}
+
+/**
+ * Formats a Date object as UTC YYYYMMDDTHHMMSSZ (RFC 5545 required for DTSTAMP)
+ */
+function formatIcsUtc(date: Date): string {
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 }
 
 /**
@@ -45,47 +93,100 @@ function escapeIcsText(text: string): string {
 }
 
 /**
- * Calculates the next calendar Date instance for a given day of the week (0=Dom, 1=Seg, ...)
+ * Splits lines longer than 74 octets using RFC 5545 line folding (\r\n followed by a space)
+ * Prevents Apple Calendar on iOS from dropping events with long descriptions/subtasks.
  */
-function getNextDateForDayOfWeek(targetDay: DayOfWeek): Date {
-  const now = new Date();
-  const currentDay = now.getDay();
-  let daysDiff = targetDay - currentDay;
-  if (daysDiff < 0) {
-    daysDiff += 7;
+function foldIcsLine(line: string, maxBytes = 74): string {
+  const encoder = new TextEncoder();
+  if (encoder.encode(line).length <= maxBytes) {
+    return line;
   }
-  const result = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysDiff);
-  return result;
+
+  const parts: string[] = [];
+  let currentPart = '';
+  let currentBytes = 0;
+
+  for (const char of line) {
+    const charBytes = encoder.encode(char).length;
+    // Continuation lines start with a single whitespace character
+    const limit = parts.length === 0 ? maxBytes : maxBytes - 1;
+
+    if (currentBytes + charBytes > limit) {
+      parts.push(currentPart);
+      currentPart = char;
+      currentBytes = charBytes;
+    } else {
+      currentPart += char;
+      currentBytes += charBytes;
+    }
+  }
+
+  if (currentPart.length > 0) {
+    parts.push(currentPart);
+  }
+
+  return parts.join('\r\n ');
 }
 
 /**
- * Builds the content of an RFC 5545 .ics file from the application's routines
+ * Calculates the calendar Date instance for a given day of the week, anchored
+ * to the current calendar week (Monday through Sunday).
+ */
+function getCalendarDateForDayOfWeek(targetDay: DayOfWeek, isRecurring: boolean): Date {
+  const now = new Date();
+  const currentDay = now.getDay(); // 0=Dom, 1=Seg, 2=Ter...
+  const currentDayIndex = currentDay === 0 ? 6 : currentDay - 1;
+  const targetDayIndex = targetDay === 0 ? 6 : targetDay - 1;
+  let diffDays = targetDayIndex - currentDayIndex;
+
+  // If non-recurring and target day already passed in current week, move to upcoming week
+  if (!isRecurring && diffDays < 0) {
+    diffDays += 7;
+  }
+
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffDays);
+}
+
+/**
+ * Builds the content of an RFC 5545 .ics file with native VTIMEZONE and line folding
  */
 export function generateIcsContent(
   routines: Record<DayOfWeek, DayRoutine>,
   options: CalendarExportOptions
 ): string {
   const { scope, selectedDay, alertAtStart, alert5MinBefore, recurringWeekly } = options;
+  const { timeZone, offsetString, tzName } = getDeviceTimeZoneInfo();
 
   const daysToExport: DayOfWeek[] =
     scope === 'day' ? [selectedDay] : [1, 2, 3, 4, 5, 6, 0];
 
+  const nowUtcStamp = formatIcsUtc(new Date());
+
   const calendarLines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Rotina Visual//Rotina Infantil TEA//PT',
+    'PRODID:-//Synapsis Kids//Rotina Visual Infantil//PT',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:Rotina Visual',
+    'X-WR-CALNAME:Rotina Visual • Synapsis Kids',
+    `X-WR-TIMEZONE:${timeZone}`,
+    'BEGIN:VTIMEZONE',
+    `TZID:${timeZone}`,
+    `X-LIC-LOCATION:${timeZone}`,
+    'BEGIN:STANDARD',
+    'DTSTART:19700101T000000',
+    `TZOFFSETFROM:${offsetString}`,
+    `TZOFFSETTO:${offsetString}`,
+    `TZNAME:${tzName}`,
+    'END:STANDARD',
+    'END:VTIMEZONE',
   ];
-
-  const nowStamp = formatIcsDateTime(new Date());
 
   daysToExport.forEach((dayOfWeek) => {
     const routine = routines[dayOfWeek];
     if (!routine || !routine.tasks || routine.tasks.length === 0) return;
 
-    const baseDate = getNextDateForDayOfWeek(dayOfWeek);
+    const baseDate = getCalendarDateForDayOfWeek(dayOfWeek, recurringWeekly);
     const dayCode = ICS_DAY_CODES[dayOfWeek];
 
     routine.tasks.forEach((task: RoutineTask) => {
@@ -99,40 +200,40 @@ export function generateIcsContent(
       const durationMinutes = task.durationMinutes || 20;
       const endDate = new Date(startDate.getTime() + durationMinutes * 60 * 1000);
 
-      const dtStart = formatIcsDateTime(startDate);
-      const dtEnd = formatIcsDateTime(endDate);
-      const uid = `rotina-${dayOfWeek}-${task.id}-${task.time.replace(':', '')}@rotinavisual.app`;
+      const dtStart = formatIcsLocal(startDate);
+      const dtEnd = formatIcsLocal(endDate);
+      const uid = `synapsis-${dayOfWeek}-${task.id}-${task.time.replace(':', '')}@synapsisclinico.com.br`;
 
-      let descriptionText = `Atividade da Rotina Visual: ${task.title}`;
+      let description = `Atividade da Rotina Visual: ${task.title}`;
       if (task.subtasks && task.subtasks.length > 0) {
-        descriptionText += `\\n\\nPassos a concluir:`;
+        description += '\n\nPassos a concluir:';
         task.subtasks.forEach((st, idx) => {
-          descriptionText += `\\n${idx + 1}. ${st.title}`;
+          description += `\n${idx + 1}. ${st.title}`;
         });
       }
       if (task.notes) {
-        descriptionText += `\\n\\nObservação: ${task.notes}`;
+        description += `\n\nObservação: ${task.notes}`;
       }
 
       calendarLines.push('BEGIN:VEVENT');
       calendarLines.push(`UID:${uid}`);
-      calendarLines.push(`DTSTAMP:${nowStamp}`);
-      calendarLines.push(`DTSTART:${dtStart}`);
-      calendarLines.push(`DTEND:${dtEnd}`);
+      calendarLines.push(`DTSTAMP:${nowUtcStamp}`);
+      calendarLines.push(`DTSTART;TZID=${timeZone}:${dtStart}`);
+      calendarLines.push(`DTEND;TZID=${timeZone}:${dtEnd}`);
       calendarLines.push(`SUMMARY:${escapeIcsText(task.title)}`);
-      calendarLines.push(`DESCRIPTION:${descriptionText}`);
+      calendarLines.push(`DESCRIPTION:${escapeIcsText(description)}`);
 
-      // If weekly recurring is enabled
+      // Weekly recurring rule
       if (recurringWeekly) {
         calendarLines.push(`RRULE:FREQ=WEEKLY;BYDAY=${dayCode}`);
       }
 
-      // Alarms
+      // Alarms (Reminders)
       if (alertAtStart) {
         calendarLines.push('BEGIN:VALARM');
         calendarLines.push('ACTION:DISPLAY');
         calendarLines.push(`DESCRIPTION:Hora de: ${escapeIcsText(task.title)}`);
-        calendarLines.push('TRIGGER:-PT0M');
+        calendarLines.push('TRIGGER:PT0S');
         calendarLines.push('END:VALARM');
       }
 
@@ -149,7 +250,9 @@ export function generateIcsContent(
   });
 
   calendarLines.push('END:VCALENDAR');
-  return calendarLines.join('\r\n');
+
+  // Enforce strict RFC 5545 line folding (<= 75 octets) across all lines
+  return calendarLines.map((line) => foldIcsLine(line)).join('\r\n');
 }
 
 /**
