@@ -75,7 +75,11 @@ export default function App() {
   // Application State
   const [routines, setRoutines] = useState<Record<DayOfWeek, DayRoutine>>(loadRoutines);
   const [selectedDay, setSelectedDay] = useState<DayOfWeek>(todayDayOfWeek);
-  const [settings, setSettings] = useState<AppSettings>(loadSettings);
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    const s = loadSettings();
+    soundManager.setMasterVolume(s.soundVolume);
+    return s;
+  });
 
   // View Mode for Non-verbal / PECS ('list' = agenda normal | 'board' = cartões grandes)
   const [viewMode, setViewMode] = useState<'list' | 'board'>('list');
@@ -212,6 +216,7 @@ export default function App() {
 
   useEffect(() => {
     saveSettings(settings);
+    soundManager.setMasterVolume(settings.soundVolume);
     soundManager.setVoicePreferences(
       settings.selectedVoiceURI,
       settings.voicePitch,
@@ -973,16 +978,20 @@ export default function App() {
                 type="button"
                 data-help-id="sound-toggle"
                 onClick={() => {
-                  const nextVol = settings.soundVolume > 0 ? 0 : 0.8;
+                  const isCurrentlyMuted = settings.soundVolume <= 0;
+                  const nextVol = isCurrentlyMuted ? 0.8 : 0;
                   setSettings((s) => ({ ...s, soundVolume: nextVol }));
-                  if (nextVol > 0) soundManager.playSound('chime', 0.8);
+                  soundManager.setMasterVolume(nextVol);
+                  if (nextVol > 0) {
+                    soundManager.playSound('chime', 0.8);
+                  }
                 }}
                 className={`p-2 rounded-xl transition-colors ${
                   settings.soundVolume > 0
                     ? 'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50'
-                    : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
+                    : 'text-rose-500 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40'
                 }`}
-                title={settings.soundVolume > 0 ? 'Som ativado' : 'Som desativado'}
+                title={settings.soundVolume > 0 ? 'Som ativado (toque para silenciar)' : 'Silenciado (toque para ativar som)'}
               >
                 {settings.soundVolume > 0 ? (
                   <Volume2 className="w-4 h-4" />

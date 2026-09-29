@@ -48,6 +48,8 @@ export function getCoreTaskAudioUrl(title: string): string | null {
 class AudioManager {
   private ctx: AudioContext | null = null;
   private currentAudioElement: HTMLAudioElement | null = null;
+  private masterVolume = 0.8;
+  private isMuted = false;
 
   private getAudioContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -64,16 +66,66 @@ class AudioManager {
   }
 
   /**
+   * Configura o volume mestre global (0 a 1). Se for 0, silencia imediatamente todo áudio e fala.
+   */
+  setMasterVolume(volume: number) {
+    const clamped = Math.max(0, Math.min(1, volume));
+    this.masterVolume = clamped;
+    this.isMuted = clamped <= 0;
+    if (this.isMuted) {
+      this.stopAll();
+    }
+  }
+
+  getMasterVolume(): number {
+    return this.isMuted ? 0 : this.masterVolume;
+  }
+
+  isSoundMuted(): boolean {
+    return this.isMuted || this.masterVolume <= 0;
+  }
+
+  /**
+   * Interrompe instantaneamente qualquer som em reprodução e cancela falas pendentes
+   */
+  stopAll() {
+    if (this.currentAudioElement) {
+      try {
+        this.currentAudioElement.pause();
+        this.currentAudioElement.currentTime = 0;
+      } catch {}
+      this.currentAudioElement = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch {}
+    }
+  }
+
+  /**
+   * Calcula o volume efetivo considerando mudo e masterVolume
+   */
+  private getEffectiveVolume(volume?: number): number {
+    if (this.isMuted || this.masterVolume <= 0) return 0;
+    const v = volume !== undefined ? volume : this.masterVolume;
+    return Math.max(0, Math.min(1, v));
+  }
+
+  /**
    * Play a gentle, sensory-friendly tone using Web Audio API synthesis
    */
-  playSound(type: SoundAlert, volume = 0.8) {
+  playSound(type: SoundAlert, volume?: number) {
     if (type === 'none') return;
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+
     const ctx = this.getAudioContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(Math.min(Math.max(volume, 0.05), 1), now);
+    masterGain.gain.setValueAtTime(effVol, now);
     masterGain.connect(ctx.destination);
 
     if (type === 'chime') {
@@ -99,13 +151,19 @@ class AudioManager {
   /**
    * Play success victory fanfare for completing a task or all subtasks
    */
-  playSuccess(volume = 0.8) {
+  playSuccess(volume?: number) {
+    // Fire celebratory confetti!
+    this.triggerConfetti();
+
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+
     const ctx = this.getAudioContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(volume * 0.9, now);
+    masterGain.gain.setValueAtTime(effVol * 0.9, now);
     masterGain.connect(ctx.destination);
 
     // Warm cheerful chords: C5, E5, G5, high C6
@@ -128,13 +186,20 @@ class AudioManager {
    * Play grand victory celebration with joyful cartoon sparkles and double confetti
    * Triggered when completing all daily tasks!
    */
-  playGrandCelebration(volume = 0.85) {
+  playGrandCelebration(volume?: number) {
+    // Fire double celebratory confetti!
+    this.triggerConfetti();
+    setTimeout(() => this.triggerConfetti(), 350);
+
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+
     const ctx = this.getAudioContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(volume, now);
+    masterGain.gain.setValueAtTime(effVol, now);
     masterGain.connect(ctx.destination);
 
     // Triumphant cartoon fanfare melody (C5, E5, G5, C6, A5, sustained high C6)
@@ -156,10 +221,6 @@ class AudioManager {
     chimes.forEach((freq, idx) => {
       this.playBell(ctx, masterGain, freq, now + 0.45 + idx * 0.14, 0.6);
     });
-
-    // Fire double celebratory confetti!
-    this.triggerConfetti();
-    setTimeout(() => this.triggerConfetti(), 350);
   }
 
   /**
@@ -285,7 +346,10 @@ class AudioManager {
   /**
    * Play base64 or URL audio recording (e.g. parents or therapist voice memo, or mascot mp3)
    */
-  playRecording(audioDataUrl: string, volume = 1.0): Promise<void> {
+  playRecording(audioDataUrl: string, volume?: number): Promise<void> {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return Promise.resolve();
+
     return new Promise((resolve, reject) => {
       try {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -299,7 +363,7 @@ class AudioManager {
 
         const audio = new Audio(audioDataUrl);
         this.currentAudioElement = audio;
-        audio.volume = Math.min(Math.max(volume, 0.05), 1.0);
+        audio.volume = effVol;
         audio.onended = () => {
           if (this.currentAudioElement === audio) {
             this.currentAudioElement = null;
@@ -368,7 +432,10 @@ class AudioManager {
   /**
    * Speak friendly text in Portuguese using the highest quality natural voice
    */
-  speak(text: string, volume = 0.9) {
+  speak(text: string, volume?: number) {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+
     if (this.currentAudioElement) {
       this.currentAudioElement.pause();
       this.currentAudioElement.currentTime = 0;
@@ -380,7 +447,7 @@ class AudioManager {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = this.preferredRate || 0.95; // Natural human conversational pace
       utterance.pitch = this.preferredPitch || 1.0; // Warm, natural human pitch
-      utterance.volume = volume;
+      utterance.volume = effVol;
 
       const allVoices = window.speechSynthesis.getVoices();
       let chosenVoice: SpeechSynthesisVoice | undefined;
@@ -416,15 +483,18 @@ class AudioManager {
    * Speak lively encouragement praise with positive reinforcement tailored for children.
    * Plays studio pre-recorded MP3 when in mascot mode without custom voice override.
    */
-  speakEncouragement(taskTitle: string, isAllCompleted = false, volume = 0.9) {
+  speakEncouragement(taskTitle: string, isAllCompleted = false, volume?: number) {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+
     if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
       if (isAllCompleted) {
         const audioFiles = ['/audio/all_done.mp3', '/audio/all_done_2.mp3'];
         const chosen = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-        this.playRecording(chosen, volume).catch(() => {
+        this.playRecording(chosen, effVol).catch(() => {
           this.speak(
             'Uau, sensacional! Você terminou todas as tarefas de hoje! Você é um super campeão! Viva!',
-            volume
+            effVol
           );
         });
         return;
@@ -437,8 +507,8 @@ class AudioManager {
           '/audio/celebration_5.mp3',
         ];
         const chosen = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-        this.playRecording(chosen, volume).catch(() => {
-          this.speak(`Eba! Você concluiu: ${taskTitle}! Você é demais!`, volume);
+        this.playRecording(chosen, effVol).catch(() => {
+          this.speak(`Eba! Você concluiu: ${taskTitle}! Você é demais!`, effVol);
         });
         return;
       }
@@ -464,25 +534,28 @@ class AudioManager {
       }
     }
 
-    this.speak(phrase, volume);
+    this.speak(phrase, effVol);
   }
 
   /**
    * Play studio intro speech for the Mascot
    */
-  playMascotIntro(volume = 0.9): Promise<void> {
+  playMascotIntro(volume?: number): Promise<void> {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return Promise.resolve();
+
     if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
-      return this.playRecording('/audio/intro_mascote.mp3', volume).catch(() => {
+      return this.playRecording('/audio/intro_mascote.mp3', effVol).catch(() => {
         this.speak(
           'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
-          volume
+          effVol
         );
       });
     }
 
     this.speak(
       'Oi amiguinho! Eu sou o Mascote do Synapsis Kids! Vamos fazer as tarefas juntos e se divertir?',
-      volume
+      effVol
     );
     return Promise.resolve();
   }
@@ -497,32 +570,37 @@ class AudioManager {
     title: string,
     voicePhrase?: string,
     audioRecording?: string,
-    volume = 0.9
+    volume?: number
   ): Promise<void> {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return Promise.resolve();
+
     if (audioRecording) {
-      return this.playRecording(audioRecording, volume);
+      return this.playRecording(audioRecording, effVol);
     }
 
     if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
       const coreAudio = getCoreTaskAudioUrl(title);
       if (coreAudio) {
-        return this.playRecording(coreAudio, volume).catch(() => {
-          this.speak(voicePhrase || `Hora de: ${title}`, volume);
+        return this.playRecording(coreAudio, effVol).catch(() => {
+          this.speak(voicePhrase || `Hora de: ${title}`, effVol);
         });
       }
     }
 
-    this.speak(voicePhrase || `Hora de: ${title}`, volume);
+    this.speak(voicePhrase || `Hora de: ${title}`, effVol);
     return Promise.resolve();
   }
 
   /**
    * Play sample fanfare celebration and voice praise for demonstration/testing in settings
    */
-  playCelebrationSample(volume = 0.9) {
-    this.playSuccess(volume);
+  playCelebrationSample(volume?: number) {
+    const effVol = this.getEffectiveVolume(volume);
+    if (effVol <= 0) return;
+    this.playSuccess(effVol);
     setTimeout(() => {
-      this.speakEncouragement('Escovar os Dentes', false, volume);
+      this.speakEncouragement('Escovar os Dentes', false, effVol);
     }, 450);
   }
 

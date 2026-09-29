@@ -98,6 +98,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     const updated = { ...localSettings, soundVolume: vol };
     setLocalSettings(updated);
     onSaveSettings(updated);
+    soundManager.setMasterVolume(vol);
   };
 
   const handleThemeChange = (mode: ThemeMode) => {
