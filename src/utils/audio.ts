@@ -527,19 +527,35 @@ class AudioManager {
   }
 
   /**
-   * Confetti celebration for positive reinforcement
+   * Confetti celebration for positive reinforcement (fireworks effect)
    */
   triggerConfetti() {
     try {
+      const colors = ['#38bdf8', '#34d399', '#fbbf24', '#f472b6', '#a78bfa', '#ff5722', '#ffffff'];
+      
+      // Burst 1 (left side)
       confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ['#38bdf8', '#34d399', '#fbbf24', '#f472b6', '#a78bfa'],
-        disableForReducedMotion: true,
+        particleCount: 60,
+        spread: 80,
+        origin: { x: 0.3, y: 0.65 },
+        colors,
+        disableForReducedMotion: false,
+        zIndex: 99999,
       });
-    } catch {
-      // Fallback safe
+
+      // Burst 2 (right side)
+      setTimeout(() => {
+        confetti({
+          particleCount: 60,
+          spread: 80,
+          origin: { x: 0.7, y: 0.65 },
+          colors,
+          disableForReducedMotion: false,
+          zIndex: 99999,
+        });
+      }, 140);
+    } catch (e) {
+      console.warn('Confetti trigger fallback', e);
     }
   }
 }

@@ -10,3 +10,4 @@ coverage/
 .vercel
 .env*
 test_*.mjs
+promo-videos/

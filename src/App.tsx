@@ -339,11 +339,36 @@ export default function App() {
     totalDayTasks > 0 ? Math.round((completedDayTasks / totalDayTasks) * 100) : 0;
 
   // Toggle Task Completion
-  const handleToggleTaskComplete = (taskId: string) => {
+  // Trigger celebratory sounds and voice reinforcement when completing a task or all daily tasks
+  const triggerTaskCompletionAudio = (taskTitle: string, taskId: string) => {
+    // Check if with this task, all tasks of the day are completed
+    const remainingUncompleted = currentDayTasks.filter(
+      (t) => t.id !== taskId && !t.completed
+    );
+    const isAllDayDone = remainingUncompleted.length === 0 && currentDayTasks.length > 0;
+
+    if (isAllDayDone) {
+      soundManager.playGrandCelebration(settings.soundVolume);
+    } else {
+      soundManager.playSuccess(settings.soundVolume);
+    }
+
+    if (settings.voiceEnabled) {
+      setTimeout(() => {
+        soundManager.speakEncouragement(taskTitle, isAllDayDone, settings.soundVolume);
+      }, 420);
+    }
+  };
+
+  // Toggle or Force Task Completion
+  const handleToggleTaskComplete = (taskId: string, forceStatus?: boolean) => {
     const task = currentDayTasks.find((t) => t.id === taskId);
     if (!task) return;
 
-    const willBeCompleted = !task.completed;
+    // If forceStatus is false, and it's already false, do nothing
+    if (forceStatus === false && !task.completed) return;
+
+    const willBeCompleted = forceStatus !== undefined ? forceStatus : !task.completed;
 
     if (selectedDay === todayDayOfWeek) {
       setCompletions((prev) => {
@@ -357,6 +382,9 @@ export default function App() {
           });
         } else {
           delete nextTasks[taskId];
+          task.subtasks.forEach((st) => {
+            delete nextSubtasks[st.id];
+          });
         }
         return { tasks: nextTasks, subtasks: nextSubtasks };
       });
@@ -385,27 +413,31 @@ export default function App() {
     }
 
     if (willBeCompleted) {
-      // Check if this was the last remaining uncompleted task of the day
-      const remainingUncompleted = currentDayTasks.filter(
-        (t) => t.id !== taskId && !t.completed
-      );
-      const isAllDayDone = remainingUncompleted.length === 0 && currentDayTasks.length > 0;
-
-      if (isAllDayDone) {
-        soundManager.playGrandCelebration(settings.soundVolume);
-      } else {
-        soundManager.playSuccess(settings.soundVolume);
-      }
-
-      if (settings.voiceEnabled) {
-        soundManager.speakEncouragement(task.title, isAllDayDone, settings.soundVolume);
-      }
+      triggerTaskCompletionAudio(task.title, taskId);
     } else {
       soundManager.playSound('chime', settings.soundVolume);
     }
+
+    setActiveSubtaskTask((prev) => {
+      if (!prev || prev.id !== taskId) return prev;
+      return {
+        ...prev,
+        completed: willBeCompleted,
+        subtasks: prev.subtasks.map((st) => ({ ...st, completed: willBeCompleted })),
+      };
+    });
+
+    setFocusedLargeTask((prev) => {
+      if (!prev || prev.id !== taskId) return prev;
+      return {
+        ...prev,
+        completed: willBeCompleted,
+        subtasks: prev.subtasks.map((st) => ({ ...st, completed: willBeCompleted })),
+      };
+    });
   };
 
-  // Toggle Subtask Completion
+  // Toggle Subtask Completion with automatic task completion when all steps are done
   const handleToggleSubtask = (taskId: string, subtaskId: string) => {
     const task = currentDayTasks.find((t) => t.id === taskId);
     if (!task) return;
@@ -414,6 +446,13 @@ export default function App() {
     if (!targetSubtask) return;
 
     const willBeCompleted = !targetSubtask.completed;
+
+    // Check if ALL subtasks will be completed after this toggle
+    const updatedSubtasks = task.subtasks.map((s) =>
+      s.id === subtaskId ? { ...s, completed: willBeCompleted } : s
+    );
+    const areAllSubtasksDone =
+      updatedSubtasks.length > 0 && updatedSubtasks.every((s) => s.completed);
 
     if (selectedDay === todayDayOfWeek) {
       setCompletions((prev) => {
@@ -424,13 +463,13 @@ export default function App() {
           delete nextSubtasks[subtaskId];
         }
 
-        const willAllSubtasksBeDone = task.subtasks.every((st) =>
-          st.id === subtaskId ? willBeCompleted : Boolean(nextSubtasks[st.id])
-        );
-
         const nextTasks = { ...prev.tasks };
-        if (willAllSubtasksBeDone && task.subtasks.length > 0) {
+        if (areAllSubtasksDone) {
+          // All subtasks done -> automatically complete the parent task!
           nextTasks[taskId] = true;
+        } else {
+          // If any subtask is unchecked, parent task is no longer complete
+          delete nextTasks[taskId];
         }
 
         return { tasks: nextTasks, subtasks: nextSubtasks };
@@ -441,15 +480,9 @@ export default function App() {
         if (!dayRoutine) return prev;
         const updatedTasks = dayRoutine.tasks.map((t) => {
           if (t.id === taskId) {
-            const updatedSubtasks = t.subtasks.map((s) =>
-              s.id === subtaskId ? { ...s, completed: willBeCompleted } : s
-            );
-            const allDone =
-              updatedSubtasks.length > 0 &&
-              updatedSubtasks.every((s) => s.completed);
             return {
               ...t,
-              completed: allDone,
+              completed: areAllSubtasksDone,
               subtasks: updatedSubtasks,
             };
           }
@@ -462,7 +495,11 @@ export default function App() {
       });
     }
 
-    if (willBeCompleted) {
+    // Audio & Feedback Logic
+    if (areAllSubtasksDone && willBeCompleted) {
+      // 🎯 The last subtask was just checked -> ALL SUBTASKS COMPLETED!
+      triggerTaskCompletionAudio(task.title, taskId);
+    } else if (willBeCompleted) {
       soundManager.playSound('marimba', settings.soundVolume);
     } else {
       soundManager.playSound('chime', settings.soundVolume);
@@ -472,16 +509,24 @@ export default function App() {
       if (!prev || prev.id !== taskId) return prev;
       return {
         ...prev,
-        subtasks: prev.subtasks.map((st) =>
-          st.id === subtaskId ? { ...st, completed: willBeCompleted } : st
-        ),
+        completed: areAllSubtasksDone,
+        subtasks: updatedSubtasks,
+      };
+    });
+
+    setFocusedLargeTask((prev) => {
+      if (!prev || prev.id !== taskId) return prev;
+      return {
+        ...prev,
+        completed: areAllSubtasksDone,
+        subtasks: updatedSubtasks,
       };
     });
   };
 
-  // Complete All Subtasks in a task
+  // Complete All Subtasks in a task (guaranteed force complete)
   const handleCompleteAllSubtasks = (taskId: string) => {
-    handleToggleTaskComplete(taskId);
+    handleToggleTaskComplete(taskId, true);
   };
 
   // Add Subtask from modal
@@ -1290,7 +1335,7 @@ export default function App() {
         {/* 1. Subtasks Modal (e.g. for "Tarefas da Casa") */}
         {activeSubtaskTask && (
           <SubtaskListModal
-            task={activeSubtaskTask}
+            task={currentDayTasks.find((t) => t.id === activeSubtaskTask.id) || activeSubtaskTask}
             isOpen={Boolean(activeSubtaskTask)}
             onClose={() => setActiveSubtaskTask(null)}
             onToggleSubtask={(subtaskId) =>
@@ -1330,7 +1375,7 @@ export default function App() {
             task={activeTimerTask}
             isOpen={Boolean(activeTimerTask)}
             onClose={() => setActiveTimerTask(null)}
-            onFinishTask={() => handleToggleTaskComplete(activeTimerTask.id)}
+            onFinishTask={() => handleToggleTaskComplete(activeTimerTask.id, true)}
           />
         )}
 
@@ -1408,26 +1453,14 @@ export default function App() {
         {/* 8. Large Card Focus Modal (PECS / CAA Fullscreen Focus) */}
         {focusedLargeTask && (
           <LargeCardFocusModal
-            task={focusedLargeTask}
+            task={currentDayTasks.find((t) => t.id === focusedLargeTask.id) || focusedLargeTask}
             isOpen={Boolean(focusedLargeTask)}
             onClose={() => setFocusedLargeTask(null)}
             onToggleComplete={(taskId) => {
               handleToggleTaskComplete(taskId);
-              setFocusedLargeTask((prev) =>
-                prev && prev.id === taskId ? { ...prev, completed: !prev.completed } : prev
-              );
             }}
             onToggleSubtask={(taskId, subtaskId) => {
               handleToggleSubtask(taskId, subtaskId);
-              setFocusedLargeTask((prev) => {
-                if (!prev || prev.id !== taskId) return prev;
-                return {
-                  ...prev,
-                  subtasks: prev.subtasks.map((st) =>
-                    st.id === subtaskId ? { ...st, completed: !st.completed } : st
-                  ),
-                };
-              });
             }}
             onOpenTimer={(task) => setActiveTimerTask(task)}
           />

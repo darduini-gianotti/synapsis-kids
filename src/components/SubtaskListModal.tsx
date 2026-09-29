@@ -368,14 +368,10 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                 onCompleteAll();
                 onClose();
               }}
-              className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-white flex items-center justify-center gap-2 active:scale-98 transition-all text-sm ${
-                allCompleted
-                  ? 'bg-emerald-600 hover:bg-emerald-700'
-                  : 'bg-stone-800 dark:bg-stone-700 hover:bg-stone-900 dark:hover:bg-stone-600'
-              }`}
+              className="flex-1 py-3 px-4 rounded-xl font-extrabold text-white flex items-center justify-center gap-2 active:scale-98 transition-all text-sm bg-emerald-600 hover:bg-emerald-700 shadow-md"
             >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Concluir Tarefa Inteira</span>
+              <CheckCircle2 className="w-5 h-5" />
+              <span>Concluir Tarefa e Fechar</span>
             </button>
           </div>
         </motion.div>

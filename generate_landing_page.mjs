@@ -611,8 +611,8 @@ const htmlContent = `<!DOCTYPE html>
           <a href="https://synapsisclinico.com.br" target="_blank" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white font-bold text-xs shadow-lg shadow-teal-500/25 transition text-center whitespace-nowrap">
             Acessar Site do Synapsis Clínico ➔
           </a>
-          <a href="https://wa.me/5511999998888?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20demonstra%C3%A7%C3%A3o%20do%20Synapsis%20Cl%C3%ADnico." target="_blank" class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-bold text-xs transition text-center whitespace-nowrap flex items-center justify-center gap-2">
-            <span>💬 Demonstração no WhatsApp</span>
+          <a href="mailto:contato@synapsisclinico.com.br?subject=Contato%20-%20Synapsis%20Cl%C3%ADnico" class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 font-bold text-xs transition text-center whitespace-nowrap flex items-center justify-center gap-2">
+            <span>✉️ Contato por E-mail</span>
           </a>
         </div>
       </div>
