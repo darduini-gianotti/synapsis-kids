@@ -364,14 +364,17 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
             <button
               type="button"
               id="confirm-all-subtasks-btn"
-              onClick={() => {
-                onCompleteAll();
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!task.completed) {
+                  onCompleteAll();
+                }
                 onClose();
               }}
               className="flex-1 py-3 px-4 rounded-xl font-extrabold text-white flex items-center justify-center gap-2 active:scale-98 transition-all text-sm bg-emerald-600 hover:bg-emerald-700 shadow-md"
             >
               <CheckCircle2 className="w-5 h-5" />
-              <span>Concluir Tarefa e Fechar</span>
+              <span>{task.completed ? 'Voltar às Rotinas' : 'Concluir Tarefa e Fechar'}</span>
             </button>
           </div>
         </motion.div>

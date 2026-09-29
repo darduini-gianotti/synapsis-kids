@@ -391,6 +391,9 @@ export default function App() {
     const task = currentDayTasks.find((t) => t.id === taskId);
     if (!task) return;
 
+    // If forceStatus is true, and it's already completed, do nothing (prevents duplicate celebrations)
+    if (forceStatus === true && task.completed) return;
+
     // If forceStatus is false, and it's already false, do nothing
     if (forceStatus === false && !task.completed) return;
 

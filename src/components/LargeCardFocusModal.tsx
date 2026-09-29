@@ -194,7 +194,11 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                 <button
                   type="button"
                   id="large-card-complete-btn"
-                  onClick={onClose}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onClose();
+                  }}
                   className="w-full py-4 px-6 rounded-2xl font-extrabold text-base flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-95 bg-emerald-600 text-white hover:bg-emerald-700"
                 >
                   <CheckCircle2 className="w-7 h-7" />
