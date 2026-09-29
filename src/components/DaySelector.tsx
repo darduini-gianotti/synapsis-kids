@@ -28,14 +28,32 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
 }) => {
   const days: DayOfWeek[] = [1, 2, 3, 4, 5, 6, 0]; // Seg -> Dom
 
+  // Helper para calcular a data do calendário de cada dia da semana atual
+  const getDayDate = (targetDay: DayOfWeek): Date => {
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 é Dom, 1 é Seg...
+    const currentDayIndex = currentDay === 0 ? 6 : currentDay - 1;
+    const targetDayIndex = targetDay === 0 ? 6 : targetDay - 1;
+    const diffDays = targetDayIndex - currentDayIndex;
+    const result = new Date(now);
+    result.setDate(now.getDate() + diffDays);
+    return result;
+  };
+
+  const selectedDate = getDayDate(selectedDay);
+  const formattedSelectedDate = selectedDate.toLocaleDateString('pt-BR', {
+    day: 'numeric',
+    month: 'short',
+  });
+
   return (
     <div className="w-full bg-white dark:bg-stone-900 border-b border-stone-200/80 dark:border-stone-800 px-4 py-2.5 space-y-2" id="day-selector-bar">
-      {/* Top row: Current day name + Primary clinical/share actions */}
+      {/* Top row: Current day name + Real Date + Primary clinical/share actions */}
       <div className="flex items-center justify-between gap-1 flex-wrap">
         <div className="flex items-center gap-1.5 min-w-0">
           <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
           <h2 className="text-sm font-extrabold text-stone-900 dark:text-stone-100 tracking-tight truncate">
-            {DAY_NAMES[selectedDay].full}
+            {DAY_NAMES[selectedDay].full}, <span className="font-semibold text-stone-500 dark:text-stone-400 capitalize">{formattedSelectedDate}</span>
             {selectedDay === todayDayOfWeek && (
               <span className="ml-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                 Hoje
@@ -118,6 +136,8 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
           const isToday = todayDayOfWeek === day;
           const stats = taskStatsByDay[day] || { total: 0, completed: 0 };
           const isAllDone = stats.total > 0 && stats.completed === stats.total;
+          const dayDate = getDayDate(day);
+          const dayNum = dayDate.getDate().toString().padStart(2, '0');
 
           return (
             <button
@@ -133,23 +153,34 @@ export const DaySelector: React.FC<DaySelectorProps> = ({
                   : 'bg-stone-50 dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700/80 font-medium'
               }`}
             >
-              <span className="text-xs uppercase tracking-tight">
+              {/* Sigla do dia: SEG, TER, QUA... */}
+              <span className={`text-[10px] uppercase font-bold tracking-tight ${
+                isSelected ? 'text-stone-300 dark:text-indigo-200' : 'text-stone-500 dark:text-stone-400'
+              }`}>
                 {DAY_NAMES[day].short}
               </span>
 
+              {/* Data real do dia: 28, 29, 30... */}
+              <span className="text-sm font-black tracking-tight my-0.5 leading-none">
+                {dayNum}
+              </span>
+
               {/* Progress mini indicator */}
-              {stats.total > 0 && (
+              {stats.total > 0 ? (
                 <span
-                  className={`text-[10px] mt-0.5 ${
+                  className={`text-[9px] font-bold px-1 rounded-md leading-tight ${
                     isSelected
-                      ? 'text-stone-300 dark:text-indigo-200'
+                      ? 'bg-white/20 text-white'
                       : isAllDone
-                      ? 'text-emerald-600 dark:text-emerald-400 font-bold'
-                      : 'text-stone-400 dark:text-stone-500'
+                      ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300'
+                      : 'text-stone-400 dark:text-stone-400'
                   }`}
+                  title={`${stats.completed} de ${stats.total} tarefas concluídas`}
                 >
                   {isAllDone ? '✓' : `${stats.completed}/${stats.total}`}
                 </span>
+              ) : (
+                <span className="text-[9px] opacity-0">-</span>
               )}
             </button>
           );

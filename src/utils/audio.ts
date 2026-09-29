@@ -31,6 +31,9 @@ export const CORE_TASK_AUDIO_MAP: Record<string, string> = {
   'terapia': '/audio/task_terapia.mp3',
   'passeio': '/audio/task_passeio.mp3',
   'parquinho': '/audio/task_passeio.mp3',
+  'tarefa': '/audio/task_tarefas_casa.mp3',
+  'tarefas': '/audio/task_tarefas_casa.mp3',
+  'casa': '/audio/task_tarefas_casa.mp3',
 };
 
 export function getCoreTaskAudioUrl(title: string): string | null {
@@ -449,12 +452,15 @@ class AudioManager {
       utterance.pitch = this.preferredPitch || 1.0; // Warm, natural human pitch
       utterance.volume = effVol;
 
-      const allVoices = window.speechSynthesis.getVoices();
+      const liveVoices = window.speechSynthesis.getVoices();
+      const allVoices = liveVoices && liveVoices.length > 0 ? liveVoices : (this.cachedVoices || []);
       let chosenVoice: SpeechSynthesisVoice | undefined;
 
       // 1. If user selected a specific voice in Settings, try to use it across all voices
       if (this.preferredVoiceURI) {
-        chosenVoice = allVoices.find((v) => v.voiceURI === this.preferredVoiceURI);
+        chosenVoice = allVoices.find(
+          (v) => v.voiceURI === this.preferredVoiceURI || v.name === this.preferredVoiceURI
+        );
       }
 
       // 2. Otherwise pick the top-ranked natural voice in Portuguese
