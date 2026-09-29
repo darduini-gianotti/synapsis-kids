@@ -58,6 +58,7 @@ import { ClinicalTemplatesModal } from './components/ClinicalTemplatesModal';
 import { ShareRoutineModal } from './components/ShareRoutineModal';
 import { IncomingRoutineModal, IncomingRoutineData } from './components/IncomingRoutineModal';
 import { decodeRoutine } from './utils/routineCodec';
+import { saasTracker } from './utils/saasTracker';
 import {
   HelpModal,
   QuickGuideModal,
@@ -123,6 +124,12 @@ export default function App() {
       window.removeEventListener('click', handleGlobalHelpCapture, true);
       document.body.classList.remove('inspector-mode-active');
     };
+  }, [isInspectorMode]);
+
+  useEffect(() => {
+    if (isInspectorMode) {
+      saasTracker.track('inspector_mode_started');
+    }
   }, [isInspectorMode]);
 
   // Listen for WhatsApp 1-Click Magic Link (#r=... or #rotina=... or #import=...)
@@ -216,6 +223,14 @@ export default function App() {
   useEffect(() => {
     saveDateCompletions(todayDateKey, completions);
   }, [todayDateKey, completions]);
+
+  // Telemetria do SaaS Manager: Rastrear abertura do App
+  useEffect(() => {
+    saasTracker.track('app_open', {
+      theme: settings.themeMode || 'light',
+      voice_enabled: settings.voiceEnabled,
+    });
+  }, []);
 
   // Apply dark mode class to root HTML element
   useEffect(() => {
@@ -358,6 +373,12 @@ export default function App() {
         soundManager.speakEncouragement(taskTitle, isAllDayDone, settings.soundVolume);
       }, 420);
     }
+
+    // Telemetria do SaaS Manager: rotina concluída
+    saasTracker.track('routine_completed', {
+      title: taskTitle,
+      is_all_day_done: isAllDayDone,
+    });
   };
 
   // Toggle or Force Task Completion

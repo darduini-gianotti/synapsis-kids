@@ -21,6 +21,7 @@ import { DayOfWeek, DayRoutine, RoutineTask } from '../types';
 import { DAY_NAMES } from '../utils/storage';
 import { soundManager } from '../utils/audio';
 import { encodeRoutine, decodeRoutine, RoutinePayload } from '../utils/routineCodec';
+import { saasTracker } from '../utils/saasTracker';
 
 interface ShareRoutineModalProps {
   isOpen: boolean;
@@ -561,6 +562,7 @@ export const ShareRoutineModal: React.FC<ShareRoutineModalProps> = ({
                 href="https://synapsisclinico.com.br"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => saasTracker.track('clinico_referral_click', { source: 'share_routine_modal' })}
                 className="inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white text-xs font-bold shadow-xs active:scale-98 transition-all"
               >
                 <span>Conhecer o Programa Synapsis Clínico</span>

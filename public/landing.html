@@ -859,6 +859,87 @@
     } else {
       detectOS();
     }
+
+    // ============================================================
+    // TELEMETRIA SAAS MANAGER (Landing Page & Funil PLG)
+    // ============================================================
+    (function initSaasTelemetry() {
+      const TELEMETRY_URL = 'https://main.d31vrxhs05asmz.amplifyapp.com/api/v1/telemetry/events';
+      const APP_KEY = 'pk_live_synapsis_kids_7f9a12c8e3b4';
+      const APP_ID = 'synapsis-kids';
+      const APP_VERSION = '1.0.0';
+
+      function getOrCreateInstanceId() {
+        try {
+          let id = localStorage.getItem('synapsis_saas_instance_id');
+          if (!id) {
+            id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+              ? crypto.randomUUID()
+              : 'inst_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+            localStorage.setItem('synapsis_saas_instance_id', id);
+          }
+          return id;
+        } catch (e) {
+          return 'anon_' + Date.now();
+        }
+      }
+
+      function sendTelemetryEvent(eventName, properties) {
+        try {
+          const payload = {
+            app_id: APP_ID,
+            app_version: APP_VERSION,
+            instance_id: getOrCreateInstanceId(),
+            platform: {
+              is_pwa: false,
+              os: /android/i.test(navigator.userAgent) ? 'Android' : /iphone|ipad/i.test(navigator.userAgent) ? 'iOS' : 'Desktop',
+              screen_type: window.innerWidth <= 768 ? 'mobile' : 'desktop'
+            },
+            events: [
+              {
+                event_name: eventName,
+                timestamp: Date.now(),
+                properties: properties || {}
+              }
+            ]
+          };
+
+          fetch(TELEMETRY_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-App-Key': APP_KEY
+            },
+            body: JSON.stringify(payload),
+            keepalive: true
+          }).catch(function() {});
+        } catch (err) {}
+      }
+
+      // Rastrear visualização da Landing Page
+      sendTelemetryEvent('landing_page_view', {
+        referrer: document.referrer || 'direct',
+        url: window.location.href
+      });
+
+      // Capturar cliques em links para Synapsis Clínico e Abertura do App
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('a');
+        if (!link) return;
+
+        var href = link.getAttribute('href') || '';
+        if (href.indexOf('synapsisclinico.com.br') !== -1 || href.indexOf('contato@synapsisclinico.com.br') !== -1) {
+          sendTelemetryEvent('clinico_referral_click', {
+            target: href,
+            text: (link.innerText || '').trim().substring(0, 50)
+          });
+        } else if (href === '/' || href.indexOf('index.html') !== -1) {
+          sendTelemetryEvent('landing_to_app_click', {
+            text: (link.innerText || '').trim().substring(0, 50)
+          });
+        }
+      }, true);
+    })();
   </script>
 
 </body>
