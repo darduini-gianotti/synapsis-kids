@@ -141,6 +141,14 @@ const htmlContent = `<!DOCTYPE html>
       border: 1px solid rgba(255, 255, 255, 0.15);
       object-fit: contain;
     }
+    /* Ocultar barra de rolagem mas manter rolagem fluida */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="bg-[#090D16] text-slate-100 font-sans antialiased selection:bg-teal-500 selection:text-white">
@@ -371,130 +379,189 @@ const htmlContent = `<!DOCTYPE html>
 
   <!-- ==================== RECURSOS DO APLICATIVO COM TELAS REAIS ==================== -->
   <section id="recursos" class="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto space-y-3 mb-10 sm:mb-12">
-      <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Recursos Feitos para o Dia a Dia</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Tudo o que pais e terapeutas precisam.</h2>
-      <p class="text-slate-400 text-sm sm:text-base">
-        Veja as telas reais do aplicativo. Toque em qualquer imagem para ampliar em tela cheia.
-      </p>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+      <div class="max-w-2xl space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+          <span>✨</span> Recursos Feitos para o Dia a Dia
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Tudo o que pais e terapeutas precisam.
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base">
+          Veja as telas reais do aplicativo. Deslize horizontalmente ou toque em qualquer tela para ampliar em tela cheia.
+        </p>
+      </div>
+
+      <!-- Setas e Contador de Navegação -->
+      <div class="flex items-center gap-3 shrink-0 self-start sm:self-end">
+        <span id="recursos-counter" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-900 border border-slate-700/80 text-teal-300">
+          1 de 6
+        </span>
+        <div class="flex items-center gap-1.5">
+          <button 
+            id="recursos-prev-btn" 
+            type="button" 
+            aria-label="Ver recurso anterior" 
+            title="Recurso anterior"
+            class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-teal-400 text-slate-300 hover:text-white flex items-center justify-center transition-all shadow-md active:scale-95 focus:outline-none cursor-pointer"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button 
+            id="recursos-next-btn" 
+            type="button" 
+            aria-label="Ver próximo recurso" 
+            title="Próximo recurso"
+            class="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-teal-400 text-slate-300 hover:text-white flex items-center justify-center transition-all shadow-md active:scale-95 focus:outline-none cursor-pointer"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      
-      <!-- Card 1: Prancha Visual PECS -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen02B64}" alt="Prancha Visual TEA" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">🧩</span>
-            <h3 class="text-base font-extrabold text-white">Prancha de Comunicação Visual (PECS)</h3>
+    <!-- Carrossel Horizontal com Snap Touch-Friendly -->
+    <div class="relative">
+      <div 
+        id="recursos-carousel" 
+        class="flex gap-5 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-1 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0"
+      >
+        
+        <!-- Card 1: Prancha Visual PECS -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen02B64}" alt="Prancha Visual TEA" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
           </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Cartões grandes em formato CAA/PECS. A criança toca no cartão para ouvir o que deve fazer e toca para concluir, acompanhando visualmente o progresso da rotina.
-          </p>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🧩</span>
+              <h3 class="text-base font-extrabold text-white">Prancha de Comunicação Visual (PECS)</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Cartões grandes em formato CAA/PECS. A criança toca no cartão para ouvir o que deve fazer e toca para concluir, acompanhando visualmente o progresso da rotina.
+            </p>
+          </div>
         </div>
+
+        <!-- Card 2: Vozes, Mascote & Sons de Estúdio -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen06B64}" alt="Vozes Neurais e Sons de Estúdio" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
+          </div>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎙️</span>
+              <h3 class="text-base font-extrabold text-white">Vozes Calibradas & Sons sem Ruído</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              23 áudios de estúdio em MP3 com afeto e modulação sensorial, mascote encorajador e possibilidade de gravar a própria voz familiar dos pais.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Modo Primeiro / Depois & Foco -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen03B64}" alt="Foco na Tarefa e Micro-Passos" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
+          </div>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⏳</span>
+              <h3 class="text-base font-extrabold text-white">Foco na Tarefa & Micro-Passos</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Janela de foco que decompõe tarefas (como tomar banho ou escovar dentes) em passos simples, e tela de Primeiro/Depois para motivar transições difíceis.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4: Compartilhamento WhatsApp -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen04B64}" alt="Compartilhamento por Link Mágico" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
+          </div>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📲</span>
+              <h3 class="text-base font-extrabold text-white">Sincronização 1-Clique via WhatsApp</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Envie a rotina completa estruturada pelo terapeuta para o WhatsApp dos pais. Um Link Mágico ultra-compacto carrega toda a programação instantaneamente.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 5: Alarmes no Celular -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen05B64}" alt="Sincronização de Calendário" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
+          </div>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📅</span>
+              <h3 class="text-base font-extrabold text-white">Lembretes no Calendário do Celular</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Exporte as rotinas para o calendário oficial do iPhone ou Android (.ICS) com alarmes pontuais programados nos horários de cada atividade.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 6: Importação Rápida no App -->
+        <div class="recurso-card w-[84vw] max-w-[340px] md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] shrink-0 snap-start rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
+          <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
+            <img src="data:image/png;base64,${screen04bB64}" alt="Importação Rápida no Meu App" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
+              🔍 Ampliar
+            </span>
+          </div>
+          <div class="p-6 space-y-2.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📥</span>
+              <h3 class="text-base font-extrabold text-white">Importação Sem Perder Configurações</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Recebeu um link no WhatsApp? Toque em colar no aplicativo já instalado para atualizar sua semana mantendo seu tema, senha PIN e ajustes intactos.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Indicadores de Paginação / Dots + Dica Mobile -->
+    <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+      <!-- Dica tátil exclusiva para mobile -->
+      <div class="flex items-center gap-2 text-xs text-slate-400 sm:hidden">
+        <span class="inline-block animate-pulse">👈</span>
+        <span class="font-medium text-slate-300">Deslize para o lado para ver todos os recursos</span>
+        <span class="inline-block animate-pulse">👉</span>
       </div>
 
-      <!-- Card 2: Vozes, Mascote & Sons de Estúdio -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen06B64}" alt="Vozes Neurais e Sons de Estúdio" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">🎙️</span>
-            <h3 class="text-base font-extrabold text-white">Vozes Calibradas & Sons sem Ruído</h3>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            23 áudios de estúdio em MP3 com afeto e modulação sensorial, mascote encorajador e possibilidade de gravar a própria voz familiar dos pais.
-          </p>
-        </div>
+      <!-- Bolinhas Interativas (Dots) -->
+      <div class="flex items-center justify-center gap-2 mx-auto sm:mx-0" id="recursos-dots">
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-teal-400 w-8 shadow-[0_0_12px_rgba(45,212,191,0.6)] cursor-pointer" data-index="0" aria-label="Ir para recurso 1 (Prancha PECS)"></button>
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer" data-index="1" aria-label="Ir para recurso 2 (Vozes & Sons)"></button>
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer" data-index="2" aria-label="Ir para recurso 3 (Foco & Micro-Passos)"></button>
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer" data-index="3" aria-label="Ir para recurso 4 (Link WhatsApp)"></button>
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer" data-index="4" aria-label="Ir para recurso 5 (Alarmes Calendário)"></button>
+        <button class="recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer" data-index="5" aria-label="Ir para recurso 6 (Importação)"></button>
       </div>
-
-      <!-- Card 3: Modo Primeiro / Depois & Foco -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen03B64}" alt="Foco na Tarefa e Micro-Passos" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">⏳</span>
-            <h3 class="text-base font-extrabold text-white">Foco na Tarefa & Micro-Passos</h3>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Janela de foco que decompõe tarefas (como tomar banho ou escovar dentes) em passos simples, e tela de Primeiro/Depois para motivar transições difíceis.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 4: Compartilhamento WhatsApp -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen04B64}" alt="Compartilhamento por Link Mágico" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">📲</span>
-            <h3 class="text-base font-extrabold text-white">Sincronização 1-Clique via WhatsApp</h3>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Envie a rotina completa estruturada pelo terapeuta para o WhatsApp dos pais. Um Link Mágico ultra-compacto carrega toda a programação instantaneamente.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 5: Alarmes no Celular -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen05B64}" alt="Sincronização de Calendário" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">📅</span>
-            <h3 class="text-base font-extrabold text-white">Lembretes no Calendário do Celular</h3>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Exporte as rotinas para o calendário oficial do iPhone ou Android (.ICS) com alarmes pontuais programados nos horários de cada atividade.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 6: Importação Rápida no App -->
-      <div class="rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 transition group overflow-hidden shadow-xl flex flex-col justify-between">
-        <div class="h-64 sm:h-72 p-3 bg-gradient-to-b from-slate-950 to-slate-900 border-b border-slate-800 flex items-center justify-center overflow-hidden relative cursor-pointer" onclick="zoomImage(this.querySelector('img'))">
-          <img src="data:image/png;base64,${screen04bB64}" alt="Importação Rápida no Meu App" class="max-h-full max-w-full object-contain rounded-xl shadow-lg border border-slate-700/60 group-hover:scale-105 transition-transform duration-300">
-          <span class="absolute bottom-3 right-3 px-2 py-0.5 rounded-full bg-slate-950/80 text-[10px] text-teal-300 font-bold border border-teal-500/30 backdrop-blur-sm">
-            🔍 Ampliar
-          </span>
-        </div>
-        <div class="p-6 space-y-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-xl">📥</span>
-            <h3 class="text-base font-extrabold text-white">Importação Sem Perder Configurações</h3>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Recebeu um link no WhatsApp? Toque em colar no aplicativo já instalado para atualizar sua semana mantendo seu tema, senha PIN e ajustes intactos.
-          </p>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -877,11 +944,119 @@ const htmlContent = `<!DOCTYPE html>
       }
     });
 
-    // Inicializar detecção
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', detectOS);
-    } else {
+    // ============================================================
+    // CARROSSEL HORIZONTAL DE RECURSOS (TOUCH, SETAS E DOTS)
+    // ============================================================
+    function setupRecursosCarousel() {
+      const container = document.getElementById('recursos-carousel');
+      const prevBtn = document.getElementById('recursos-prev-btn');
+      const nextBtn = document.getElementById('recursos-next-btn');
+      const dots = document.querySelectorAll('.recurso-dot');
+      const counter = document.getElementById('recursos-counter');
+      if (!container) return;
+
+      function getScrollStep() {
+        const card = container.querySelector('.recurso-card');
+        if (!card) return 320;
+        const style = window.getComputedStyle(container);
+        const gap = parseFloat(style.gap) || 20;
+        return card.offsetWidth + gap;
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+          container.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+          container.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+        });
+      }
+
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          const idx = parseInt(this.getAttribute('data-index') || '0', 10);
+          const cards = container.querySelectorAll('.recurso-card');
+          if (cards[idx]) {
+            cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          }
+        });
+      });
+
+      function updateCarouselState() {
+        const cards = container.querySelectorAll('.recurso-card');
+        if (!cards.length) return;
+        const scrollLeft = container.scrollLeft;
+
+        let closestIdx = 0;
+        if (scrollLeft <= 15) {
+          closestIdx = 0;
+        } else if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 15) {
+          closestIdx = cards.length - 1;
+        } else {
+          const containerWidth = container.offsetWidth;
+          const scrollCenter = scrollLeft + containerWidth / 2;
+          let minDiff = Infinity;
+
+          cards.forEach(function(card, idx) {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const diff = Math.abs(cardCenter - scrollCenter);
+            if (diff < minDiff) {
+              minDiff = diff;
+              closestIdx = idx;
+            }
+          });
+        }
+
+        // Atualizar dots
+        dots.forEach(function(dot, idx) {
+          if (idx === closestIdx) {
+            dot.className = 'recurso-dot h-2.5 rounded-full transition-all duration-300 bg-teal-400 w-8 shadow-[0_0_12px_rgba(45,212,191,0.6)] cursor-pointer';
+          } else {
+            dot.className = 'recurso-dot h-2.5 rounded-full transition-all duration-300 bg-slate-700 w-2.5 hover:bg-slate-500 cursor-pointer';
+          }
+        });
+
+        // Atualizar contador de texto
+        if (counter) {
+          counter.textContent = (closestIdx + 1) + ' de ' + cards.length;
+        }
+
+        // Atualizar estado das setas
+        if (prevBtn) {
+          if (container.scrollLeft <= 10) {
+            prevBtn.classList.add('opacity-40');
+          } else {
+            prevBtn.classList.remove('opacity-40');
+          }
+        }
+        if (nextBtn) {
+          const maxScroll = container.scrollWidth - container.clientWidth - 10;
+          if (container.scrollLeft >= maxScroll) {
+            nextBtn.classList.add('opacity-40');
+          } else {
+            nextBtn.classList.remove('opacity-40');
+          }
+        }
+      }
+
+      container.addEventListener('scroll', updateCarouselState, { passive: true });
+      window.addEventListener('resize', updateCarouselState);
+      updateCarouselState();
+    }
+
+    // Inicializar detecção e carrossel
+    function initLandingScripts() {
       detectOS();
+      setupRecursosCarousel();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLandingScripts);
+    } else {
+      initLandingScripts();
     }
 
     // ============================================================
