@@ -1566,11 +1566,11 @@ export default function App() {
         {/* Professional & Clinic Branding Footer (Synapsis Clínico & ARASAAC) */}
         <footer className="mt-auto px-4 pt-5 footer-safe-bottom border-t border-stone-200/80 dark:border-stone-800 text-center bg-stone-50/80 dark:bg-stone-900/60 space-y-2.5">
           <a
-            href="https://synapsisclinico.com.br"
+            href="https://synapsisclinico.com.br?utm_source=rotina_visual&utm_medium=kids_magnet&utm_campaign=plg_terapeutas"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 p-2 px-3.5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700/80 shadow-2xs hover:border-teal-400 dark:hover:border-teal-500 transition-all group"
-            title="Conhecer o ecossistema Synapsis Clínico"
+            title="Synapsis Clínico • Software para Psicologia, Fonoaudiologia, T.O. e Psicopedagogia"
           >
             <img
               src="/assets/synapsi_brain1.png"
