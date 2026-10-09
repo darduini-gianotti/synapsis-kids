@@ -303,6 +303,46 @@ export default function App() {
       .sort((a, b) => a.time.localeCompare(b.time));
   }, [routines, selectedDay, todayDayOfWeek, completions]);
 
+  // Headless test and documentation automation hook
+  useEffect(() => {
+    (window as any).__SYNAPSIS_DEV__ = {
+      openHelp: () => setIsHelpModalOpen(true),
+      closeHelp: () => setIsHelpModalOpen(false),
+      openQuickGuide: () => setIsQuickGuideOpen(true),
+      closeQuickGuide: () => setIsQuickGuideOpen(false),
+      openPinModal: (title?: string, desc?: string) => {
+        if (title) setPinModalTitle(title);
+        if (desc) setPinModalDescription(desc);
+        setIsPinModalOpen(true);
+      },
+      closePinModal: () => setIsPinModalOpen(false),
+      openInspectorSheet: (id: string) => setInspectedItemId(id),
+      closeInspectorSheet: () => setInspectedItemId(null),
+      setInspectorMode: (active: boolean) => setIsInspectorMode(active),
+      setViewMode: (mode: 'list' | 'board') => setViewMode(mode),
+      setBoardSubtype: (sub: 'board' | 'first-then') => setBoardSubtype(sub),
+      setIncomingRoutine: (data: any) => setIncomingRoutineData(data),
+      openSettings: () => setIsSettingsOpen(true),
+      closeSettings: () => setIsSettingsOpen(false),
+      openClinicalTemplates: () => setIsClinicalTemplatesOpen(true),
+      closeClinicalTemplates: () => setIsClinicalTemplatesOpen(false),
+      openShareModal: () => setIsShareModalOpen(true),
+      closeShareModal: () => setIsShareModalOpen(false),
+      openExportModal: () => setIsExportModalOpen(true),
+      closeExportModal: () => setIsExportModalOpen(false),
+      openCopyModal: () => setIsCopyModalOpen(true),
+      closeCopyModal: () => setIsCopyModalOpen(false),
+      openNewTask: () => setIsNewTaskModalOpen(true),
+      closeNewTask: () => setIsNewTaskModalOpen(false),
+      openEditTask: (task?: any) => setEditingTask(task || currentDayTasks[0]),
+      closeEditTask: () => setEditingTask(null),
+      openFocusTask: (task?: any) => setFocusedLargeTask(task || currentDayTasks[0]),
+      closeFocusTask: () => setFocusedLargeTask(null),
+      openTimer: (task?: any) => setActiveTimerTask(task || currentDayTasks[0]),
+      closeTimer: () => setActiveTimerTask(null),
+    };
+  }, [currentDayTasks]);
+
   // Filtered tasks by period
   const displayedTasks = useMemo(() => {
     if (timeFilter === 'all') return currentDayTasks;
@@ -1448,6 +1488,32 @@ export default function App() {
               setSettings(newSettings);
               if (!newSettings.childLockEnabled) {
                 setIsParentUnlocked(true);
+              }
+              // Atualizar tarefas automáticas caso o mascote tenha mudado
+              if (newSettings.mascotPreference && newSettings.mascotPreference !== settings.mascotPreference) {
+                const masc = newSettings.mascotPreference;
+                setRoutines((prev) => {
+                  const updated = { ...prev };
+                  Object.keys(updated).forEach((k) => {
+                    const dayKey = Number(k) as DayOfWeek;
+                    if (updated[dayKey]) {
+                      updated[dayKey] = {
+                        ...updated[dayKey],
+                        tasks: updated[dayKey].tasks.map((t) => {
+                          if (t.id === 'task-3' || t.title.toLowerCase().includes('escovar')) {
+                            return {
+                              ...t,
+                              imageUrl: `/mascots/${masc}_escovando.jpg`,
+                              videoUrl: masc === 'panquecca' ? '/mascots/panquecca_1x1.mp4' : undefined,
+                            };
+                          }
+                          return t;
+                        }),
+                      };
+                    }
+                  });
+                  return updated;
+                });
               }
             }}
             onResetAllToFactory={handleResetAllToFactory}

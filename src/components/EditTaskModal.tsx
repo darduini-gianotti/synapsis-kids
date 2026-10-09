@@ -490,6 +490,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                   </p>
                   <button
                     type="button"
+                    id="open-arasaac-modal-btn"
                     onClick={() => setIsArasaacModalOpen(true)}
                     className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shrink-0 shadow-2xs active:scale-95 transition-all"
                   >
