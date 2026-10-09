@@ -596,10 +596,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = { ...localSettings, mascotPreference: 'panquecca' as const };
+                    const updated: AppSettings = {
+                      ...localSettings,
+                      mascotPreference: 'panquecca',
+                      voiceStyle: 'mascot',
+                      voicePitch: 1.35,
+                      voiceRate: 0.95,
+                    };
                     setLocalSettings(updated);
                     onSaveSettings(updated);
-                    soundManager.speak('Oi! Eu sou a Panquecca! Vamos fazer nossa rotina juntos?');
+                    soundManager.setVoicePreferences(
+                      updated.selectedVoiceURI,
+                      1.35,
+                      0.95,
+                      'mascot'
+                    );
+                    soundManager.speak('Au au! Oi! Eu sou a Panquecca! Vamos escovar os dentinhos juntos?');
                   }}
                   className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
                     (localSettings.mascotPreference || 'panquecca') === 'panquecca'
@@ -613,17 +625,29 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="w-14 h-14 rounded-xl object-cover shadow-2xs"
                   />
                   <span className="text-xs font-black text-amber-900 dark:text-amber-200">Panquecca</span>
-                  <span className="text-[10px] text-amber-700 dark:text-amber-400">Filhote Golden</span>
+                  <span className="text-[10px] text-amber-700 dark:text-amber-400">Voz Mascote 🐾</span>
                 </button>
 
                 {/* 2. JOÃO */}
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = { ...localSettings, mascotPreference: 'joao' as const };
+                    const updated: AppSettings = {
+                      ...localSettings,
+                      mascotPreference: 'joao',
+                      voiceStyle: 'normal',
+                      voicePitch: 1.15,
+                      voiceRate: 1.0,
+                    };
                     setLocalSettings(updated);
                     onSaveSettings(updated);
-                    soundManager.speak('Oi! Eu sou o João! Vamos arrasar na nossa rotina!');
+                    soundManager.setVoicePreferences(
+                      updated.selectedVoiceURI,
+                      1.15,
+                      1.0,
+                      'normal'
+                    );
+                    soundManager.speak('E aí amigão! Eu sou o João! Vamos arrasar na nossa rotina!');
                   }}
                   className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
                     localSettings.mascotPreference === 'joao'
@@ -637,17 +661,29 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="w-14 h-14 rounded-xl object-cover shadow-2xs"
                   />
                   <span className="text-xs font-black text-blue-900 dark:text-blue-200">João</span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-400">Menino Guia</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-400">Voz Menino 👦</span>
                 </button>
 
                 {/* 3. GIGI */}
                 <button
                   type="button"
                   onClick={() => {
-                    const updated = { ...localSettings, mascotPreference: 'gigi' as const };
+                    const updated: AppSettings = {
+                      ...localSettings,
+                      mascotPreference: 'gigi',
+                      voiceStyle: 'gentle',
+                      voicePitch: 1.45,
+                      voiceRate: 0.92,
+                    };
                     setLocalSettings(updated);
                     onSaveSettings(updated);
-                    soundManager.speak('Oi! Eu sou a Gigi! Que alegria fazer a rotina com você!');
+                    soundManager.setVoicePreferences(
+                      updated.selectedVoiceURI,
+                      1.45,
+                      0.92,
+                      'gentle'
+                    );
+                    soundManager.speak('Oiê! Eu sou a Gigi! Que alegria fazer a rotina com você!');
                   }}
                   className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
                     localSettings.mascotPreference === 'gigi'
@@ -661,7 +697,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     className="w-14 h-14 rounded-xl object-cover shadow-2xs"
                   />
                   <span className="text-xs font-black text-pink-900 dark:text-pink-200">Gigi</span>
-                  <span className="text-[10px] text-pink-700 dark:text-pink-400">Menina Guia</span>
+                  <span className="text-[10px] text-pink-700 dark:text-pink-400">Voz Menina 👧</span>
                 </button>
               </div>
             </div>

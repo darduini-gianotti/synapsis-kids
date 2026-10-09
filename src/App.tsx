@@ -1489,8 +1489,8 @@ export default function App() {
               if (!newSettings.childLockEnabled) {
                 setIsParentUnlocked(true);
               }
-              // Atualizar tarefas automáticas caso o mascote tenha mudado
-              if (newSettings.mascotPreference && newSettings.mascotPreference !== settings.mascotPreference) {
+              // Atualizar tarefas automáticas caso o mascote tenha sido definido
+              if (newSettings.mascotPreference) {
                 const masc = newSettings.mascotPreference;
                 setRoutines((prev) => {
                   const updated = { ...prev };
@@ -1512,6 +1512,7 @@ export default function App() {
                       };
                     }
                   });
+                  saveRoutines(updated);
                   return updated;
                 });
               }
