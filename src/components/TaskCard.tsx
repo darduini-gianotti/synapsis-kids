@@ -79,7 +79,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         {/* Visual Icon Badge */}
         <div
           onClick={() => hasSubtasks && onOpenSubtasks(task)}
-          className={`w-12 h-12 rounded-xl ${
+          className={`w-12 h-12 rounded-xl relative ${
             isCompleted
               ? 'bg-stone-200 dark:bg-stone-700 text-stone-400 dark:text-stone-500'
               : task.imageUrl
@@ -94,11 +94,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <img
               src={task.imageUrl}
               alt={task.title}
-              className="w-10 h-10 object-contain p-0.5"
+              className="w-10 h-10 object-contain p-0.5 rounded-lg"
               loading="lazy"
             />
           ) : (
             <TaskIcon name={task.iconName} className="w-6 h-6" />
+          )}
+          {task.videoUrl && !isCompleted && (
+            <span
+              className="absolute -bottom-1 -right-1 bg-amber-500 text-white text-[9px] font-black px-1 rounded-full shadow-xs ring-1 ring-white dark:ring-stone-900"
+              title="Mascote Animado Disponível"
+            >
+              🐾
+            </span>
           )}
         </div>
 

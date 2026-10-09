@@ -97,8 +97,33 @@ export const VisualTimerModal: React.FC<VisualTimerModalProps> = ({
             Acompanhe o tempo visualmente
           </p>
 
+          {/* Mascot Video Preview if available */}
+          {task.videoUrl && (
+            <div className="w-28 h-28 mb-3 rounded-2xl overflow-hidden border-2 border-indigo-200 dark:border-indigo-800 shadow-md relative bg-stone-100 dark:bg-stone-850">
+              {timeLeft === 0 ? (
+                <img
+                  src="/mascots/panquecca_sorriso.jpg"
+                  alt="Mascote comemorando"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <video
+                  src={task.videoUrl}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              )}
+              <span className="absolute bottom-1 left-1 bg-stone-900/80 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">
+                {timeLeft === 0 ? '✨ Concluído!' : '🐾 Panquecca'}
+              </span>
+            </div>
+          )}
+
           {/* Time Timer Circular Graphic */}
-          <div className="relative w-48 h-48 flex items-center justify-center my-1">
+          <div className="relative w-44 h-44 flex items-center justify-center my-1">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               {/* Background Track */}
               <circle

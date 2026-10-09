@@ -97,6 +97,8 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Hora de escovar os dentinhos!',
     durationMinutes: 3,
+    imageUrl: '/mascots/panquecca_escovando.jpg',
+    videoUrl: '/mascots/panquecca_1x1.mp4',
   },
   {
     id: 'task-4',

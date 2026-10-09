@@ -84,29 +84,52 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
           {/* Main Card Focus Body */}
           <div className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col items-center text-center space-y-4">
-            {/* Giant Central Illustration Card */}
+            {/* Giant Central Illustration / Animated Video Mascot Card */}
             <motion.div
-              whileTap={{ scale: 0.96 }}
+              whileTap={{ scale: 0.98 }}
               onClick={handleSpeak}
-              className={`w-full max-w-[280px] aspect-square rounded-3xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md ${
+              className={`w-full max-w-[280px] aspect-square rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative ${
                 isCompleted
                   ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600 opacity-80'
                   : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
               }`}
               title="Toque para ouvir a voz"
             >
-              <PecsIllustration
-                iconName={task.iconName}
-                imageUrl={task.imageUrl}
-                size={140}
-                className="w-36 h-36 drop-shadow-xs"
-              />
-              
-              {/* Little sound prompt underneath */}
-              <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold shadow-2xs">
-                <Volume2 className="w-3.5 h-3.5 animate-pulse" />
-                <span>Toque para Ouvir</span>
-              </div>
+              {task.videoUrl ? (
+                <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
+                  <video
+                    src={task.videoUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover rounded-2xl"
+                  />
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                    <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                      Mascote Guia
+                    </span>
+                    <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                      <Volume2 className="w-3 h-3 text-sky-300" />
+                      Ouvir
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-6 flex flex-col items-center justify-center">
+                  <PecsIllustration
+                    iconName={task.iconName}
+                    imageUrl={task.imageUrl}
+                    size={140}
+                    className="w-36 h-36 drop-shadow-xs"
+                  />
+                  {/* Little sound prompt underneath */}
+                  <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold shadow-2xs">
+                    <Volume2 className="w-3.5 h-3.5 animate-pulse" />
+                    <span>Toque para Ouvir</span>
+                  </div>
+                </div>
+              )}
             </motion.div>
 
             {/* Big Activity Title */}

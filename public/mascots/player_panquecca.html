@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panquecca em Ação - Primeiro Vídeo Oficial</title>
+<style>
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0f172a;
+    color: #f8fafc;
+    margin: 0;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .header {
+    text-align: center;
+    max-width: 650px;
+    margin-bottom: 24px;
+  }
+  .header h1 {
+    color: #38bdf8;
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  .header p {
+    color: #94a3b8;
+    font-size: 15px;
+    margin: 0;
+  }
+  .player-card {
+    background: #1e293b;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #38bdf8;
+    max-width: 640px;
+    width: 100%;
+  }
+  video {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    background: black;
+  }
+  .controls-note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #cbd5e1;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  .badge {
+    background: #0284c7;
+    color: white;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐾 Panquecca: Escovação de Dentes</h1>
+  <p>Primeiro vídeo oficial renderizado pelo Hailuo AI (MiniMax) com a camiseta Synapsis Kids!</p>
+</div>
+
+<div class="player-card">
+  <video src="panquecca_escovando.mp4" controls autoplay loop playsinline></video>
+  <div class="controls-note">
+    <span class="badge">Duração: 5 segundos</span>
+    <span class="badge" style="background: #10b981;">Tamanho: 1.1 MB</span>
+    <span class="badge" style="background: #f59e0b;">Loop Automático</span>
+  </div>
+</div>
+
+</body>
+</html>

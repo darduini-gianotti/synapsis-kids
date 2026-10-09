@@ -39,6 +39,7 @@ export interface RoutineTask {
   durationMinutes?: number;
   notes?: string;
   imageUrl?: string; // URL do pictograma ARASAAC ou imagem personalizada
+  videoUrl?: string; // Vídeo/micro-animação do mascote para a rotina (ex: /mascots/panquecca_1x1.mp4)
 }
 
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
@@ -49,6 +50,8 @@ export interface DayRoutine {
   isCustomized?: boolean;
 }
 
+export type MascotId = 'panquecca' | 'joao' | 'gigi' | 'none';
+
 export interface AppSettings {
   soundVolume: number; // 0 to 1
   voiceEnabled: boolean;
@@ -58,6 +61,8 @@ export interface AppSettings {
   parentPin?: string; // default "1234" or simple math question
   themeMode?: ThemeMode; // 'light' | 'dark' | 'system'
   enableLargeCards?: boolean; // Habilitar ou desabilitar modo cartões grandes (PECS/CAA)
+  mascotPreference?: MascotId; // 'panquecca' | 'joao' | 'gigi'
+
   selectedVoiceURI?: string; // URI da voz selecionada pelo usuário (ex: Google, Natural)
   voiceStyle?: VoiceCharacterStyle; // 'mascot' | 'gentle' | 'normal'
   voicePitch?: number; // 0.8 a 1.5
