@@ -82,6 +82,32 @@
       margin-bottom: 0.35rem;
       background: #000;
     }
+    .img-box .placeholder {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 1rem;
+      border: 2px dashed #cbd5e1;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.75rem;
+      font-weight: 700;
+      gap: 0.25rem;
+      margin-bottom: 0.35rem;
+    }
+    .img-box .placeholder code {
+      font-size: 0.65rem;
+      color: #475569;
+      background: #e2e8f0;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.35rem;
+      word-break: break-all;
+    }
     .img-label {
       font-size: 0.75rem;
       font-weight: 700;
@@ -362,25 +388,41 @@
 
     </div>
 
-    <!-- SEÇÃO 2: CATÁLOGO EXPANDIDO DE ATIVIDADES -->
-    <h2 class="section-title">📋 Catálogo Estendido de Atividades (Prompts Prontos para Gerar)</h2>
+    <!-- SEÇÃO 2: CATÁLOGO EXPANDIDO DE ATIVIDADES (3D PIXAR ANIMATION CGI) -->
+    <h2 class="section-title">📋 Catálogo Estendido de Atividades (Pares em 3D Pixar Animation)</h2>
     <div class="routine-grid">
 
       <!-- 8. Acordar e Espreguiçar -->
       <div class="routine-card">
         <div class="card-header">
           <h3>8. Acordar e Espreguiçar</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_acordar.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Acordar">
+            <div class="placeholder" style="display:none;"><span>🌅 Execução 3D</span><code>panquecca_acordar.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_acordar_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Bom Dia!">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_acordar_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Bom Dia!</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Panquecca se espreguiçando com energia na caminha ao nascer do sol.<br><strong>Vitória:</strong> Em pé radiante com a luz do sol, pronta para o novo dia!</p>
+          <p class="card-desc"><strong>Ação:</strong> Espreguiçando na caminha sob os raios da manhã com bocejo fofo.<br><strong>Vitória:</strong> Em pé triunfante no tapete do quarto com as patas na cintura, sorriso radiante!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing light blue Synapsis Kids t-shirt, sitting up in cozy bed, stretching paws and arching back happily with big cute yawn, bright morning sunbeams through window, 2D flat cartoon Pixar animation style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is sitting up in a cozy toddler bed in the morning, arching back and stretching both front paws with a big adorable yawn, blinking sleepy happy eyes. Warm golden morning sunbeams streaming through the bedroom window. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' standing energized on bedroom rug, hands on hips with big proud smile, sparkling eyes, sun rays shining, triumphant 'Good Morning' pose, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is standing energized on the bedroom rug, hands on hips in a triumphant 'Good Morning!' superhero pose, beaming proud smile, sparkling brown puppy eyes, blushing cheeks, bright morning sun rays shining. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_acordar.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_acordar_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
@@ -389,17 +431,33 @@
       <div class="routine-card">
         <div class="card-header">
           <h3>9. Arrumar a Cama</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_arrumar_cama.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Arrumando Cama">
+            <div class="placeholder" style="display:none;"><span>🛏️ Execução 3D</span><code>panquecca_arrumar_cama.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_arrumar_cama_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Cama Impecável">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_arrumar_cama_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Cama Feita</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Puxando o lençol e fofando o travesseiro com as patinhas.<br><strong>Vitória:</strong> Sentada ao lado da cama impecavelmente arrumada com pose de orgulho!</p>
+          <p class="card-desc"><strong>Ação:</strong> Puxando o lençol azul e fofando o travesseiro com as patinhas.<br><strong>Vitória:</strong> Sentada ao lado da caminha arrumada com ursinho alinhado e joinha triunfante!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, straightening colorful quilt and fluffing cute pillow on toddler bed, wagging tail, focused and cheerful, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is carefully pulling and smoothing a pastel blue quilt with stars over a wooden toddler bed, fluffing a soft pillow with cute paws, focused and happy expression, wagging tail. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' sitting proudly next to perfectly made neat bed, plush teddy sitting neatly on pillow, beaming smile, sparkle stars, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is sitting proudly next to a perfectly made, neat and tidy toddler bed. A cute little plush teddy bear sits neatly centered on the pillow. Panquecca has a triumphant beaming smile, paws giving a thumbs up, little golden sparkle stars. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_arrumar_cama.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_arrumar_cama_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
@@ -408,17 +466,33 @@
       <div class="routine-card">
         <div class="card-header">
           <h3>10. Lição de Casa / Leitura</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_licao.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Lição">
+            <div class="placeholder" style="display:none;"><span>✏️ Execução 3D</span><code>panquecca_licao.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_licao_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Desenho Pronto">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_licao_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Foco Total</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Focadinha na mesinha infantil com lápis de cor e caderno de desenho.<br><strong>Vitória:</strong> Segurando o desenho finalizado com nota 10 e estrelinha dourada!</p>
+          <p class="card-desc"><strong>Ação:</strong> Focada na mesinha infantil com lápis de cor e caderno aberto.<br><strong>Vitória:</strong> Erguendo o desenho colorido finalizado para a câmera com selo de nota 10!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, sitting at toddler study desk, holding colored pencil, drawing happily in notebook, focused sparkling eyes, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is sitting at a wooden toddler study desk, holding a colored pencil with paw, drawing with great focus and joy in an open coloring workbook. Cute pencil holder and books on desk. Focused sparkling puppy eyes, joyful gentle smile. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' holding up completed colorful drawing towards camera with proud beaming smile, golden star sticker on paper, sparkle stars, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is holding up a completed colorful drawing towards the camera with a proud radiant smile! The drawing has a gold star sticker and '10' on it. Sparkling celebration stars and confetti around. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_licao.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_licao_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
@@ -427,17 +501,33 @@
       <div class="routine-card">
         <div class="card-header">
           <h3>11. Beber Água</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_beber_agua.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Bebendo Água">
+            <div class="placeholder" style="display:none;"><span>💧 Execução 3D</span><code>panquecca_beber_agua.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_beber_agua_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Hidratado">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_beber_agua_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Hidratado</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Bebendo água fresca na garrafinha colorida infantil.<br><strong>Vitória:</strong> Hidratada, refrescada e sorrindo com gotinhas de energia!</p>
+          <p class="card-desc"><strong>Ação:</strong> Segurando a garrafinha infantil com as duas patas e bebendo água fresca.<br><strong>Vitória:</strong> Erguendo a garrafinha como um troféu, sorriso animado e gotinhas de energia!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, holding cute colorful water bottle with both paws, sipping water through straw, refreshed sparkling eyes, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is holding a cute colorful toddler water bottle with both paws, happily sipping fresh water through a straw, refreshed sparkling eyes, cute blushing cheeks, clean bright kitchen background. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' holding water bottle high, giving big happy smile, refreshing blue sparkle stars around, bright energetic expression, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is holding the water bottle high in one paw like a trophy, giving a proud thumbs up with the other paw, huge joyful energetic smile, refreshing blue water drops and golden sparkle stars around. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_beber_agua.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_beber_agua_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
@@ -446,17 +536,33 @@
       <div class="routine-card">
         <div class="card-header">
           <h3>12. Escola / Arrumar Mochila</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_escola.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Arrumando Mochila">
+            <div class="placeholder" style="display:none;"><span>🎒 Execução 3D</span><code>panquecca_escola.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_escola_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Pronto pra Escola">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_escola_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Partiu Escola</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Guardando cadernos e estojo dentro da mochilinha colorida.<br><strong>Vitória:</strong> Com a mochila nas costas pronta para a van/escola dando tchauzinho!</p>
+          <p class="card-desc"><strong>Ação:</strong> Guardando materiais dentro da mochilinha colorida no quarto.<br><strong>Vitória:</strong> Com a mochila nas costas pronta para a van/escola, acenando alegre!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, packing books and pencil case into colorful toddler backpack on floor, organized and happy, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is kneeling on the floor putting notebooks, a pencil box and a small lunchbox into a cute colorful toddler backpack, organized and cheerful, wagging tail. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing colorful backpack on its shoulders, waving cheerfully at camera, ready for school, proud enthusiastic smile, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is standing proudly with the colorful backpack on shoulders, waving cheerfully at the camera with one paw, ready for school! Radiant enthusiastic smile, blushing cheeks, bright sunny entryway in background. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_escola.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_escola_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
@@ -465,17 +571,33 @@
       <div class="routine-card">
         <div class="card-header">
           <h3>13. Terapia / Fono / TO</h3>
-          <span class="badge badge-ready">Prompt Pronto</span>
+          <span class="badge badge-star">✨ 3D Pixar CGI</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_terapia.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Execução: Terapia">
+            <div class="placeholder" style="display:none;"><span>🧩 Execução 3D</span><code>panquecca_terapia.jpg</code></div>
+            <span class="img-label">🎬 Execução (Hábito)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_terapia_fim.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="Vitória: Campeão">
+            <div class="placeholder" style="display:none;"><span>🌟 Vitória 3D</span><code>panquecca_terapia_fim.jpg</code></div>
+            <span class="img-label">🌟 Vitória: Campeão</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="card-desc"><strong>Ação:</strong> Na sala terapêutica com brinquedos sensoriais e espelho fonoaudiológico.<br><strong>Vitória:</strong> Com medalha/adesivo de campeão da sessão e sorriso radiante!</p>
+          <p class="card-desc"><strong>Ação:</strong> Na salinha terapêutica com brinquedos sensoriais e espelho fonoaudiológico.<br><strong>Vitória:</strong> Com medalha/adesivo de campeão da sessão, sorriso radiante e confetes!</p>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, in colorful therapy playroom with sensory blocks and communication cards, engaging playfully, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is sitting at a colorful therapy play table with sensory blocks, shape sorters and communication emotion cards, engaged happily and playfully in a therapy session. Focused happy eyes, warm encouraging atmosphere. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
           </div>
           <div class="prompt-box">
-            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
-            <code>Cute Golden Retriever puppy mascot 'Panquecca' proudly showing a champion golden medal ribbon pinned to shirt, huge victorious smile, celebratory confetti and stars, 2D flat cartoon Pixar style.</code>
+            <div class="prompt-title">Prompt 3D Pixar: Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>The exact same cute Golden Retriever puppy mascot 'Panquecca' wearing the light blue 'Synapsis Kids' t-shirt and collar medallion. High quality 3D Disney Pixar animation CGI character render. Panquecca is proudly showing off a shiny gold champion medal ribbon pinned to the shirt, both paws raised in celebration, huge radiant victorious smile, festive golden confetti and sparkle stars. Fluffy 3D golden fur texture, soft volumetric studio lighting, cinematic Pixar 3D quality.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_terapia.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_terapia_fim.jpg" download>Baixar Vitória</a>
           </div>
         </div>
       </div>
