@@ -16,7 +16,7 @@ import {
   Sparkles,
   HelpCircle,
 } from 'lucide-react';
-import { RoutineTask, SoundAlert, TaskCategory, SubTask } from '../types';
+import { RoutineTask, SoundAlert, TaskCategory, SubTask, TaskColor } from '../types';
 import { TaskIcon, AVAILABLE_ICONS, COLOR_THEMES } from './TaskIcon';
 import { soundManager } from '../utils/audio';
 import { ArasaacPickerModal } from './ArasaacPickerModal';
@@ -77,6 +77,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const [time, setTime] = useState(initialTask?.time || '08:30');
   const [durationMinutes, setDurationMinutes] = useState<number>(initialTask?.durationMinutes || 20);
   const [category, setCategory] = useState<TaskCategory>(initialTask?.category || 'chores');
+  const [color, setColor] = useState<TaskColor>(initialTask?.color || 'indigo');
   const [iconName, setIconName] = useState(initialTask?.iconName || 'CheckSquare');
   const [imageUrl, setImageUrl] = useState<string | undefined>(initialTask?.imageUrl);
   const [videoUrl, setVideoUrl] = useState<string | undefined>(initialTask?.videoUrl);
@@ -613,7 +614,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     <button
                       key={cKey}
                       type="button"
-                      onClick={() => setColor(cKey)}
+                      onClick={() => setColor(cKey as TaskColor)}
                       className={`w-7 h-7 rounded-full ${themeObj.bg} flex items-center justify-center transition-transform ${
                         isSel ? 'ring-2 ring-indigo-500 ring-offset-2 scale-110' : 'opacity-75 hover:opacity-100'
                       }`}
