@@ -369,32 +369,32 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
           // 1. Escovar os dentes
           if (t.id === 'task-3' || t.id === 'task-we-3' || lower.includes('escovar')) {
             if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_escovando.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_1x1.mp4'; changed = true; }
+            if (t.videoUrl !== '/mascots/panquecca_escovando.mp4') { t.videoUrl = '/mascots/panquecca_escovando.mp4'; changed = true; }
           }
           // 2. Banheiro
-          if ((t.id === 'task-toilet' || lower.includes('banheiro')) && !t.imageUrl) {
-            t.imageUrl = '/mascots/panquecca_banheiro.jpg';
-            changed = true;
+          if (t.id === 'task-toilet' || lower.includes('banheiro')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_banheiro.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_banheiro.mp4'; changed = true; }
           }
           // 3. Café da Manhã
-          if ((t.id === 'task-2' || t.id === 'task-we-2' || lower.includes('café da manhã')) && !t.imageUrl) {
-            t.imageUrl = '/mascots/panquecca_comendo.jpg';
-            changed = true;
+          if (t.id === 'task-2' || t.id === 'task-we-2' || lower.includes('café da manhã') || lower.includes('cafe da manha')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_comendo.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_comendo.mp4'; changed = true; }
           }
           // 4. Banho
-          if ((t.id === 'task-8' || t.id === 'task-we-8' || lower.includes('banho')) && !t.imageUrl) {
-            t.imageUrl = '/mascots/panquecca_banho.jpg';
-            changed = true;
+          if (t.id === 'task-8' || t.id === 'task-we-8' || lower.includes('banho')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_banho.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_banho.mp4'; changed = true; }
           }
           // 5. Tarefas da casa / Brinquedos
-          if ((t.id === 'task-4' || t.id === 'task-we-4' || lower.includes('tarefas da casa') || lower.includes('brinquedos')) && !t.imageUrl) {
-            t.imageUrl = '/mascots/panquecca_guardar_brinquedos.jpg';
-            changed = true;
+          if (t.id === 'task-4' || t.id === 'task-we-4' || lower.includes('tarefas da casa') || lower.includes('brinquedos')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_guardar_brinquedos.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_guardar_brinquedos.mp4'; changed = true; }
           }
           // 6. Dormir
-          if ((t.id === 'task-10' || t.id === 'task-we-9' || lower.includes('dormir')) && !t.imageUrl) {
-            t.imageUrl = '/mascots/panquecca_dormir.jpg';
-            changed = true;
+          if (t.id === 'task-10' || t.id === 'task-we-9' || lower.includes('dormir')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_dormir.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_dormir.mp4'; changed = true; }
           }
           // 7. Lavar as mãos
           if (lower.includes('lavar') || lower.includes('mão') || lower.includes('mao')) {
