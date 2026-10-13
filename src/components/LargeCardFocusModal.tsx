@@ -94,148 +94,157 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
             </div>
           </div>
 
-          {/* Main Card Focus Body */}
-          <div className="p-4 sm:p-5 overflow-y-auto flex-1 flex flex-col items-center text-center space-y-3.5">
-            {/* Animated Mascot / Illustration Card */}
-            <motion.div
-              whileTap={{ scale: 0.98 }}
-              onClick={handleSpeak}
-              className={`${
-                hasSubtasks ? 'w-44 h-44 sm:w-52 sm:h-52' : 'w-56 h-56 sm:w-64 sm:h-64'
-              } shrink-0 rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative mx-auto ${
-                isCompleted
-                  ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
-                  : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
-              }`}
-              title="Toque para ouvir a voz"
-            >
-              {task.videoUrl ? (
-                <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
-                  {showCelebrationImage ? (
-                    <img
-                      src={getCelebrateImage()}
-                      alt="Mascote comemorando"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={task.videoUrl}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      ref={(el) => {
-                        if (el) {
-                          el.muted = true;
-                          el.play().catch(() => {});
-                        }
-                      }}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
-                    <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                      {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
-                    </span>
-                    <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
-                      <Volume2 className="w-3 h-3 text-sky-300" />
-                      Ouvir
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                  <PecsIllustration
-                    iconName={task.iconName}
-                    imageUrl={task.imageUrl}
-                    size={hasSubtasks ? 100 : 130}
-                    className={`${hasSubtasks ? 'w-24 h-24' : 'w-32 h-32'} drop-shadow-xs`}
-                  />
-                  {/* Little sound prompt underneath */}
-                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold shadow-2xs">
-                    <Volume2 className="w-3 h-3 animate-pulse" />
-                    <span>Toque para Ouvir</span>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-
-            {/* Big Activity Title */}
-            <div>
-              <h2
+          {/* Main Card Focus Body: Fixed Media/Timer Top + Scrollable Compact Steps */}
+          <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+            {/* 1. PINNED TOP HERO: Video/Mascot + Title + Compact Timer (Never scrolls out of view!) */}
+            <div className="shrink-0 p-3 sm:p-4 pb-2 flex flex-col items-center text-center space-y-2 border-b border-stone-100 dark:border-stone-800/80">
+              {/* Animated Mascot / Illustration Card */}
+              <motion.div
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSpeak}
                 className={`${
-                  hasSubtasks ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'
-                } font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight`}
+                  hasSubtasks ? 'w-36 h-36 sm:w-44 sm:h-44' : 'w-52 h-52 sm:w-60 sm:h-60'
+                } shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-3 sm:border-4 shadow-md relative mx-auto ${
+                  isCompleted
+                    ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
+                    : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
+                }`}
+                title="Toque para ouvir a voz"
               >
-                {task.title}
-              </h2>
-              {task.notes && (
-                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 max-w-md font-semibold leading-relaxed">
-                  {task.notes}
-                </p>
+                {task.videoUrl ? (
+                  <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
+                    {showCelebrationImage ? (
+                      <img
+                        src={getCelebrateImage()}
+                        alt="Mascote comemorando"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <video
+                        src={task.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        ref={(el) => {
+                          if (el) {
+                            el.muted = true;
+                            el.play().catch(() => {});
+                          }
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <div className="absolute bottom-1.5 left-1.5 right-1.5 flex items-center justify-between pointer-events-none">
+                      <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                        {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
+                      </span>
+                      <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                        <Volume2 className="w-2.5 h-2.5 text-sky-300" />
+                        Ouvir
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 sm:p-4 flex flex-col items-center justify-center">
+                    <PecsIllustration
+                      iconName={task.iconName}
+                      imageUrl={task.imageUrl}
+                      size={hasSubtasks ? 90 : 120}
+                      className={`${hasSubtasks ? 'w-20 h-20' : 'w-28 h-28'} drop-shadow-xs`}
+                    />
+                    {/* Little sound prompt underneath */}
+                    <div className="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold shadow-2xs">
+                      <Volume2 className="w-2.5 h-2.5 animate-pulse" />
+                      <span>Toque para Ouvir</span>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Big Activity Title */}
+              <div>
+                <h2
+                  className={`${
+                    hasSubtasks ? 'text-lg sm:text-2xl' : 'text-2xl sm:text-3xl'
+                  } font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight`}
+                >
+                  {task.title}
+                </h2>
+                {task.notes && (
+                  <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 mt-0.5 max-w-sm font-medium leading-tight">
+                    {task.notes}
+                  </p>
+                )}
+              </div>
+
+              {/* Compact Integrated Visual Timer below video/title */}
+              {task.durationMinutes && !isCompleted && (
+                <div className="w-full max-w-sm">
+                  <TaskVisualTimer
+                    task={task}
+                    variant="inline"
+                    onFinishTask={handleComplete}
+                  />
+                </div>
               )}
             </div>
 
-            {/* Compact Integrated Visual Timer below video/title */}
-            {task.durationMinutes && !isCompleted && (
-              <div className="w-full max-w-md">
-                <TaskVisualTimer
-                  task={task}
-                  variant="inline"
-                  onFinishTask={handleComplete}
-                />
-              </div>
-            )}
-
-            {/* Subtasks / Steps Sequence (if available, e.g. for Bathroom or Brushing) */}
-            {task.subtasks && task.subtasks.length > 0 && (
-              <div className="w-full pt-2 text-left">
-                <div className="flex items-center justify-between mb-3 px-1">
-                  <span className="text-sm sm:text-base font-black text-stone-700 dark:text-stone-200 uppercase tracking-wide">
-                    Passos desta atividade:
+            {/* 2. SCROLLABLE COMPACT STEPS: Subtasks Sequence (Tight spacing & smaller font) */}
+            {hasSubtasks ? (
+              <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 w-full max-w-md mx-auto">
+                <div className="flex items-center justify-between px-1">
+                  <span className="text-xs sm:text-sm font-black text-stone-700 dark:text-stone-200 uppercase tracking-wide">
+                    Passos da atividade:
                   </span>
-                  <span className="text-xs sm:text-sm font-extrabold px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                    {task.subtasks.filter(s => s.completed).length} de {task.subtasks.length} concluídos
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                    {task.subtasks.filter((s) => s.completed).length} de {task.subtasks.length} concluídos
                   </span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-1.5">
                   {task.subtasks.map((step, idx) => (
                     <motion.div
                       key={step.id}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onToggleSubtask && onToggleSubtask(task.id, step.id)}
-                      className={`p-3.5 sm:p-4.5 rounded-2xl border-2 sm:border-3 flex items-center justify-between gap-3.5 cursor-pointer transition-all shadow-xs ${
+                      className={`p-2 sm:p-2.5 px-3 rounded-xl border-2 flex items-center justify-between gap-2.5 cursor-pointer transition-all shadow-2xs ${
                         step.completed
                           ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 opacity-80'
                           : 'bg-white dark:bg-stone-800/90 border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 hover:border-indigo-400 dark:hover:border-indigo-500'
                       }`}
                     >
-                      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                        <span className={`w-8 h-8 sm:w-10 sm:h-10 rounded-2xl font-black text-sm sm:text-base flex items-center justify-center shrink-0 shadow-2xs ${
-                          step.completed
-                            ? 'bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200'
-                            : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200'
-                        }`}>
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span
+                          className={`w-6 h-6 rounded-lg font-black text-xs flex items-center justify-center shrink-0 shadow-2xs ${
+                            step.completed
+                              ? 'bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200'
+                              : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200'
+                          }`}
+                        >
                           {idx + 1}
                         </span>
-                        <span className={`text-base sm:text-xl font-bold leading-snug break-words ${step.completed ? 'line-through opacity-75' : ''}`}>
+                        <span
+                          className={`text-xs sm:text-sm font-bold leading-tight break-words ${
+                            step.completed ? 'line-through opacity-75' : ''
+                          }`}
+                        >
                           {step.title}
                         </span>
                       </div>
 
                       <div className="shrink-0">
                         {step.completed ? (
-                          <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-600 dark:text-emerald-400" />
+                          <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                         ) : (
-                          <Circle className="w-7 h-7 sm:w-8 sm:h-8 text-stone-300 dark:text-stone-600" />
+                          <Circle className="w-5 h-5 text-stone-300 dark:text-stone-600" />
                         )}
                       </div>
                     </motion.div>
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Bottom Huge Tactile Completion Bar */}
