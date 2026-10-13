@@ -15,6 +15,7 @@ import { COLOR_THEMES } from './TaskIcon';
 import { PecsIllustration } from './PecsIllustration';
 import { soundManager } from '../utils/audio';
 import { TaskVisualTimer } from './TaskVisualTimer';
+import { getTaskCelebrationDetails } from '../utils/mascotAssets';
 
 interface LargeCardFocusModalProps {
   task: RoutineTask | null;
@@ -40,12 +41,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   const allSubtasksDone = hasSubtasks && task.subtasks.every((s) => s.completed);
   // Show celebration image if task is completed or all subtasks were done
   const showCelebrationImage = isCompleted || allSubtasksDone;
-
-  const getCelebrateImage = () => {
-    if (task.imageUrl?.includes('joao')) return '/mascots/joao_sorriso.jpg';
-    if (task.imageUrl?.includes('gigi')) return '/mascots/gigi_sorriso.jpg';
-    return '/mascots/panquecca_sorriso.jpg';
-  };
+  const celebrationDetails = getTaskCelebrationDetails(task);
 
   const theme = COLOR_THEMES[task.color] || COLOR_THEMES.indigo;
 
@@ -115,8 +111,11 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                   <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
                     {showCelebrationImage ? (
                       <img
-                        src={getCelebrateImage()}
+                        src={celebrationDetails.image}
                         alt="Mascote comemorando"
+                        onError={(e) => {
+                          e.currentTarget.src = '/mascots/panquecca_sorriso.jpg';
+                        }}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -137,7 +136,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                     )}
                     <div className="absolute bottom-1.5 left-1.5 right-1.5 flex items-center justify-between pointer-events-none">
                       <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                        {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
+                        {showCelebrationImage ? celebrationDetails.badge : '🐾 Mascote Guia'}
                       </span>
                       <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-xs flex items-center gap-1">
                         <Volume2 className="w-2.5 h-2.5 text-sky-300" />
@@ -146,18 +145,38 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3 sm:p-4 flex flex-col items-center justify-center">
-                    <PecsIllustration
-                      iconName={task.iconName}
-                      imageUrl={task.imageUrl}
-                      size={hasSubtasks ? 90 : 120}
-                      className={`${hasSubtasks ? 'w-20 h-20' : 'w-28 h-28'} drop-shadow-xs`}
-                    />
-                    {/* Little sound prompt underneath */}
-                    <div className="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold shadow-2xs">
-                      <Volume2 className="w-2.5 h-2.5 animate-pulse" />
-                      <span>Toque para Ouvir</span>
-                    </div>
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    {showCelebrationImage && (task.imageUrl?.includes('mascot') || task.imageUrl?.includes('panquecca')) ? (
+                      <div className="relative w-full h-full">
+                        <img
+                          src={celebrationDetails.image}
+                          alt="Mascote comemorando"
+                          onError={(e) => {
+                            e.currentTarget.src = '/mascots/panquecca_sorriso.jpg';
+                          }}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute bottom-1.5 left-1.5 right-1.5 flex items-center justify-between pointer-events-none">
+                          <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                            {celebrationDetails.badge}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-3 sm:p-4 flex flex-col items-center justify-center">
+                        <PecsIllustration
+                          iconName={task.iconName}
+                          imageUrl={task.imageUrl}
+                          size={hasSubtasks ? 90 : 120}
+                          className={`${hasSubtasks ? 'w-20 h-20' : 'w-28 h-28'} drop-shadow-xs`}
+                        />
+                        {/* Little sound prompt underneath */}
+                        <div className="mt-1.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold shadow-2xs">
+                          <Volume2 className="w-2.5 h-2.5 animate-pulse" />
+                          <span>Toque para Ouvir</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </motion.div>

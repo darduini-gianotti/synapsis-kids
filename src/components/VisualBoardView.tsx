@@ -14,6 +14,7 @@ import { RoutineTask } from '../types';
 import { COLOR_THEMES } from './TaskIcon';
 import { PecsIllustration } from './PecsIllustration';
 import { soundManager } from '../utils/audio';
+import { getTaskCelebrationDetails } from '../utils/mascotAssets';
 
 interface VisualBoardViewProps {
   tasks: RoutineTask[];
@@ -145,7 +146,11 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   ) : (
                     <PecsIllustration
                       iconName={firstTask.iconName}
-                      imageUrl={firstTask.imageUrl}
+                      imageUrl={
+                        firstTask.completed && (firstTask.videoUrl || firstTask.imageUrl?.includes('panquecca'))
+                          ? getTaskCelebrationDetails(firstTask).image
+                          : firstTask.imageUrl
+                      }
                       size={112}
                       className="w-28 h-28"
                     />
@@ -347,7 +352,11 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   ) : (
                     <PecsIllustration
                       iconName={task.iconName}
-                      imageUrl={task.imageUrl}
+                      imageUrl={
+                        isCompleted && (task.videoUrl || task.imageUrl?.includes('panquecca'))
+                          ? getTaskCelebrationDetails(task).image
+                          : task.imageUrl
+                      }
                       size={96}
                       className="w-24 h-24"
                     />

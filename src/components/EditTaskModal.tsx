@@ -20,6 +20,7 @@ import { RoutineTask, SoundAlert, TaskCategory, SubTask, TaskColor } from '../ty
 import { TaskIcon, AVAILABLE_ICONS, COLOR_THEMES } from './TaskIcon';
 import { soundManager } from '../utils/audio';
 import { ArasaacPickerModal } from './ArasaacPickerModal';
+import { getPanqueccaAssetsForTitle } from '../utils/mascotAssets';
 
 interface EditTaskModalProps {
   isOpen: boolean;
@@ -62,31 +63,7 @@ const QUICK_STEP_SUGGESTIONS = [
   'Tomar banho',
 ];
 
-function getPanqueccaAssetsForTitle(taskTitle: string): { image: string; video?: string } {
-  const t = (taskTitle || '').toLowerCase();
-  if (t.includes('escovar') || t.includes('dente')) {
-    return { image: '/mascots/panquecca_escovando.jpg', video: '/mascots/panquecca_1x1.mp4' };
-  }
-  if (t.includes('banheiro') || t.includes('vaso') || t.includes('xixi')) {
-    return { image: '/mascots/panquecca_banheiro.jpg' };
-  }
-  if (t.includes('banho') || t.includes('chuveiro')) {
-    return { image: '/mascots/panquecca_banho.jpg' };
-  }
-  if (t.includes('café') || t.includes('cafe') || t.includes('almoço') || t.includes('almoco') || t.includes('jantar') || t.includes('comer') || t.includes('lanche')) {
-    return { image: '/mascots/panquecca_comendo.jpg' };
-  }
-  if (t.includes('brinquedo') || t.includes('guardar') || t.includes('tarefas da casa') || t.includes('arrumar')) {
-    return { image: '/mascots/panquecca_guardar_brinquedos.jpg' };
-  }
-  if (t.includes('dormir') || t.includes('sono') || t.includes('cama') || t.includes('descansar')) {
-    return { image: '/mascots/panquecca_dormir.jpg' };
-  }
-  if (t.includes('mão') || t.includes('mao') || t.includes('lavar')) {
-    return { image: '/mascots/panquecca_lavando_maos.jpg', video: '/mascots/panquecca_lavando_maos.mp4' };
-  }
-  return { image: '/mascots/panquecca_escovando.jpg', video: '/mascots/panquecca_1x1.mp4' };
-}
+
 
 export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   isOpen,

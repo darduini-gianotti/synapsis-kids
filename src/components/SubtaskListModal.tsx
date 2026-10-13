@@ -16,6 +16,7 @@ import {
 import { RoutineTask, SubTask } from '../types';
 import { TaskIcon, COLOR_THEMES } from './TaskIcon';
 import { soundManager } from '../utils/audio';
+import { getTaskCelebrationDetails } from '../utils/mascotAssets';
 
 interface SubtaskListModalProps {
   task: RoutineTask;
@@ -188,36 +189,35 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
           {/* Subtasks items List */}
           <div className="p-4 overflow-y-auto space-y-2 flex-1 overscroll-contain">
             {/* Mascot Video / Guide on Top */}
-            {task.videoUrl && (
-              <div className="flex flex-col items-center justify-center pt-1 pb-2">
-                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border-3 border-indigo-200 dark:border-indigo-800 shadow-md relative bg-stone-100 dark:bg-stone-850">
-                  {allCompleted ? (
-                    <img
-                      src={
-                        task.imageUrl?.includes('joao')
-                          ? '/mascots/joao_sorriso.jpg'
-                          : task.imageUrl?.includes('gigi')
-                          ? '/mascots/gigi_sorriso.jpg'
-                          : '/mascots/panquecca_sorriso.jpg'
-                      }
-                      alt="Mascote comemorando"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={task.videoUrl}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
-                  )}
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
-                    <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                      {allCompleted ? '✨ Muito bem!' : '🐾 Mascote Guia'}
-                    </span>
-                    {!allCompleted && (
+            {task.videoUrl && (() => {
+              const celebrationDetails = getTaskCelebrationDetails(task);
+              return (
+                <div className="flex flex-col items-center justify-center pt-1 pb-2">
+                  <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl overflow-hidden border-3 border-indigo-200 dark:border-indigo-800 shadow-md relative bg-stone-100 dark:bg-stone-855">
+                    {allCompleted ? (
+                      <img
+                        src={celebrationDetails.image}
+                        alt="Mascote comemorando"
+                        onError={(e) => {
+                          e.currentTarget.src = '/mascots/panquecca_sorriso.jpg';
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <video
+                        src={task.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                      <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                        {allCompleted ? celebrationDetails.badge : '🐾 Mascote Guia'}
+                      </span>
+                      {!allCompleted && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -234,7 +234,8 @@ export const SubtaskListModal: React.FC<SubtaskListModalProps> = ({
                   </div>
                 </div>
               </div>
-            )}
+            );
+          })()}
 
             {task.notes && (
               <div className="bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/60 rounded-xl p-2.5 text-xs text-amber-900 dark:text-amber-200 leading-relaxed">

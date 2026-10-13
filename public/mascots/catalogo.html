@@ -3,116 +3,526 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catálogo Oficial de Imagens da Panquecca - Synapsis Kids</title>
+  <title>Catálogo Oficial da Mascote Panquecca - Synapsis Kids</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #f8fafc; color: #1e293b; padding: 2rem 1rem; }
-    .container { max-width: 1000px; margin: 0 auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f1f5f9; color: #0f172a; padding: 2rem 1rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
     header { text-align: center; margin-bottom: 2.5rem; }
-    h1 { font-size: 2rem; color: #0f172a; margin-bottom: 0.5rem; }
-    p.subtitle { color: #64748b; font-size: 1rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-    .card { background: white; border-radius: 1.25rem; border: 2px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); transition: transform 0.2s; }
-    .card:hover { transform: translateY(-4px); border-color: #38bdf8; }
-    .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
-    .card-body { padding: 1rem; }
-    .badge { display: inline-block; font-size: 0.75rem; font-weight: 800; background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.6rem; rounded: 9999px; margin-bottom: 0.5rem; border-radius: 9999px; }
-    .card h3 { font-size: 1.1rem; color: #0f172a; margin-bottom: 0.35rem; }
-    .card p { font-size: 0.85rem; color: #64748b; line-height: 1.4; margin-bottom: 0.85rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.65rem; background: #4f46e5; color: white; text-decoration: none; border-radius: 0.75rem; font-weight: 700; font-size: 0.85rem; }
+    h1 { font-size: 2.25rem; font-weight: 900; color: #0f172a; margin-bottom: 0.5rem; }
+    p.subtitle { color: #64748b; font-size: 1.1rem; max-width: 750px; margin: 0 auto; line-height: 1.5; }
+    
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 2.5rem 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .routine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .routine-card {
+      background: white;
+      border-radius: 1.5rem;
+      border: 2px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      padding: 1rem 1.25rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-header h3 { font-size: 1.15rem; font-weight: 800; color: #0f172a; }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-video { background: #dcfce7; color: #15803d; }
+    .badge-ready { background: #e0f2fe; color: #0369a1; }
+    .badge-star { background: #fef3c7; color: #b45309; }
+
+    .pair-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: #f8fafc;
+    }
+    .img-box {
+      text-align: center;
+    }
+    .img-box img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 1rem;
+      border: 2px solid #e2e8f0;
+      display: block;
+      margin-bottom: 0.35rem;
+      background: white;
+    }
+    .img-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .card-body {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    .prompt-box {
+      background: #f1f5f9;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      font-size: 0.78rem;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      position: relative;
+    }
+    .prompt-title {
+      font-weight: 800;
+      font-size: 0.7rem;
+      color: #475569;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .copy-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0f172a;
+    }
+    .copy-btn:hover { background: #cbd5e1; }
+
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+    .btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem;
+      background: #4f46e5;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
     .btn:hover { background: #4338ca; }
-    .footer-note { margin-top: 3rem; text-align: center; padding: 1.5rem; background: #eff6ff; border-radius: 1rem; border: 1px solid #bfdbfe; font-size: 0.9rem; color: #1e40af; }
+    .btn-secondary { background: #0284c7; }
+    .btn-secondary:hover { background: #0369a1; }
+
+    .footer-note {
+      margin-top: 3.5rem;
+      text-align: center;
+      padding: 1.75rem;
+      background: #e0f2fe;
+      border-radius: 1.25rem;
+      border: 1px solid #bae6fd;
+      font-size: 0.95rem;
+      color: #0369a1;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>🐾 Galeria Oficial da Panquecca</h1>
-      <p class="subtitle">Imagens oficiais 1:1 prontas para usar como capas e para animar no Hailuo (Image-to-Video)</p>
+      <p class="subtitle">
+        Catálogo Completo das Atividades com Pares de Execução (Hábito) e Celebração de Vitória (Reforço Positivo), 
+        prontos para download e animação no Hailuo / CapCut Pro.
+      </p>
     </header>
 
-    <div class="grid">
-      <!-- 1. Escovar os Dentes (Já em vídeo) -->
-      <div class="card">
-        <img src="/mascots/panquecca_escovando.jpg" alt="Escovar os Dentes">
-        <div class="card-body">
-          <span class="badge" style="background:#dcfce7; color:#15803d;">✓ Vídeo 1:1 Já Ativo no App</span>
+    <!-- SEÇÃO 1: ROTINAS PRINCIPAIS (PARES COMPLETOS JÁ DISPONÍVEIS) -->
+    <h2 class="section-title">🌟 Rotinas Principais com Celebrações de Vitória Prontas</h2>
+    <div class="routine-grid">
+
+      <!-- 1. Escovar os Dentes -->
+      <div class="routine-card">
+        <div class="card-header">
           <h3>1. Escovar os Dentes</h3>
-          <p>A Panquecca escovando os dentinhos com espelho e sorriso.</p>
-          <a class="btn" href="/mascots/panquecca_escovando.jpg" download="panquecca_escovando.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-video">✓ Vídeo 1:1 Ativo</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_escovando.jpg" alt="Execução: Escovando">
+            <span class="img-label">🎬 Execução (Vídeo)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_sorriso.jpg" alt="Vitória: Dentes Brilhando">
+            <span class="img-label">🌟 Vitória: Sorriso</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Vídeo da Panquecca escovando em loop. Ao concluir, exibe o sorriso triunfante com dentes limpos e estrelinhas!</p>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_escovando.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_sorriso.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
       <!-- 2. Lavar as Mãos -->
-      <div class="card">
-        <img src="/mascots/panquecca_lavando_maos.jpg" alt="Lavar as Mãos">
-        <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
+      <div class="routine-card">
+        <div class="card-header">
           <h3>2. Lavar as Mãos</h3>
-          <p>No banquinho infantil lavando as patinhas com sabão e água.</p>
-          <a class="btn" href="/mascots/panquecca_lavando_maos.jpg" download="panquecca_lavando_maos.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-video">✓ Vídeo 1:1 Ativo</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_lavando_maos.jpg" alt="Execução: Lavando">
+            <span class="img-label">🎬 Execução (Vídeo)</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_lavando_maos_fim.jpg" alt="Vitória: Patas Limpas">
+            <span class="img-label">🌟 Vitória: Patas Limpas</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Vídeo da Panquecca lavando as mãos com espuma. Ao concluir, exibe as patinhas sequinhas e brilhando com estrelinhas!</p>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_lavando_maos.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_lavando_maos_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
       <!-- 3. Ir ao Banheiro -->
-      <div class="card">
-        <img src="/mascots/panquecca_banheiro.jpg" alt="Ir ao Banheiro">
-        <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
+      <div class="routine-card">
+        <div class="card-header">
           <h3>3. Ir ao Banheiro</h3>
-          <p>Sentadinha no redutor comemorando e papel higiênico.</p>
-          <a class="btn" href="/mascots/panquecca_banheiro.jpg" download="panquecca_banheiro.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-star">🌟 Vitória Pronta</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_banheiro.jpg" alt="Execução: No Banheiro">
+            <span class="img-label">🎬 Execução</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_banheiro_fim.jpg" alt="Vitória: Joinha e Descarga">
+            <span class="img-label">🌟 Vitória: Joinha</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">No redutor infantil. Ao concluir, comemora no tapete com joinha alegre e descarga dada com autonomia!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Hailuo AI (Image to Video) <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy in blue t-shirt sitting happily on colorful toddler toilet seat, holding toilet paper rolls, gently wagging tail, warm smiling eyes, soft 3D cartoon Pixar animation.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_banheiro.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_banheiro_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
       <!-- 4. Tomar Banho -->
-      <div class="card">
-        <img src="/mascots/panquecca_banho.jpg" alt="Tomar Banho">
-        <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
+      <div class="routine-card">
+        <div class="card-header">
           <h3>4. Tomar Banho</h3>
-          <p>Banho de espuma quentinho na banheira com patinho de borracha.</p>
-          <a class="btn" href="/mascots/panquecca_banho.jpg" download="panquecca_banho.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-star">🌟 Vitória Pronta</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_banho.jpg" alt="Execução: Na Banheira">
+            <span class="img-label">🎬 Execução</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_banho_fim.jpg" alt="Vitória: Roupão e Patinho">
+            <span class="img-label">🌟 Vitória: Roupão</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Banho de espuma na banheira com patinho. Ao concluir, surge aconchegada num roupão quentinho e cheiroso!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Hailuo AI (Image to Video) <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy taking a fun warm bath in bathtub, fluffy white suds and soap bubbles floating, holding rubber duck, cheerful splash of water, warm Pixar 3D cartoon style.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_banho.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_banho_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
-      <!-- 5. Café da Manhã -->
-      <div class="card">
-        <img src="/mascots/panquecca_comendo.jpg" alt="Café da Manhã">
-        <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
+      <!-- 5. Café da Manhã / Refeição -->
+      <div class="routine-card">
+        <div class="card-header">
           <h3>5. Café da Manhã / Refeição</h3>
-          <p>Comportada à mesa comendo frutinhas e tigela de cereal.</p>
-          <a class="btn" href="/mascots/panquecca_comendo.jpg" download="panquecca_comendo.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-star">🌟 Vitória Pronta</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_comendo.jpg" alt="Execução: Comendo">
+            <span class="img-label">🎬 Execução</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_comendo_fim.jpg" alt="Vitória: Prato Limpo">
+            <span class="img-label">🌟 Vitória: Prato Limpo</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Comendo frutinhas e cereal à mesa. Ao concluir, mostra o pratinho limpo (comeu tudo!) e sorriso meigo!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Hailuo AI (Image to Video) <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy in blue t-shirt sitting at kitchen table, eating breakfast cereal with spoon, chewing happily, gentle tail wagging, cozy morning sunlight, Pixar 3D animation style.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_comendo.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_comendo_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
       <!-- 6. Guardar Brinquedos -->
-      <div class="card">
-        <img src="/mascots/panquecca_guardar_brinquedos.jpg" alt="Guardar os Brinquedos">
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>6. Guardar Brinquedos</h3>
+          <span class="badge badge-star">🌟 Vitória Pronta</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_guardar_brinquedos.jpg" alt="Execução: Guardando">
+            <span class="img-label">🎬 Execução</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_guardar_brinquedos_fim.jpg" alt="Vitória: Quarto Arrumado">
+            <span class="img-label">🌟 Vitória: Organizado</span>
+          </div>
+        </div>
         <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
-          <h3>6. Guardar os Brinquedos</h3>
-          <p>Guardando blocos e ursinho no baú colorido do quarto.</p>
-          <a class="btn" href="/mascots/panquecca_guardar_brinquedos.jpg" download="panquecca_guardar_brinquedos.jpg">Baixar Imagem Original</a>
+          <p class="card-desc">Guardando blocos no baú colorido. Ao concluir, comemora com braços abertos no quarto arrumado!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Hailuo AI (Image to Video) <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy in blue t-shirt tidying up bedroom, gently picking up colorful toy blocks and putting them into open toy chest, happy wagging tail, clean Pixar 3D cartoon style.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_guardar_brinquedos.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_guardar_brinquedos_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
 
       <!-- 7. Hora de Dormir -->
-      <div class="card">
-        <img src="/mascots/panquecca_dormir.jpg" alt="Hora de Dormir">
-        <div class="card-body">
-          <span class="badge">Pronta para o Hailuo</span>
+      <div class="routine-card">
+        <div class="card-header">
           <h3>7. Hora de Dormir</h3>
-          <p>Aconchegada na caminha com pijama de estrelas e lua na janela.</p>
-          <a class="btn" href="/mascots/panquecca_dormir.jpg" download="panquecca_dormir.jpg">Baixar Imagem Original</a>
+          <span class="badge badge-star">🌟 Vitória Pronta</span>
+        </div>
+        <div class="pair-images">
+          <div class="img-box">
+            <img src="/mascots/panquecca_dormir.jpg" alt="Execução: Indo Dormir">
+            <span class="img-label">🎬 Execução</span>
+          </div>
+          <div class="img-box">
+            <img src="/mascots/panquecca_dormir_fim.jpg" alt="Vitória: Dormindo Sereno">
+            <span class="img-label">🌟 Vitória: Soninho</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Aconchegada na caminha de pijaminha. Ao concluir, adormece com o ursinho sob a lua e estrelas douradas!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Hailuo AI (Image to Video) <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy in star pajamas tucked under cozy blanket in bed, gently hugging teddy bear, blinking sleepy eyes, soft yawn, warm nightlight, calm bedtime Pixar 3D animation.</code>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="/mascots/panquecca_dormir.jpg" download>Baixar Execução</a>
+            <a class="btn btn-secondary" href="/mascots/panquecca_dormir_fim.jpg" download>Baixar Vitória</a>
+          </div>
         </div>
       </div>
+
+    </div>
+
+    <!-- SEÇÃO 2: CATÁLOGO EXPANDIDO DE ATIVIDADES -->
+    <h2 class="section-title">📋 Catálogo Estendido de Atividades (Prompts Prontos para Gerar)</h2>
+    <div class="routine-grid">
+
+      <!-- 8. Acordar e Espreguiçar -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>8. Acordar e Espreguiçar</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Panquecca se espreguiçando com energia na caminha ao nascer do sol.<br><strong>Vitória:</strong> Em pé radiante com a luz do sol, pronta para o novo dia!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing light blue Synapsis Kids t-shirt, sitting up in cozy bed, stretching paws and arching back happily with big cute yawn, bright morning sunbeams through window, 2D flat cartoon Pixar animation style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' standing energized on bedroom rug, hands on hips with big proud smile, sparkling eyes, sun rays shining, triumphant 'Good Morning' pose, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Arrumar a Cama -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>9. Arrumar a Cama</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Puxando o lençol e fofando o travesseiro com as patinhas.<br><strong>Vitória:</strong> Sentada ao lado da cama impecavelmente arrumada com pose de orgulho!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, straightening colorful quilt and fluffing cute pillow on toddler bed, wagging tail, focused and cheerful, 2D flat cartoon Pixar style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' sitting proudly next to perfectly made neat bed, plush teddy sitting neatly on pillow, beaming smile, sparkle stars, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Lição de Casa & Leitura -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>10. Lição de Casa / Leitura</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Focadinha na mesinha infantil com lápis de cor e caderno de desenho.<br><strong>Vitória:</strong> Segurando o desenho finalizado com nota 10 e estrelinha dourada!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, sitting at toddler study desk, holding colored pencil, drawing happily in notebook, focused sparkling eyes, 2D flat cartoon Pixar style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' holding up completed colorful drawing towards camera with proud beaming smile, golden star sticker on paper, sparkle stars, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Beber Água -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>11. Beber Água</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Bebendo água fresca na garrafinha colorida infantil.<br><strong>Vitória:</strong> Hidratada, refrescada e sorrindo com gotinhas de energia!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, holding cute colorful water bottle with both paws, sipping water through straw, refreshed sparkling eyes, 2D flat cartoon Pixar style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' holding water bottle high, giving big happy smile, refreshing blue sparkle stars around, bright energetic expression, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Escola / Arrumar Mochila -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>12. Escola / Arrumar Mochila</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Guardando cadernos e estojo dentro da mochilinha colorida.<br><strong>Vitória:</strong> Com a mochila nas costas pronta para a van/escola dando tchauzinho!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, packing books and pencil case into colorful toddler backpack on floor, organized and happy, 2D flat cartoon Pixar style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing colorful backpack on its shoulders, waving cheerfully at camera, ready for school, proud enthusiastic smile, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. Terapia / Fonoaudiologia -->
+      <div class="routine-card">
+        <div class="card-header">
+          <h3>13. Terapia / Fono / TO</h3>
+          <span class="badge badge-ready">Prompt Pronto</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc"><strong>Ação:</strong> Na sala terapêutica com brinquedos sensoriais e espelho fonoaudiológico.<br><strong>Vitória:</strong> Com medalha/adesivo de campeão da sessão e sorriso radiante!</p>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Execução <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' wearing blue Synapsis Kids t-shirt, in colorful therapy playroom with sensory blocks and communication cards, engaging playfully, 2D flat cartoon Pixar style.</code>
+          </div>
+          <div class="prompt-box">
+            <div class="prompt-title">Prompt Imagem de Vitória <button class="copy-btn" onclick="copyText(this)">Copiar</button></div>
+            <code>Cute Golden Retriever puppy mascot 'Panquecca' proudly showing a champion golden medal ribbon pinned to shirt, huge victorious smile, celebratory confetti and stars, 2D flat cartoon Pixar style.</code>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="footer-note">
-      💡 <strong>Como usar no Hailuo / CapCut Pro:</strong> Escolha a ferramenta <em>Image to Video</em>, faça o upload da imagem e cole o prompt em inglês correspondente. O resultado fica 100% fiel à identidade da Panquecca!
+      💡 <strong>Como usar no Hailuo AI (MiniMax) ou CapCut Pro:</strong><br>
+      1. Clique em <em>Baixar Execução</em> na rotina desejada.<br>
+      2. No Hailuo ou CapCut Pro, selecione a ferramenta <strong>Image-to-Video</strong>.<br>
+      3. Suba a imagem baixada e cole o prompt em inglês correspondente.<br>
+      4. Salve o vídeo gerado na pasta <code>public/mascots/</code> com o nome exato indicado (ex: <code>panquecca_banho.mp4</code>). O app já está 100% programado para reconhecer e tocar automaticamente!
     </div>
   </div>
+
+  <script>
+    function copyText(btn) {
+      const code = btn.closest('.prompt-box').querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const original = btn.innerText;
+        btn.innerText = '✓ Copiado!';
+        btn.style.background = '#86efac';
+        setTimeout(() => {
+          btn.innerText = original;
+          btn.style.background = '';
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
