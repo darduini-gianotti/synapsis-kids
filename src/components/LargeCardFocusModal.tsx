@@ -37,7 +37,8 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   const isCompleted = task.completed;
   const hasSubtasks = Boolean(task.subtasks && task.subtasks.length > 0);
   const allSubtasksDone = hasSubtasks && task.subtasks.every((s) => s.completed);
-  const isDone = isCompleted || allSubtasksDone;
+  // Only celebrate if all subtasks were actually completed in this session
+  const showCelebrationImage = allSubtasksDone;
 
   const getCelebrateImage = () => {
     if (task.imageUrl?.includes('joao')) return '/mascots/joao_sorriso.jpg';
@@ -101,7 +102,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
               className={`w-full ${
                 hasSubtasks ? 'max-w-[190px] sm:max-w-[210px]' : 'max-w-[270px]'
               } aspect-square rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative ${
-                isDone
+                isCompleted
                   ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
                   : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
               }`}
@@ -109,7 +110,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
             >
               {task.videoUrl ? (
                 <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
-                  {isDone ? (
+                  {showCelebrationImage ? (
                     <img
                       src={getCelebrateImage()}
                       alt="Mascote comemorando"
@@ -122,12 +123,18 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                       loop
                       muted
                       playsInline
+                      ref={(el) => {
+                        if (el) {
+                          el.muted = true;
+                          el.play().catch(() => {});
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                   )}
                   <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
                     <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                      {isDone ? '✨ Parabéns!' : '🐾 Mascote Guia'}
+                      {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
                     </span>
                     <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
                       <Volume2 className="w-3 h-3 text-sky-300" />

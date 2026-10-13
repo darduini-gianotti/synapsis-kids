@@ -122,12 +122,34 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                 </div>
 
                 <div className="my-3 flex items-center justify-center">
-                  <PecsIllustration
-                    iconName={firstTask.iconName}
-                    imageUrl={firstTask.imageUrl}
-                    size={112}
-                    className="w-28 h-28"
-                  />
+                  {firstTask.videoUrl ? (
+                    <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-700 shadow-sm relative bg-black/5 dark:bg-black/30">
+                      <video
+                        src={firstTask.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        ref={(el) => {
+                          if (el) {
+                            el.muted = true;
+                            el.play().catch(() => {});
+                          }
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 right-1 bg-amber-500 text-white text-[9px] font-black px-1 rounded-full shadow-xs">
+                        🐾
+                      </span>
+                    </div>
+                  ) : (
+                    <PecsIllustration
+                      iconName={firstTask.iconName}
+                      imageUrl={firstTask.imageUrl}
+                      size={112}
+                      className="w-28 h-28"
+                    />
+                  )}
                 </div>
 
                 <h4 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 mb-2">
@@ -191,12 +213,34 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                 </div>
 
                 <div className="my-3 flex items-center justify-center">
-                  <PecsIllustration
-                    iconName={thenTask.iconName}
-                    imageUrl={thenTask.imageUrl}
-                    size={112}
-                    className="w-28 h-28"
-                  />
+                  {thenTask.videoUrl ? (
+                    <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-emerald-400 dark:border-emerald-600 shadow-sm relative bg-black/5 dark:bg-black/30">
+                      <video
+                        src={thenTask.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        ref={(el) => {
+                          if (el) {
+                            el.muted = true;
+                            el.play().catch(() => {});
+                          }
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 right-1 bg-amber-500 text-white text-[9px] font-black px-1 rounded-full shadow-xs">
+                        🐾
+                      </span>
+                    </div>
+                  ) : (
+                    <PecsIllustration
+                      iconName={thenTask.iconName}
+                      imageUrl={thenTask.imageUrl}
+                      size={112}
+                      className="w-28 h-28"
+                    />
+                  )}
                 </div>
 
                 <h4 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 mb-2">
@@ -278,14 +322,36 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   </button>
                 </div>
 
-                {/* Big Visual Drawing on Crisp White Canvas */}
+                {/* Big Visual Drawing on Crisp White Canvas or Animated Mascot */}
                 <div className="my-2 flex items-center justify-center">
-                  <PecsIllustration
-                    iconName={task.iconName}
-                    imageUrl={task.imageUrl}
-                    size={96}
-                    className="w-24 h-24"
-                  />
+                  {task.videoUrl && !isCompleted ? (
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-indigo-200 dark:border-indigo-800 shadow-xs relative bg-black/5 dark:bg-black/30">
+                      <video
+                        src={task.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        ref={(el) => {
+                          if (el) {
+                            el.muted = true;
+                            el.play().catch(() => {});
+                          }
+                        }}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute bottom-1 right-1 bg-amber-500 text-white text-[9px] font-black px-1 rounded-full shadow-xs">
+                        🐾
+                      </span>
+                    </div>
+                  ) : (
+                    <PecsIllustration
+                      iconName={task.iconName}
+                      imageUrl={task.imageUrl}
+                      size={96}
+                      className="w-24 h-24"
+                    />
+                  )}
                 </div>
 
                 {/* High Contrast Bold Title */}
