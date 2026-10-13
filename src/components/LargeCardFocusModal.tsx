@@ -35,6 +35,16 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   if (!isOpen || !task) return null;
 
   const isCompleted = task.completed;
+  const hasSubtasks = Boolean(task.subtasks && task.subtasks.length > 0);
+  const allSubtasksDone = hasSubtasks && task.subtasks.every((s) => s.completed);
+  const isDone = isCompleted || allSubtasksDone;
+
+  const getCelebrateImage = () => {
+    if (task.imageUrl?.includes('joao')) return '/mascots/joao_sorriso.jpg';
+    if (task.imageUrl?.includes('gigi')) return '/mascots/gigi_sorriso.jpg';
+    return '/mascots/panquecca_sorriso.jpg';
+  };
+
   const theme = COLOR_THEMES[task.color] || COLOR_THEMES.indigo;
 
   const handleSpeak = () => {
@@ -83,31 +93,41 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
           </div>
 
           {/* Main Card Focus Body */}
-          <div className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col items-center text-center space-y-4">
-            {/* Giant Central Illustration / Animated Video Mascot Card */}
+          <div className="p-4 sm:p-5 overflow-y-auto flex-1 flex flex-col items-center text-center space-y-3">
+            {/* Animated Mascot / Illustration Card */}
             <motion.div
               whileTap={{ scale: 0.98 }}
               onClick={handleSpeak}
-              className={`w-full max-w-[280px] aspect-square rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative ${
-                isCompleted
-                  ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600 opacity-80'
+              className={`w-full ${
+                hasSubtasks ? 'max-w-[190px] sm:max-w-[210px]' : 'max-w-[270px]'
+              } aspect-square rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative ${
+                isDone
+                  ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
                   : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
               }`}
               title="Toque para ouvir a voz"
             >
               {task.videoUrl ? (
                 <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
-                  <video
-                    src={task.videoUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover rounded-2xl"
-                  />
+                  {isDone ? (
+                    <img
+                      src={getCelebrateImage()}
+                      alt="Mascote comemorando"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <video
+                      src={task.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
                     <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                      Mascote Guia
+                      {isDone ? '✨ Parabéns!' : '🐾 Mascote Guia'}
                     </span>
                     <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
                       <Volume2 className="w-3 h-3 text-sky-300" />
@@ -116,16 +136,16 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="p-6 flex flex-col items-center justify-center">
+                <div className="p-4 sm:p-6 flex flex-col items-center justify-center">
                   <PecsIllustration
                     iconName={task.iconName}
                     imageUrl={task.imageUrl}
-                    size={140}
-                    className="w-36 h-36 drop-shadow-xs"
+                    size={hasSubtasks ? 110 : 140}
+                    className={`${hasSubtasks ? 'w-28 h-28' : 'w-36 h-36'} drop-shadow-xs`}
                   />
                   {/* Little sound prompt underneath */}
-                  <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-xs font-bold shadow-2xs">
-                    <Volume2 className="w-3.5 h-3.5 animate-pulse" />
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold shadow-2xs">
+                    <Volume2 className="w-3 h-3 animate-pulse" />
                     <span>Toque para Ouvir</span>
                   </div>
                 </div>
@@ -134,11 +154,15 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
 
             {/* Big Activity Title */}
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight">
+              <h2
+                className={`${
+                  hasSubtasks ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl md:text-5xl'
+                } font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight`}
+              >
                 {task.title}
               </h2>
               {task.notes && (
-                <p className="text-sm sm:text-base text-stone-600 dark:text-stone-300 mt-2 max-w-md font-semibold leading-relaxed">
+                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 max-w-md font-semibold leading-relaxed">
                   {task.notes}
                 </p>
               )}

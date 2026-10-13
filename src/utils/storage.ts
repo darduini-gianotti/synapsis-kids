@@ -237,6 +237,8 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Hora de escovar os dentinhos!',
     durationMinutes: 3,
+    imageUrl: '/mascots/panquecca_escovando.jpg',
+    videoUrl: '/mascots/panquecca_1x1.mp4',
   },
   {
     id: 'task-we-4',
@@ -345,7 +347,31 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
       saveRoutines(initial);
       return initial;
     }
-    return JSON.parse(raw);
+    const parsed: Record<DayOfWeek, DayRoutine> = JSON.parse(raw);
+    let changed = false;
+
+    // Auto-migrate brushing tasks without mascot video
+    for (const day in parsed) {
+      const routine = parsed[day as unknown as DayOfWeek];
+      if (routine?.tasks) {
+        routine.tasks.forEach((t) => {
+          if (
+            (t.id === 'task-3' || t.id === 'task-we-3' || t.title.toLowerCase().includes('escovar')) &&
+            !t.videoUrl
+          ) {
+            t.imageUrl = t.imageUrl || '/mascots/panquecca_escovando.jpg';
+            t.videoUrl = '/mascots/panquecca_1x1.mp4';
+            changed = true;
+          }
+        });
+      }
+    }
+
+    if (changed) {
+      saveRoutines(parsed);
+    }
+
+    return parsed;
   } catch (e) {
     console.error('Failed to load routines from storage', e);
     return getInitialRoutines();
