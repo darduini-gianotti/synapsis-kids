@@ -65,7 +65,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 280 }}
-          className="w-full max-w-lg md:max-w-4xl bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden border-2 border-stone-200 dark:border-stone-800 flex flex-col max-h-[94vh]"
+          className="w-full max-w-lg bg-white dark:bg-stone-900 rounded-3xl shadow-2xl overflow-hidden border-2 border-stone-200 dark:border-stone-800 flex flex-col max-h-[94vh]"
           id="large-card-focus-modal"
         >
           {/* Top Bar with gentle Back button */}
@@ -95,103 +95,97 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
           </div>
 
           {/* Main Card Focus Body */}
-          <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
-            {/* Top Area: Mascot Card & Integrated Visual Timer Side-by-Side (or stacked on mobile) */}
-            <div className={`w-full ${task.durationMinutes ? 'grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-center' : 'flex flex-col items-center text-center'}`}>
-              {/* Left Column: Mascot & Title */}
-              <div className="flex flex-col items-center text-center space-y-3">
-                {/* Animated Mascot / Illustration Card */}
-                <motion.div
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleSpeak}
-                  className={`${
-                    hasSubtasks ? 'w-44 h-44 sm:w-52 sm:h-52' : 'w-56 h-56 sm:w-64 sm:h-64'
-                  } shrink-0 rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative mx-auto ${
-                    isCompleted
-                      ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
-                      : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
-                  }`}
-                  title="Toque para ouvir a voz"
-                >
-                  {task.videoUrl ? (
-                    <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
-                      {showCelebrationImage ? (
-                        <img
-                          src={getCelebrateImage()}
-                          alt="Mascote comemorando"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <video
-                          src={task.videoUrl}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          ref={(el) => {
-                            if (el) {
-                              el.muted = true;
-                              el.play().catch(() => {});
-                            }
-                          }}
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
-                        <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
-                          {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
-                        </span>
-                        <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
-                          <Volume2 className="w-3 h-3 text-sky-300" />
-                          Ouvir
-                        </span>
-                      </div>
-                    </div>
+          <div className="p-4 sm:p-5 overflow-y-auto flex-1 flex flex-col items-center text-center space-y-3.5">
+            {/* Animated Mascot / Illustration Card */}
+            <motion.div
+              whileTap={{ scale: 0.98 }}
+              onClick={handleSpeak}
+              className={`${
+                hasSubtasks ? 'w-44 h-44 sm:w-52 sm:h-52' : 'w-56 h-56 sm:w-64 sm:h-64'
+              } shrink-0 rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative mx-auto ${
+                isCompleted
+                  ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
+                  : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
+              }`}
+              title="Toque para ouvir a voz"
+            >
+              {task.videoUrl ? (
+                <div className="relative w-full h-full flex items-center justify-center bg-black/5 dark:bg-black/30">
+                  {showCelebrationImage ? (
+                    <img
+                      src={getCelebrateImage()}
+                      alt="Mascote comemorando"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="p-4 sm:p-6 flex flex-col items-center justify-center">
-                      <PecsIllustration
-                        iconName={task.iconName}
-                        imageUrl={task.imageUrl}
-                        size={hasSubtasks ? 100 : 130}
-                        className={`${hasSubtasks ? 'w-24 h-24' : 'w-32 h-32'} drop-shadow-xs`}
-                      />
-                      {/* Little sound prompt underneath */}
-                      <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold shadow-2xs">
-                        <Volume2 className="w-3 h-3 animate-pulse" />
-                        <span>Toque para Ouvir</span>
-                      </div>
-                    </div>
+                    <video
+                      src={task.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      ref={(el) => {
+                        if (el) {
+                          el.muted = true;
+                          el.play().catch(() => {});
+                        }
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   )}
-                </motion.div>
-
-                {/* Big Activity Title */}
-                <div>
-                  <h2
-                    className={`${
-                      hasSubtasks ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'
-                    } font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight`}
-                  >
-                    {task.title}
-                  </h2>
-                  {task.notes && (
-                    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 max-w-md font-semibold leading-relaxed">
-                      {task.notes}
-                    </p>
-                  )}
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                    <span className="bg-sky-500/90 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">
+                      {showCelebrationImage ? '✨ Parabéns!' : '🐾 Mascote Guia'}
+                    </span>
+                    <span className="bg-stone-900/70 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1">
+                      <Volume2 className="w-3 h-3 text-sky-300" />
+                      Ouvir
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              {/* Right Column: Integrated Visual Timer */}
-              {task.durationMinutes && (
-                <div className="w-full flex flex-col items-center justify-center">
-                  <TaskVisualTimer
-                    task={task}
-                    variant="embedded"
-                    onFinishTask={handleComplete}
+              ) : (
+                <div className="p-4 sm:p-6 flex flex-col items-center justify-center">
+                  <PecsIllustration
+                    iconName={task.iconName}
+                    imageUrl={task.imageUrl}
+                    size={hasSubtasks ? 100 : 130}
+                    className={`${hasSubtasks ? 'w-24 h-24' : 'w-32 h-32'} drop-shadow-xs`}
                   />
+                  {/* Little sound prompt underneath */}
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold shadow-2xs">
+                    <Volume2 className="w-3 h-3 animate-pulse" />
+                    <span>Toque para Ouvir</span>
+                  </div>
                 </div>
               )}
+            </motion.div>
+
+            {/* Big Activity Title */}
+            <div>
+              <h2
+                className={`${
+                  hasSubtasks ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'
+                } font-black text-stone-900 dark:text-stone-100 tracking-tight leading-tight`}
+              >
+                {task.title}
+              </h2>
+              {task.notes && (
+                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 mt-1 max-w-md font-semibold leading-relaxed">
+                  {task.notes}
+                </p>
+              )}
             </div>
+
+            {/* Compact Integrated Visual Timer below video/title */}
+            {task.durationMinutes && !isCompleted && (
+              <div className="w-full max-w-md">
+                <TaskVisualTimer
+                  task={task}
+                  variant="inline"
+                  onFinishTask={handleComplete}
+                />
+              </div>
+            )}
 
             {/* Subtasks / Steps Sequence (if available, e.g. for Bathroom or Brushing) */}
             {task.subtasks && task.subtasks.length > 0 && (
