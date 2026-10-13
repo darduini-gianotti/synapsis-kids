@@ -89,6 +89,7 @@ export default function App() {
   // Active Modals State
   const [activeSubtaskTask, setActiveSubtaskTask] = useState<RoutineTask | null>(null);
   const [activeTimerTask, setActiveTimerTask] = useState<RoutineTask | null>(null);
+  const [activeInlineTimerTaskId, setActiveInlineTimerTaskId] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<RoutineTask | null>(null);
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
@@ -1352,6 +1353,10 @@ export default function App() {
                         onToggleComplete={handleToggleTaskComplete}
                         onOpenSubtasks={(t) => setActiveSubtaskTask(t)}
                         onOpenTimer={(t) => setActiveTimerTask(t)}
+                        isTimerActive={activeInlineTimerTaskId === task.id}
+                        onToggleTimer={(t) => {
+                          setActiveInlineTimerTaskId((prev) => (prev === t.id ? null : t.id));
+                        }}
                         onEditTask={(t) =>
                           handleRequirePin(
                             () => setEditingTask(t),

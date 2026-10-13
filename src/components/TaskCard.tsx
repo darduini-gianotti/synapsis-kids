@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   CheckCircle2,
   Circle,
@@ -17,6 +17,7 @@ import {
 import { RoutineTask } from '../types';
 import { TaskIcon, COLOR_THEMES } from './TaskIcon';
 import { soundManager } from '../utils/audio';
+import { TaskVisualTimer } from './TaskVisualTimer';
 
 interface TaskCardProps {
   task: RoutineTask;
@@ -24,6 +25,8 @@ interface TaskCardProps {
   onToggleComplete: (taskId: string) => void;
   onOpenSubtasks: (task: RoutineTask) => void;
   onOpenTimer?: (task: RoutineTask) => void;
+  isTimerActive?: boolean;
+  onToggleTimer?: (task: RoutineTask) => void;
   onEditTask?: (task: RoutineTask) => void;
   onDeleteTask?: (taskId: string) => void;
   isLocked?: boolean;
@@ -36,6 +39,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onToggleComplete,
   onOpenSubtasks,
   onOpenTimer,
+  isTimerActive = false,
+  onToggleTimer,
   onEditTask,
   onDeleteTask,
   isLocked = false,
@@ -154,13 +159,17 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </button>
 
               {/* Timer button */}
-              {onOpenTimer && task.durationMinutes && !isCompleted && (
+              {(onToggleTimer || onOpenTimer) && task.durationMinutes && !isCompleted && (
                 <button
                   type="button"
                   data-help-id="task-timer"
-                  onClick={() => onOpenTimer(task)}
-                  className="p-1 rounded-md text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors"
-                  title="Abrir temporizador visual"
+                  onClick={() => (onToggleTimer ? onToggleTimer(task) : onOpenTimer?.(task))}
+                  className={`p-1 rounded-md transition-all ${
+                    isTimerActive
+                      ? 'bg-amber-100 dark:bg-amber-900/60 ring-1 ring-amber-400 text-amber-700 dark:text-amber-300 font-bold'
+                      : 'text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                  }`}
+                  title={isTimerActive ? 'Recolher temporizador' : 'Abrir temporizador visual'}
                   aria-label="Temporizador visual"
                 >
                   <Timer className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
@@ -291,6 +300,26 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           )}
         </button>
       </div>
+
+      {/* Inline Visual Timer Drawer */}
+      <AnimatePresence>
+        {isTimerActive && !isCompleted && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden pt-2.5 mt-2.5 border-t border-stone-100 dark:border-stone-700/60"
+          >
+            <TaskVisualTimer
+              task={task}
+              variant="inline"
+              onClose={() => (onToggleTimer ? onToggleTimer(task) : onOpenTimer?.(task))}
+              onFinishTask={() => onToggleComplete(task.id)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
