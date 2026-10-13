@@ -40,6 +40,7 @@ export interface RoutineTask {
   notes?: string;
   imageUrl?: string; // URL do pictograma ARASAAC ou imagem personalizada
   videoUrl?: string; // Vídeo/micro-animação do mascote para a rotina (ex: /mascots/panquecca_1x1.mp4)
+  arasaacImageUrl?: string; // Pictograma ARASAAC preservado caso o mascote seja alternado
 }
 
 export type DayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado

@@ -1460,6 +1460,7 @@ export default function App() {
         {/* 3. Edit / Create Task Modal */}
         {(editingTask || isNewTaskModalOpen) && (
           <EditTaskModal
+            key={editingTask ? editingTask.id : 'new-task'}
             isOpen={Boolean(editingTask || isNewTaskModalOpen)}
             onClose={() => {
               setEditingTask(null);

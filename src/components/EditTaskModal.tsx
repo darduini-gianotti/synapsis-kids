@@ -62,6 +62,32 @@ const QUICK_STEP_SUGGESTIONS = [
   'Tomar banho',
 ];
 
+function getPanqueccaAssetsForTitle(taskTitle: string): { image: string; video?: string } {
+  const t = (taskTitle || '').toLowerCase();
+  if (t.includes('escovar') || t.includes('dente')) {
+    return { image: '/mascots/panquecca_escovando.jpg', video: '/mascots/panquecca_1x1.mp4' };
+  }
+  if (t.includes('banheiro') || t.includes('vaso') || t.includes('xixi')) {
+    return { image: '/mascots/panquecca_banheiro.jpg' };
+  }
+  if (t.includes('banho') || t.includes('chuveiro')) {
+    return { image: '/mascots/panquecca_banho.jpg' };
+  }
+  if (t.includes('café') || t.includes('cafe') || t.includes('almoço') || t.includes('almoco') || t.includes('jantar') || t.includes('comer') || t.includes('lanche')) {
+    return { image: '/mascots/panquecca_comendo.jpg' };
+  }
+  if (t.includes('brinquedo') || t.includes('guardar') || t.includes('tarefas da casa') || t.includes('arrumar')) {
+    return { image: '/mascots/panquecca_guardar_brinquedos.jpg' };
+  }
+  if (t.includes('dormir') || t.includes('sono') || t.includes('cama') || t.includes('descansar')) {
+    return { image: '/mascots/panquecca_dormir.jpg' };
+  }
+  if (t.includes('mão') || t.includes('mao') || t.includes('lavar')) {
+    return { image: '/mascots/panquecca_lavando_maos.jpg' };
+  }
+  return { image: '/mascots/panquecca_escovando.jpg', video: '/mascots/panquecca_1x1.mp4' };
+}
+
 export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   isOpen,
   onClose,
@@ -79,7 +105,22 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const [category, setCategory] = useState<TaskCategory>(initialTask?.category || 'chores');
   const [color, setColor] = useState<TaskColor>(initialTask?.color || 'indigo');
   const [iconName, setIconName] = useState(initialTask?.iconName || 'CheckSquare');
-  const [imageUrl, setImageUrl] = useState<string | undefined>(initialTask?.imageUrl);
+
+  // Identifica se a tarefa originalmente tinha Mascote ativo
+  const isInitialMascot = Boolean(
+    initialTask?.videoUrl ||
+    (initialTask?.imageUrl && (initialTask.imageUrl.includes('mascots') || initialTask.imageUrl.includes('panquecca')))
+  );
+
+  // Identifica e preserva pictograma ARASAAC
+  const initialArasaac =
+    initialTask?.arasaacImageUrl ||
+    (initialTask?.imageUrl && !initialTask.imageUrl.includes('mascots') && !initialTask.imageUrl.includes('panquecca')
+      ? initialTask.imageUrl
+      : undefined);
+
+  const [isMascotEnabled, setIsMascotEnabled] = useState<boolean>(isInitialMascot);
+  const [arasaacImageUrl, setArasaacImageUrl] = useState<string | undefined>(initialArasaac);
   const [videoUrl, setVideoUrl] = useState<string | undefined>(initialTask?.videoUrl);
   const [isArasaacModalOpen, setIsArasaacModalOpen] = useState(false);
   const [soundAlert, setSoundAlert] = useState<SoundAlert>(initialTask?.soundAlert || 'bell');
@@ -208,9 +249,10 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
       soundManager.speak(`Hora de: ${title || 'esta tarefa'}!`);
     }
   };
-
   const handleSave = () => {
     if (!title.trim()) return;
+
+    const panqueccaAssets = isMascotEnabled ? getPanqueccaAssetsForTitle(title) : null;
 
     const taskToSave: RoutineTask = {
       id: initialTask?.id || `task-${Date.now()}`,
@@ -226,8 +268,11 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
       audioRecording: audioRecording || undefined,
       durationMinutes: durationMinutes > 0 ? durationMinutes : undefined,
       notes: notes.trim() || undefined,
-      imageUrl: imageUrl || undefined,
-      videoUrl: videoUrl || undefined,
+      arasaacImageUrl: arasaacImageUrl || undefined,
+      videoUrl: isMascotEnabled ? (panqueccaAssets?.video || videoUrl || undefined) : undefined,
+      imageUrl: isMascotEnabled
+        ? (panqueccaAssets?.image || arasaacImageUrl || undefined)
+        : (arasaacImageUrl || undefined),
     };
 
     onSave(taskToSave);
@@ -434,55 +479,66 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             </div>
 
             {/* MASCOTE GUIA OFICIAL SYNAPSIS KIDS - PANQUECCA */}
-            <div className="p-3.5 bg-gradient-to-br from-amber-50/70 to-orange-50/40 dark:from-stone-850 dark:to-stone-900 border-2 border-amber-300/80 dark:border-amber-700/60 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-base">🐾</span>
-                  <label className="text-xs font-black text-stone-800 dark:text-stone-200 uppercase tracking-wider">
-                    Mascote Guia Oficial da Tarefa
-                  </label>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200">
-                  Panquecca
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3 p-2.5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700">
-                <img
-                  src="/mascots/panquecca_escovando.jpg"
-                  alt="Panquecca"
-                  className="w-14 h-14 rounded-xl object-cover shrink-0 border border-amber-300 dark:border-amber-700"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-xs font-black text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
-                    Panquecca em Vídeo Animado
-                  </h4>
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-tight mt-0.5">
-                    Modela o hábito em vídeo contínuo e sorri ao concluir todos os passos.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (videoUrl || imageUrl?.includes('panquecca')) {
-                      setImageUrl(undefined);
-                      setVideoUrl(undefined);
-                    } else {
-                      setImageUrl('/mascots/panquecca_escovando.jpg');
-                      setVideoUrl('/mascots/panquecca_1x1.mp4');
-                    }
-                  }}
-                  className={`px-3 py-2 rounded-xl text-xs font-black transition-all shrink-0 active:scale-95 shadow-2xs ${
-                    videoUrl || imageUrl?.includes('panquecca')
-                      ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                      : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 hover:bg-amber-100'
+            {(() => {
+              const currentPanqueccaAssets = getPanqueccaAssetsForTitle(title || initialTask?.title || '');
+              return (
+                <div
+                  className={`p-3.5 border-2 rounded-2xl space-y-2.5 transition-all ${
+                    isMascotEnabled
+                      ? 'bg-gradient-to-br from-amber-50/80 to-orange-50/50 dark:from-stone-850 dark:to-stone-900 border-amber-400 dark:border-amber-600 shadow-xs'
+                      : 'bg-stone-50/80 dark:bg-stone-850/50 border-stone-200 dark:border-stone-750 opacity-80 hover:opacity-100'
                   }`}
                 >
-                  {videoUrl || imageUrl?.includes('panquecca') ? '✓ Ativada' : '+ Ativar'}
-                </button>
-              </div>
-            </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-base">🐾</span>
+                      <label className="text-xs font-black text-stone-800 dark:text-stone-200 uppercase tracking-wider">
+                        Mascote Guia Oficial da Tarefa
+                      </label>
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isMascotEnabled
+                          ? 'bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
+                          : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
+                      }`}
+                    >
+                      {isMascotEnabled ? 'Panquecca Ativada' : 'Panquecca Desativada'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-2.5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700">
+                    <img
+                      src={currentPanqueccaAssets.image}
+                      alt="Panquecca"
+                      className="w-14 h-14 rounded-xl object-cover shrink-0 border border-amber-300 dark:border-amber-700"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-black text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
+                        Panquecca {currentPanqueccaAssets.video ? 'em Vídeo Animado' : 'em Ilustração Oficial'}
+                      </h4>
+                      <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-tight mt-0.5">
+                        {isMascotEnabled
+                          ? 'Modela o hábito visualmente nos cartões grandes e na agenda.'
+                          : 'Clique para ativar a modelagem do hábito com a Panquecca.'}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsMascotEnabled((prev) => !prev)}
+                      className={`px-3 py-2 rounded-xl text-xs font-black transition-all shrink-0 active:scale-95 shadow-2xs ${
+                        isMascotEnabled
+                          ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                          : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 hover:bg-amber-100 dark:hover:bg-amber-950/60'
+                      }`}
+                    >
+                      {isMascotEnabled ? '✓ Ativada' : '+ Ativar'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* ARASAAC Pictogram Selection Section (CAA) */}
             <div className="p-3.5 bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/60 rounded-2xl space-y-2.5" data-help-id="task-edit-arasaac">
@@ -498,23 +554,29 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                 </span>
               </div>
 
-              {imageUrl ? (
+              {arasaacImageUrl ? (
                 <div className="flex items-center justify-between gap-3 p-2.5 bg-white dark:bg-stone-800 border-2 border-indigo-300 dark:border-indigo-700 rounded-xl shadow-2xs">
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div className="w-12 h-12 rounded-lg bg-white border border-stone-200 p-1 flex items-center justify-center shrink-0">
                       <img
-                        src={imageUrl}
+                        src={arasaacImageUrl}
                         alt="Pictograma selecionado"
                         className="max-h-full max-w-full object-contain"
                       />
                     </div>
                     <div className="min-w-0">
                       <span className="text-xs font-bold text-stone-800 dark:text-stone-200 block truncate">
-                        Pictograma ARASAAC Ativo
+                        Pictograma ARASAAC Configurado
                       </span>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                        Aparecerá nos cartões grandes e agenda
-                      </span>
+                      {isMascotEnabled ? (
+                        <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold block">
+                          Salvo na tarefa (Panquecca está ativa no momento)
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
+                          ✓ Ativo nos cartões grandes e agenda
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -528,9 +590,9 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     </button>
                     <button
                       type="button"
-                      onClick={() => setImageUrl(undefined)}
+                      onClick={() => setArasaacImageUrl(undefined)}
                       className="p-1.5 text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors"
-                      title="Remover e voltar ao ícone vetorial"
+                      title="Remover desenho terapêutico"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -548,7 +610,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shrink-0 shadow-2xs active:scale-95 transition-all"
                   >
                     <Search className="w-3.5 h-3.5" />
-                    <span>Buscar ARASAAC</span>
+                    <span>Buscar Desenho</span>
                   </button>
                 </div>
               )}
@@ -805,9 +867,9 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
           isOpen={isArasaacModalOpen}
           onClose={() => setIsArasaacModalOpen(false)}
           onSelect={(selectedUrl) => {
-            setImageUrl(selectedUrl);
+            setArasaacImageUrl(selectedUrl);
           }}
-          currentImageUrl={imageUrl}
+          currentImageUrl={arasaacImageUrl}
           defaultSearchQuery={title || ''}
         />
       )}
