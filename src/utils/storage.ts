@@ -71,6 +71,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora de ir ao banheiro com calma.',
     durationMinutes: 10,
     notes: 'Abaixe a roupa, use o papel e dê a descarga',
+    imageUrl: '/mascots/panquecca_banheiro.jpg',
   },
   {
     id: 'task-2',
@@ -84,6 +85,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'marimba',
     voicePhrase: 'Hora do café da manhã!',
     durationMinutes: 25,
+    imageUrl: '/mascots/panquecca_comendo.jpg',
   },
   {
     id: 'task-3',
@@ -113,6 +115,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora das tarefas da casa! Vamos conferir a lista?',
     durationMinutes: 20,
     notes: 'Marque cada item que você concluir!',
+    imageUrl: '/mascots/panquecca_guardar_brinquedos.jpg',
   },
   {
     id: 'task-5',
@@ -169,6 +172,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Hora de um banho bem gostoso!',
     durationMinutes: 20,
+    imageUrl: '/mascots/panquecca_banho.jpg',
   },
   {
     id: 'task-9',
@@ -195,6 +199,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Boa noite! Hora de relaxar e sonhar.',
     durationMinutes: 15,
+    imageUrl: '/mascots/panquecca_dormir.jpg',
   },
 ];
 
@@ -224,6 +229,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'marimba',
     voicePhrase: 'Hora do café!',
     durationMinutes: 30,
+    imageUrl: '/mascots/panquecca_comendo.jpg',
   },
   {
     id: 'task-we-3',
@@ -255,6 +261,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'bell',
     voicePhrase: 'Tarefinhas da casa rápidas para depois brincar!',
     durationMinutes: 15,
+    imageUrl: '/mascots/panquecca_guardar_brinquedos.jpg',
   },
   {
     id: 'task-we-5',
@@ -307,6 +314,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Hora do banho relaxante.',
     durationMinutes: 25,
+    imageUrl: '/mascots/panquecca_banho.jpg',
   },
   {
     id: 'task-we-9',
@@ -320,6 +328,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Boa noite e bons sonhos!',
     durationMinutes: 20,
+    imageUrl: '/mascots/panquecca_dormir.jpg',
   },
 ];
 
@@ -350,17 +359,41 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
     const parsed: Record<DayOfWeek, DayRoutine> = JSON.parse(raw);
     let changed = false;
 
-    // Auto-migrate brushing tasks without mascot video
+    // Auto-migrate mascot images and videos for core routines
     for (const day in parsed) {
       const routine = parsed[day as unknown as DayOfWeek];
       if (routine?.tasks) {
         routine.tasks.forEach((t) => {
-          if (
-            (t.id === 'task-3' || t.id === 'task-we-3' || t.title.toLowerCase().includes('escovar')) &&
-            !t.videoUrl
-          ) {
-            t.imageUrl = t.imageUrl || '/mascots/panquecca_escovando.jpg';
-            t.videoUrl = '/mascots/panquecca_1x1.mp4';
+          const lower = t.title.toLowerCase();
+
+          // 1. Escovar os dentes
+          if (t.id === 'task-3' || t.id === 'task-we-3' || lower.includes('escovar')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_escovando.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_1x1.mp4'; changed = true; }
+          }
+          // 2. Banheiro
+          if ((t.id === 'task-toilet' || lower.includes('banheiro')) && !t.imageUrl) {
+            t.imageUrl = '/mascots/panquecca_banheiro.jpg';
+            changed = true;
+          }
+          // 3. Café da Manhã
+          if ((t.id === 'task-2' || t.id === 'task-we-2' || lower.includes('café da manhã')) && !t.imageUrl) {
+            t.imageUrl = '/mascots/panquecca_comendo.jpg';
+            changed = true;
+          }
+          // 4. Banho
+          if ((t.id === 'task-8' || t.id === 'task-we-8' || lower.includes('banho')) && !t.imageUrl) {
+            t.imageUrl = '/mascots/panquecca_banho.jpg';
+            changed = true;
+          }
+          // 5. Tarefas da casa / Brinquedos
+          if ((t.id === 'task-4' || t.id === 'task-we-4' || lower.includes('tarefas da casa') || lower.includes('brinquedos')) && !t.imageUrl) {
+            t.imageUrl = '/mascots/panquecca_guardar_brinquedos.jpg';
+            changed = true;
+          }
+          // 6. Dormir
+          if ((t.id === 'task-10' || t.id === 'task-we-9' || lower.includes('dormir')) && !t.imageUrl) {
+            t.imageUrl = '/mascots/panquecca_dormir.jpg';
             changed = true;
           }
         });
