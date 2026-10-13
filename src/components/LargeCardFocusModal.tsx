@@ -99,9 +99,9 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
             <motion.div
               whileTap={{ scale: 0.98 }}
               onClick={handleSpeak}
-              className={`w-full ${
-                hasSubtasks ? 'max-w-[190px] sm:max-w-[210px]' : 'max-w-[270px]'
-              } aspect-square rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative ${
+              className={`${
+                hasSubtasks ? 'w-44 h-44 sm:w-52 sm:h-52' : 'w-64 h-64 sm:w-72 sm:h-72'
+              } shrink-0 rounded-3xl overflow-hidden flex flex-col items-center justify-center cursor-pointer transition-all border-4 shadow-md relative mx-auto ${
                 isCompleted
                   ? 'bg-stone-100 dark:bg-stone-800/60 border-emerald-400 dark:border-emerald-600'
                   : 'bg-stone-50 dark:bg-stone-800/90 border-indigo-500/80 dark:border-indigo-400 hover:border-indigo-600 dark:hover:border-indigo-300'
