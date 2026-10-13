@@ -570,29 +570,38 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               )}
             </div>
 
-            {/* SELEÇÃO DO MASCOTE OFICIAL SYNAPSIS KIDS */}
-            <div className="p-3.5 bg-gradient-to-br from-amber-50/60 to-orange-50/40 dark:from-stone-850 dark:to-stone-900 border-2 border-amber-300/80 dark:border-amber-700/60 rounded-2xl space-y-3" data-help-id="settings-mascot-guide">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-base shadow-xs">
+            {/* MASCOTE GUIA OFICIAL SYNAPSIS KIDS - PANQUECCA */}
+            <div className="p-4 bg-gradient-to-br from-amber-50/80 via-orange-50/40 to-amber-100/30 dark:from-stone-850 dark:to-stone-900 border-2 border-amber-300 dark:border-amber-700/70 rounded-2xl space-y-3" data-help-id="settings-mascot-guide">
+              <div className="flex items-center gap-3">
+                <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-400 dark:border-amber-600 shadow-sm shrink-0">
+                  <img
+                    src="/mascots/panquecca_escovando.jpg"
+                    alt="Panquecca"
+                    className="w-full h-full object-cover"
+                  />
+                  <span className="absolute bottom-0 right-0 bg-amber-500 text-white text-[9px] font-black px-1 rounded-tl-md">
                     🐾
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-stone-900 dark:text-stone-100 flex items-center gap-1.5 uppercase tracking-wide">
-                      Mascote Guia da Rotina
-                      <span className="text-[10px] bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1.5 py-0.2 rounded-full font-bold">
-                        V2
-                      </span>
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-black text-amber-950 dark:text-amber-100 tracking-tight">
+                      Panquecca • Mascote Guia Oficial
                     </h4>
-                    <p className="text-[11px] text-stone-500 dark:text-stone-400">
-                      Escolha o personagem companheiro que guia e comemora com a criança
-                    </p>
+                    <span className="text-[10px] bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-2 py-0.5 rounded-full font-black">
+                      Oficial
+                    </span>
                   </div>
+                  <p className="text-xs text-amber-900/80 dark:text-amber-200/80 mt-0.5 leading-snug">
+                    A Golden Retriever companheira do Synapsis Kids. Modela as tarefas em vídeo e reforça a autonomia da criança com carinho e alegria!
+                  </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                {/* 1. PANQUECCA */}
+              <div className="flex items-center justify-between pt-2 border-t border-amber-200/70 dark:border-stone-700">
+                <span className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                  <span>🐕</span> Voz de Mascote Animada Ativa
+                </span>
                 <button
                   type="button"
                   onClick={() => {
@@ -611,93 +620,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       0.95,
                       'mascot'
                     );
-                    soundManager.speak('Au au! Oi! Eu sou a Panquecca! Vamos escovar os dentinhos juntos?');
+                    soundManager.speak('Au au! Oi amiguinho! Eu sou a Panquecca! Vamos cuidar da nossa rotina e nos divertir juntos?');
                   }}
-                  className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
-                    (localSettings.mascotPreference || 'panquecca') === 'panquecca'
-                      ? 'bg-amber-100/80 dark:bg-amber-950/80 border-amber-500 text-amber-950 dark:text-amber-100 ring-2 ring-amber-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:border-amber-300'
-                  }`}
+                  className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-2xs transition-all"
+                  title="Ouvir a voz da Panquecca"
                 >
-                  <img
-                    src="/mascots/panquecca_escovando.jpg"
-                    alt="Panquecca"
-                    className="w-14 h-14 rounded-xl object-cover shadow-2xs"
-                  />
-                  <span className="text-xs font-black text-amber-900 dark:text-amber-200">Panquecca</span>
-                  <span className="text-[10px] text-amber-700 dark:text-amber-400">Voz Mascote 🐾</span>
-                </button>
-
-                {/* 2. JOÃO */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated: AppSettings = {
-                      ...localSettings,
-                      mascotPreference: 'joao',
-                      voiceStyle: 'normal',
-                      voicePitch: 1.15,
-                      voiceRate: 1.0,
-                    };
-                    setLocalSettings(updated);
-                    onSaveSettings(updated);
-                    soundManager.setVoicePreferences(
-                      updated.selectedVoiceURI,
-                      1.15,
-                      1.0,
-                      'normal'
-                    );
-                    soundManager.speak('E aí amigão! Eu sou o João! Vamos arrasar na nossa rotina!');
-                  }}
-                  className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
-                    localSettings.mascotPreference === 'joao'
-                      ? 'bg-blue-100/80 dark:bg-blue-950/80 border-blue-500 text-blue-950 dark:text-blue-100 ring-2 ring-blue-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:border-blue-300'
-                  }`}
-                >
-                  <img
-                    src="/mascots/joao_escovando.jpg"
-                    alt="João"
-                    className="w-14 h-14 rounded-xl object-cover shadow-2xs"
-                  />
-                  <span className="text-xs font-black text-blue-900 dark:text-blue-200">João</span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-400">Voz Menino 👦</span>
-                </button>
-
-                {/* 3. GIGI */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated: AppSettings = {
-                      ...localSettings,
-                      mascotPreference: 'gigi',
-                      voiceStyle: 'gentle',
-                      voicePitch: 1.45,
-                      voiceRate: 0.92,
-                    };
-                    setLocalSettings(updated);
-                    onSaveSettings(updated);
-                    soundManager.setVoicePreferences(
-                      updated.selectedVoiceURI,
-                      1.45,
-                      0.92,
-                      'gentle'
-                    );
-                    soundManager.speak('Oiê! Eu sou a Gigi! Que alegria fazer a rotina com você!');
-                  }}
-                  className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1 text-center transition-all ${
-                    localSettings.mascotPreference === 'gigi'
-                      ? 'bg-pink-100/80 dark:bg-pink-950/80 border-pink-500 text-pink-950 dark:text-pink-100 ring-2 ring-pink-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:border-pink-300'
-                  }`}
-                >
-                  <img
-                    src="/mascots/gigi_escovando.jpg"
-                    alt="Gigi"
-                    className="w-14 h-14 rounded-xl object-cover shadow-2xs"
-                  />
-                  <span className="text-xs font-black text-pink-900 dark:text-pink-200">Gigi</span>
-                  <span className="text-[10px] text-pink-700 dark:text-pink-400">Voz Menina 👧</span>
+                  <Play className="w-3 h-3 fill-white" />
+                  <span>Ouvir a Panquecca</span>
                 </button>
               </div>
             </div>

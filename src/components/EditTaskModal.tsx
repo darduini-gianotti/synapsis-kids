@@ -432,7 +432,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
               </div>
             </div>
 
-            {/* SELEÇÃO DO MASCOTE GUIA SYNAPSIS KIDS */}
+            {/* MASCOTE GUIA OFICIAL SYNAPSIS KIDS - PANQUECCA */}
             <div className="p-3.5 bg-gradient-to-br from-amber-50/70 to-orange-50/40 dark:from-stone-850 dark:to-stone-900 border-2 border-amber-300/80 dark:border-amber-700/60 rounded-2xl space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
@@ -442,95 +442,45 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                   </label>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200">
-                  Synapsis Kids V2
+                  Panquecca
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                {/* 1. PANQUECCA */}
+              <div className="flex items-center gap-3 p-2.5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700">
+                <img
+                  src="/mascots/panquecca_escovando.jpg"
+                  alt="Panquecca"
+                  className="w-14 h-14 rounded-xl object-cover shrink-0 border border-amber-300 dark:border-amber-700"
+                />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-xs font-black text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
+                    Panquecca em Vídeo Animado
+                  </h4>
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-tight mt-0.5">
+                    Modela o hábito em vídeo contínuo e sorri ao concluir todos os passos.
+                  </p>
+                </div>
+
                 <button
                   type="button"
                   onClick={() => {
-                    setImageUrl('/mascots/panquecca_escovando.jpg');
-                    setVideoUrl('/mascots/panquecca_1x1.mp4');
-                  }}
-                  className={`p-2 rounded-xl border-2 flex flex-col items-center gap-1 transition-all ${
-                    imageUrl?.includes('panquecca')
-                      ? 'bg-amber-100 dark:bg-amber-950/80 border-amber-500 ring-2 ring-amber-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 hover:border-amber-300'
-                  }`}
-                >
-                  <img
-                    src="/mascots/panquecca_escovando.jpg"
-                    alt="Panquecca"
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <span className="text-[11px] font-black text-amber-950 dark:text-amber-200">Panquecca 🐾</span>
-                  <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">Vídeo Ativo</span>
-                </button>
-
-                {/* 2. JOÃO */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setImageUrl('/mascots/joao_escovando.jpg');
-                    setVideoUrl(undefined);
-                  }}
-                  className={`p-2 rounded-xl border-2 flex flex-col items-center gap-1 transition-all ${
-                    imageUrl?.includes('joao')
-                      ? 'bg-blue-100 dark:bg-blue-950/80 border-blue-500 ring-2 ring-blue-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 hover:border-blue-300'
-                  }`}
-                >
-                  <img
-                    src="/mascots/joao_escovando.jpg"
-                    alt="João"
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <span className="text-[11px] font-black text-blue-950 dark:text-blue-200">João 👦</span>
-                  <span className="text-[9px] text-stone-400">Card 2D</span>
-                </button>
-
-                {/* 3. GIGI */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setImageUrl('/mascots/gigi_escovando.jpg');
-                    setVideoUrl(undefined);
-                  }}
-                  className={`p-2 rounded-xl border-2 flex flex-col items-center gap-1 transition-all ${
-                    imageUrl?.includes('gigi')
-                      ? 'bg-pink-100 dark:bg-pink-950/80 border-pink-500 ring-2 ring-pink-400 font-bold shadow-xs'
-                      : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 hover:border-pink-300'
-                  }`}
-                >
-                  <img
-                    src="/mascots/gigi_escovando.jpg"
-                    alt="Gigi"
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <span className="text-[11px] font-black text-pink-950 dark:text-pink-200">Gigi 👧</span>
-                  <span className="text-[9px] text-stone-400">Card 2D</span>
-                </button>
-              </div>
-
-              {imageUrl && (imageUrl.includes('panquecca') || imageUrl.includes('joao') || imageUrl.includes('gigi')) && (
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-[10px] text-amber-800 dark:text-amber-300 font-semibold">
-                    ✓ Ilustração com camiseta oficial selecionada
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
+                    if (videoUrl || imageUrl?.includes('panquecca')) {
                       setImageUrl(undefined);
                       setVideoUrl(undefined);
-                    }}
-                    className="text-[10px] text-rose-500 hover:underline font-bold"
-                  >
-                    Remover Mascote
-                  </button>
-                </div>
-              )}
+                    } else {
+                      setImageUrl('/mascots/panquecca_escovando.jpg');
+                      setVideoUrl('/mascots/panquecca_1x1.mp4');
+                    }
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-black transition-all shrink-0 active:scale-95 shadow-2xs ${
+                    videoUrl || imageUrl?.includes('panquecca')
+                      ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                      : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 hover:bg-amber-100'
+                  }`}
+                >
+                  {videoUrl || imageUrl?.includes('panquecca') ? '✓ Ativada' : '+ Ativar'}
+                </button>
+              </div>
             </div>
 
             {/* ARASAAC Pictogram Selection Section (CAA) */}
