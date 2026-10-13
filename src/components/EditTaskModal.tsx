@@ -83,7 +83,7 @@ function getPanqueccaAssetsForTitle(taskTitle: string): { image: string; video?:
     return { image: '/mascots/panquecca_dormir.jpg' };
   }
   if (t.includes('mão') || t.includes('mao') || t.includes('lavar')) {
-    return { image: '/mascots/panquecca_lavando_maos.jpg' };
+    return { image: '/mascots/panquecca_lavando_maos.jpg', video: '/mascots/panquecca_lavando_maos.mp4' };
   }
   return { image: '/mascots/panquecca_escovando.jpg', video: '/mascots/panquecca_1x1.mp4' };
 }

@@ -396,6 +396,11 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
             t.imageUrl = '/mascots/panquecca_dormir.jpg';
             changed = true;
           }
+          // 7. Lavar as mãos
+          if (lower.includes('lavar') || lower.includes('mão') || lower.includes('mao')) {
+            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_lavando_maos.jpg'; changed = true; }
+            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_lavando_maos.mp4'; changed = true; }
+          }
         });
       }
     }

@@ -38,8 +38,8 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   const isCompleted = task.completed;
   const hasSubtasks = Boolean(task.subtasks && task.subtasks.length > 0);
   const allSubtasksDone = hasSubtasks && task.subtasks.every((s) => s.completed);
-  // Only celebrate if all subtasks were actually completed in this session
-  const showCelebrationImage = allSubtasksDone;
+  // Show celebration image if task is completed or all subtasks were done
+  const showCelebrationImage = isCompleted || allSubtasksDone;
 
   const getCelebrateImage = () => {
     if (task.imageUrl?.includes('joao')) return '/mascots/joao_sorriso.jpg';
