@@ -495,6 +495,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
               return (
                 <div
+                  data-help-id="task-edit-mascot"
                   className={`p-3.5 border-2 rounded-2xl space-y-2.5 transition-all ${
                     isMascotEnabled
                       ? 'bg-gradient-to-br from-amber-50/80 to-orange-50/50 dark:from-stone-850 dark:to-stone-900 border-amber-400 dark:border-amber-600 shadow-xs'
@@ -554,6 +555,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     <div className="flex flex-col gap-1.5 shrink-0">
                       <button
                         type="button"
+                        data-help-id="task-edit-mascot-toggle"
                         onClick={() => setIsMascotEnabled((prev) => !prev)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-2xs ${
                           isMascotEnabled
@@ -567,6 +569,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                       {isMascotEnabled && (
                         <button
                           type="button"
+                          data-help-id="task-edit-mascot-picker"
                           onClick={() => setIsMascotPickerOpen((prev) => !prev)}
                           className="px-2 py-1 rounded-lg text-[10px] font-bold bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 flex items-center justify-center gap-1 transition-all"
                         >
@@ -588,6 +591,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                         {isMascotManuallySelected && (
                           <button
                             type="button"
+                            data-help-id="task-edit-mascot-auto"
                             onClick={() => {
                               setIsMascotManuallySelected(false);
                               const auto = findMascotConfigForTitle(title || initialTask?.title || '');

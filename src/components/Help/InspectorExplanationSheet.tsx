@@ -17,6 +17,10 @@ import {
   CheckSquare,
   Timer,
   Check,
+  Film,
+  Image as ImageIcon,
+  ListChecks,
+  Mic,
 } from 'lucide-react';
 import { INSPECTOR_ITEMS, InspectorItem } from './helpData';
 
@@ -42,6 +46,11 @@ const ITEM_ICONS: Record<string, React.ReactNode> = {
   ArrowRight: <ArrowRight className="w-5 h-5 text-emerald-400" />,
   CheckSquare: <CheckSquare className="w-5 h-5 text-teal-400" />,
   Timer: <Timer className="w-5 h-5 text-amber-400" />,
+  Check: <Check className="w-5 h-5 text-emerald-400" />,
+  Film: <Film className="w-5 h-5 text-amber-400" />,
+  Image: <ImageIcon className="w-5 h-5 text-indigo-400" />,
+  ListChecks: <ListChecks className="w-5 h-5 text-teal-400" />,
+  Mic: <Mic className="w-5 h-5 text-amber-400" />,
 };
 
 const CATEGORY_LABELS: Record<InspectorItem['category'], { label: string; color: string }> = {

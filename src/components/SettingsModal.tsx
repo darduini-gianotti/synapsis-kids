@@ -604,6 +604,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </span>
                 <button
                   type="button"
+                  data-help-id="settings-mascot-voice-test"
                   onClick={() => {
                     const updated: AppSettings = {
                       ...localSettings,
