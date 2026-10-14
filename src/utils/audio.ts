@@ -2,38 +2,78 @@ import confetti from 'canvas-confetti';
 import { SoundAlert, VoiceCharacterStyle } from '../types';
 
 export const CORE_TASK_AUDIO_MAP: Record<string, string> = {
+  // 1. Acordar
   'acordar': '/audio/task_acordar.mp3',
   'espreguiçar': '/audio/task_acordar.mp3',
+  'espreguicar': '/audio/task_acordar.mp3',
+  'bom dia': '/audio/task_acordar.mp3',
+
+  // 2. Escovar Dentes
   'escovar': '/audio/task_escovar_dentes.mp3',
   'dente': '/audio/task_escovar_dentes.mp3',
+  'dentes': '/audio/task_escovar_dentes.mp3',
+
+  // 3. Café da Manhã (Exclusivo café da manhã, sem colidir com lanche da tarde)
+  'cafe da manha': '/audio/task_cafe_manha.mp3',
+  'café da manhã': '/audio/task_cafe_manha.mp3',
   'cafe': '/audio/task_cafe_manha.mp3',
   'café': '/audio/task_cafe_manha.mp3',
+
+  // 4. Escola & Mochila
   'escola': '/audio/task_escola.mp3',
   'aula': '/audio/task_escola.mp3',
+  'colégio': '/audio/task_escola.mp3',
+  'colegio': '/audio/task_escola.mp3',
+  'mochila': '/audio/task_mochila.mp3',
+
+  // 5. Almoço & Jantar
   'almoco': '/audio/task_almoco.mp3',
   'almoço': '/audio/task_almoco.mp3',
+  'jantar': '/audio/task_jantar.mp3',
+
+  // 6. Lição de Casa / Estudo
   'licao': '/audio/task_licao.mp3',
   'lição': '/audio/task_licao.mp3',
   'estudar': '/audio/task_licao.mp3',
   'estudo': '/audio/task_licao.mp3',
+
+  // 7. Brincar & Lazer
   'brincar': '/audio/task_brincar.mp3',
   'brincadeira': '/audio/task_brincar.mp3',
-  'guardar': '/audio/task_guardar_brinquedos.mp3',
+  'brincadeiras': '/audio/task_brincar.mp3',
+
+  // 8. Guardar Brinquedos & Tarefas da Casa
+  'guardar brinquedos': '/audio/task_guardar_brinquedos.mp3',
+  'guardar brinquedo': '/audio/task_guardar_brinquedos.mp3',
+  'brinquedos': '/audio/task_guardar_brinquedos.mp3',
   'brinquedo': '/audio/task_guardar_brinquedos.mp3',
+  'tarefas da casa': '/audio/task_tarefas_casa.mp3',
+  'tarefa da casa': '/audio/task_tarefas_casa.mp3',
+
+  // 9. Banho
   'banho': '/audio/task_banho.mp3',
-  'jantar': '/audio/task_jantar.mp3',
+  'chuveiro': '/audio/task_banho.mp3',
+
+  // 10. Banheiro
+  'banheiro': '/audio/task_banheiro.mp3',
+  'xixi': '/audio/task_banheiro.mp3',
+  'vaso sanitário': '/audio/task_banheiro.mp3',
+  'vaso sanitario': '/audio/task_banheiro.mp3',
+  'privada': '/audio/task_banheiro.mp3',
+
+  // 11. Terapia
+  'terapia': '/audio/task_terapia.mp3',
+  'fono': '/audio/task_terapia.mp3',
+
+  // 12. Passeio & Parquinho
+  'passeio': '/audio/task_passeio.mp3',
+  'parque': '/audio/task_passeio.mp3',
+  'parquinho': '/audio/task_passeio.mp3',
+
+  // 13. Dormir
   'dormir': '/audio/task_dormir.mp3',
   'sono': '/audio/task_dormir.mp3',
-  'xixi': '/audio/task_banheiro.mp3',
-  'banheiro': '/audio/task_banheiro.mp3',
-  'vaso': '/audio/task_banheiro.mp3',
-  'mochila': '/audio/task_mochila.mp3',
-  'terapia': '/audio/task_terapia.mp3',
-  'passeio': '/audio/task_passeio.mp3',
-  'parquinho': '/audio/task_passeio.mp3',
-  'tarefa': '/audio/task_tarefas_casa.mp3',
-  'tarefas': '/audio/task_tarefas_casa.mp3',
-  'casa': '/audio/task_tarefas_casa.mp3',
+  'boa noite': '/audio/task_dormir.mp3',
 };
 
 export function getCoreTaskAudioUrl(title: string): string | null {
@@ -328,9 +368,9 @@ class AudioManager {
     this.voiceStyle = style;
 
     if (style === 'mascot') {
-      // Mascote Infantil em Cadência Mais Calma (Apoio TEA e sensorial)
-      this.preferredPitch = pitch !== undefined ? pitch : 1.28;
-      this.preferredRate = rate !== undefined ? rate : 0.88;
+      // Mascote Infantil em Cadência Mais Calma (Apoio TEA e sensorial com voz alegre e fofa)
+      this.preferredPitch = (pitch !== undefined && pitch >= 1.15) ? pitch : 1.28;
+      this.preferredRate = (rate !== undefined && rate <= 0.95) ? rate : 0.88;
     } else if (style === 'gentle') {
       // Calm, reassuring, sensory-friendly tone for autism/TEA
       this.preferredPitch = pitch !== undefined ? pitch : 1.05;
@@ -420,8 +460,12 @@ class AudioManager {
       if (name.includes('google')) score += 90;
       if (name.includes('online')) score += 70;
       if (name.includes('neural')) score += 70;
-      if (name.includes('francisca') || name.includes('thalita') || name.includes('luciana') || name.includes('felipe') || name.includes('antonio') || name.includes('maria')) {
-        score += 50;
+      // Vozes femininas e jovens com entonação doce para a mascote
+      if (name.includes('francisca') || name.includes('thalita') || name.includes('luciana') || name.includes('yara') || name.includes('maria') || name.includes('leticia')) {
+        score += 60;
+      }
+      if (name.includes('felipe') || name.includes('antonio')) {
+        score += 40;
       }
       // Deprioritize older robotic desktop voices
       if (name.includes('desktop') || name.includes('espeak')) score -= 50;
@@ -448,8 +492,16 @@ class AudioManager {
     try {
       window.speechSynthesis.cancel(); // Stop any pending speech
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = this.preferredRate || 0.95; // Natural human conversational pace
-      utterance.pitch = this.preferredPitch || 1.0; // Warm, natural human pitch
+      if (this.voiceStyle === 'mascot') {
+        utterance.rate = this.preferredRate || 0.88; // Cadência calma e amigável
+        utterance.pitch = Math.max(1.28, this.preferredPitch || 1.28); // Tom alegre infantil de mascote
+      } else if (this.voiceStyle === 'gentle') {
+        utterance.rate = this.preferredRate || 0.88;
+        utterance.pitch = this.preferredPitch || 1.05;
+      } else {
+        utterance.rate = this.preferredRate || 0.95;
+        utterance.pitch = this.preferredPitch || 1.0;
+      }
       utterance.volume = effVol;
 
       const liveVoices = window.speechSynthesis.getVoices();
@@ -585,7 +637,7 @@ class AudioManager {
       return this.playRecording(audioRecording, effVol);
     }
 
-    if (this.voiceStyle === 'mascot' && !this.preferredVoiceURI) {
+    if (this.voiceStyle === 'mascot') {
       const coreAudio = getCoreTaskAudioUrl(title);
       if (coreAudio) {
         return this.playRecording(coreAudio, effVol).catch(() => {

@@ -1,4 +1,5 @@
 import { DayRoutine, DayOfWeek, RoutineTask, AppSettings } from '../types';
+import { getPanqueccaAssetsForTitle } from './mascotAssets';
 
 const STORAGE_KEY_ROUTINES = 'tea_routines_v1';
 const STORAGE_KEY_SETTINGS = 'tea_settings_v1';
@@ -47,21 +48,42 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
   {
     id: 'task-1',
     title: 'Acordar e Espreguiçar',
-    time: '07:30',
+    time: '07:00',
     category: 'hygiene',
     iconName: 'SunMedium',
     color: 'amber',
     completed: false,
     subtasks: [],
     soundAlert: 'chime',
-    voicePhrase: 'Bom dia! Hora de acordar com calma.',
+    voicePhrase: 'Bom dia! Hora de acordar com calma e alegria!',
     durationMinutes: 10,
     notes: 'Abrir a cortina e respirar fundo',
+    imageUrl: '/mascots/panquecca_acordar.jpg',
+    videoUrl: '/mascots/panquecca_acordar.mp4',
+  },
+  {
+    id: 'task-bed',
+    title: 'Arrumar a Cama',
+    time: '07:15',
+    category: 'chores',
+    iconName: 'BedDouble',
+    color: 'indigo',
+    completed: false,
+    subtasks: [
+      { id: 'sub-bed-1', title: 'Esticar o lençol', completed: false, iconName: 'Sparkles' },
+      { id: 'sub-bed-2', title: 'Ajeitar o travesseiro', completed: false, iconName: 'Smile' },
+      { id: 'sub-bed-3', title: 'Dobrar a coberta', completed: false, iconName: 'Check' },
+    ],
+    soundAlert: 'bell',
+    voicePhrase: 'Hora de arrumar a cama e deixar o quarto lindo!',
+    durationMinutes: 10,
+    imageUrl: '/mascots/panquecca_arrumar_cama.jpg',
+    videoUrl: '/mascots/panquecca_arrumar_cama.mp4',
   },
   {
     id: 'task-toilet',
     title: 'Ir ao Banheiro',
-    time: '07:45',
+    time: '07:30',
     category: 'hygiene',
     iconName: 'Toilet',
     color: 'sky',
@@ -72,6 +94,27 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     durationMinutes: 10,
     notes: 'Abaixe a roupa, use o papel e dê a descarga',
     imageUrl: '/mascots/panquecca_banheiro.jpg',
+    videoUrl: '/mascots/panquecca_banheiro.mp4',
+  },
+  {
+    id: 'task-wash-hands',
+    title: 'Lavar as Mãos',
+    time: '07:45',
+    category: 'hygiene',
+    iconName: 'Hand',
+    color: 'cyan',
+    completed: false,
+    subtasks: [
+      { id: 'sub-hand-1', title: 'Molhar as mãos', completed: false, iconName: 'Droplets' },
+      { id: 'sub-hand-2', title: 'Passar sabonete e esfregar bem', completed: false, iconName: 'Sparkles' },
+      { id: 'sub-hand-3', title: 'Enxaguar na água', completed: false, iconName: 'Droplets' },
+      { id: 'sub-hand-4', title: 'Secar na toalha limpa', completed: false, iconName: 'Check' },
+    ],
+    soundAlert: 'chime',
+    voicePhrase: 'Hora de lavar as mãozinhas com água e sabão!',
+    durationMinutes: 5,
+    imageUrl: '/mascots/panquecca_lavando_maos.jpg',
+    videoUrl: '/mascots/panquecca_lavando_maos.mp4',
   },
   {
     id: 'task-2',
@@ -83,9 +126,10 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'marimba',
-    voicePhrase: 'Hora do café da manhã!',
+    voicePhrase: 'Hora do café da manhã bem gostoso!',
     durationMinutes: 25,
     imageUrl: '/mascots/panquecca_comendo.jpg',
+    videoUrl: '/mascots/panquecca_comendo.mp4',
   },
   {
     id: 'task-3',
@@ -100,12 +144,61 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora de escovar os dentinhos!',
     durationMinutes: 3,
     imageUrl: '/mascots/panquecca_escovando.jpg',
-    videoUrl: '/mascots/panquecca_1x1.mp4',
+    videoUrl: '/mascots/panquecca_escovando.mp4',
+  },
+  {
+    id: 'task-clothes',
+    title: 'Vestir a Roupa',
+    time: '08:45',
+    category: 'chores',
+    iconName: 'Shirt',
+    color: 'sky',
+    completed: false,
+    subtasks: [
+      { id: 'sub-clo-1', title: 'Escolher a roupa confortável', completed: false, iconName: 'Shirt' },
+      { id: 'sub-clo-2', title: 'Vestir a camiseta e calça/short', completed: false, iconName: 'Check' },
+      { id: 'sub-clo-3', title: 'Calçar meias e sapatos', completed: false, iconName: 'Smile' },
+    ],
+    soundAlert: 'chime',
+    voicePhrase: 'Hora de vestir uma roupinha bem confortável!',
+    durationMinutes: 10,
+    imageUrl: '/mascots/panquecca_vestir_roupa.jpg',
+    videoUrl: '/mascots/panquecca_vestir_roupa.mp4',
+  },
+  {
+    id: 'task-comb',
+    title: 'Pentear o Cabelo',
+    time: '08:55',
+    category: 'hygiene',
+    iconName: 'Sparkles',
+    color: 'teal',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'chime',
+    voicePhrase: 'Hora de pentear o cabelinho!',
+    durationMinutes: 5,
+    imageUrl: '/mascots/panquecca_pentear.jpg',
+    videoUrl: '/mascots/panquecca_pentear.mp4',
+  },
+  {
+    id: 'task-water-1',
+    title: 'Beber Água',
+    time: '09:15',
+    category: 'meals',
+    iconName: 'GlassWater',
+    color: 'blue',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'chime',
+    voicePhrase: 'Hora de beber água fresca e se hidratar!',
+    durationMinutes: 5,
+    imageUrl: '/mascots/panquecca_beber_agua.jpg',
+    videoUrl: '/mascots/panquecca_beber_agua.mp4',
   },
   {
     id: 'task-4',
     title: 'Tarefas da Casa',
-    time: '09:00',
+    time: '09:30',
     category: 'chores',
     iconName: 'CheckSquare',
     color: 'indigo',
@@ -116,11 +209,12 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     durationMinutes: 20,
     notes: 'Marque cada item que você concluir!',
     imageUrl: '/mascots/panquecca_guardar_brinquedos.jpg',
+    videoUrl: '/mascots/panquecca_guardar_brinquedos.mp4',
   },
   {
     id: 'task-5',
     title: 'Momento Livre / Brincadeira',
-    time: '10:00',
+    time: '10:15',
     category: 'play',
     iconName: 'Gamepad2',
     color: 'violet',
@@ -129,6 +223,8 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'harp',
     voicePhrase: 'Hora de brincar e relaxar!',
     durationMinutes: 60,
+    imageUrl: '/mascots/panquecca_brincar.jpg',
+    videoUrl: '/mascots/panquecca_brincar.mp4',
   },
   {
     id: 'task-6',
@@ -142,6 +238,8 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'marimba',
     voicePhrase: 'O almoço está pronto!',
     durationMinutes: 30,
+    imageUrl: '/mascots/panquecca_comendo.jpg',
+    videoUrl: '/mascots/panquecca_comendo.mp4',
   },
   {
     id: 'task-7',
@@ -159,6 +257,42 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'chime',
     voicePhrase: 'Hora da lição com bastante foco.',
     durationMinutes: 45,
+    imageUrl: '/mascots/panquecca_licao.jpg',
+    videoUrl: '/mascots/panquecca_licao.mp4',
+  },
+  {
+    id: 'task-lanche',
+    title: 'Hora do Lanche / Fruta',
+    time: '15:30',
+    category: 'meals',
+    iconName: 'Apple',
+    color: 'amber',
+    completed: false,
+    subtasks: [
+      { id: 'sub-lan-1', title: 'Lavar as mãos antes do lanche', completed: false, iconName: 'Hand' },
+      { id: 'sub-lan-2', title: 'Comer a fruta ou lanchinho gostoso', completed: false, iconName: 'Apple' },
+      { id: 'sub-lan-3', title: 'Guardar o pratinho na pia', completed: false, iconName: 'Check' },
+    ],
+    soundAlert: 'marimba',
+    voicePhrase: 'Hora do lanche gostoso e saudável!',
+    durationMinutes: 20,
+    imageUrl: '/mascots/panquecca_fruta.jpg',
+    videoUrl: '/mascots/panquecca_fruta.mp4',
+  },
+  {
+    id: 'task-water-2',
+    title: 'Beber Água da Tarde',
+    time: '16:30',
+    category: 'meals',
+    iconName: 'GlassWater',
+    color: 'blue',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'chime',
+    voicePhrase: 'Hora de beber água fresca e se hidratar!',
+    durationMinutes: 5,
+    imageUrl: '/mascots/panquecca_beber_agua.jpg',
+    videoUrl: '/mascots/panquecca_beber_agua.mp4',
   },
   {
     id: 'task-8',
@@ -173,6 +307,25 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora de um banho bem gostoso!',
     durationMinutes: 20,
     imageUrl: '/mascots/panquecca_banho.jpg',
+    videoUrl: '/mascots/panquecca_banho.mp4',
+  },
+  {
+    id: 'task-screen',
+    title: 'Desligar Telas e Desconectar',
+    time: '18:00',
+    category: 'chores',
+    iconName: 'Tv',
+    color: 'purple',
+    completed: false,
+    subtasks: [
+      { id: 'sub-scr-1', title: 'Salvar e desligar os jogos', completed: false, iconName: 'Check' },
+      { id: 'sub-scr-2', title: 'Guardar o celular/tablet no lugar', completed: false, iconName: 'Box' },
+    ],
+    soundAlert: 'bell',
+    voicePhrase: 'Hora de desligar as telas e descansar os olhinhos!',
+    durationMinutes: 15,
+    imageUrl: '/mascots/panquecca_desligar_telas.jpg',
+    videoUrl: '/mascots/panquecca_desligar_telas.mp4',
   },
   {
     id: 'task-9',
@@ -186,6 +339,23 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     soundAlert: 'bell',
     voicePhrase: 'Vamos preparar a mochila de amanhã?',
     durationMinutes: 15,
+    imageUrl: '/mascots/panquecca_escola.jpg',
+    videoUrl: '/mascots/panquecca_escola.mp4',
+  },
+  {
+    id: 'task-calm',
+    title: 'Momento de Acalmar / Leitura',
+    time: '20:30',
+    category: 'sleep',
+    iconName: 'HeartHandshake',
+    color: 'indigo',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'harp',
+    voicePhrase: 'Hora de desacelerar, respirar fundo e relaxar.',
+    durationMinutes: 20,
+    imageUrl: '/mascots/panquecca_acalmar.jpg',
+    videoUrl: '/mascots/panquecca_acalmar.mp4',
   },
   {
     id: 'task-10',
@@ -200,6 +370,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     voicePhrase: 'Boa noite! Hora de relaxar e sonhar.',
     durationMinutes: 15,
     imageUrl: '/mascots/panquecca_dormir.jpg',
+    videoUrl: '/mascots/panquecca_dormir.mp4',
   },
 ];
 
@@ -216,6 +387,8 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'chime',
     voicePhrase: 'Bom dia! Hoje é fim de semana para descansar.',
     durationMinutes: 15,
+    imageUrl: '/mascots/panquecca_acordar.jpg',
+    videoUrl: '/mascots/panquecca_acordar.mp4',
   },
   {
     id: 'task-we-2',
@@ -230,6 +403,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora do café!',
     durationMinutes: 30,
     imageUrl: '/mascots/panquecca_comendo.jpg',
+    videoUrl: '/mascots/panquecca_comendo.mp4',
   },
   {
     id: 'task-we-3',
@@ -244,7 +418,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora de escovar os dentinhos!',
     durationMinutes: 3,
     imageUrl: '/mascots/panquecca_escovando.jpg',
-    videoUrl: '/mascots/panquecca_1x1.mp4',
+    videoUrl: '/mascots/panquecca_escovando.mp4',
   },
   {
     id: 'task-we-4',
@@ -262,6 +436,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     voicePhrase: 'Tarefinhas da casa rápidas para depois brincar!',
     durationMinutes: 15,
     imageUrl: '/mascots/panquecca_guardar_brinquedos.jpg',
+    videoUrl: '/mascots/panquecca_guardar_brinquedos.mp4',
   },
   {
     id: 'task-we-5',
@@ -275,6 +450,8 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'chime',
     voicePhrase: 'Hora de passear ao ar livre!',
     durationMinutes: 90,
+    imageUrl: '/mascots/panquecca_brincar.jpg',
+    videoUrl: '/mascots/panquecca_brincar.mp4',
   },
   {
     id: 'task-we-6',
@@ -288,11 +465,13 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     soundAlert: 'marimba',
     voicePhrase: 'Almoço servido!',
     durationMinutes: 40,
+    imageUrl: '/mascots/panquecca_comendo.jpg',
+    videoUrl: '/mascots/panquecca_comendo.mp4',
   },
   {
     id: 'task-we-7',
     title: 'Filme em Família / Desenho',
-    time: '15:30',
+    time: '14:30',
     category: 'play',
     iconName: 'Tv',
     color: 'purple',
@@ -300,7 +479,24 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     subtasks: [],
     soundAlert: 'harp',
     voicePhrase: 'Hora do cineminha em família!',
-    durationMinutes: 90,
+    durationMinutes: 75,
+    imageUrl: '/mascots/panquecca_brincar.jpg',
+    videoUrl: '/mascots/panquecca_brincar.mp4',
+  },
+  {
+    id: 'task-we-lanche',
+    title: 'Hora do Lanche / Fruta',
+    time: '16:00',
+    category: 'meals',
+    iconName: 'Apple',
+    color: 'amber',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'marimba',
+    voicePhrase: 'Hora do lanche gostoso e saudável!',
+    durationMinutes: 20,
+    imageUrl: '/mascots/panquecca_fruta.jpg',
+    videoUrl: '/mascots/panquecca_fruta.mp4',
   },
   {
     id: 'task-we-8',
@@ -315,6 +511,22 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     voicePhrase: 'Hora do banho relaxante.',
     durationMinutes: 25,
     imageUrl: '/mascots/panquecca_banho.jpg',
+    videoUrl: '/mascots/panquecca_banho.mp4',
+  },
+  {
+    id: 'task-we-calm',
+    title: 'Momento de Acalmar e Relaxar',
+    time: '20:30',
+    category: 'sleep',
+    iconName: 'HeartHandshake',
+    color: 'indigo',
+    completed: false,
+    subtasks: [],
+    soundAlert: 'harp',
+    voicePhrase: 'Hora de descansar e relaxar a mente.',
+    durationMinutes: 30,
+    imageUrl: '/mascots/panquecca_acalmar.jpg',
+    videoUrl: '/mascots/panquecca_acalmar.mp4',
   },
   {
     id: 'task-we-9',
@@ -329,6 +541,7 @@ const DEFAULT_WEEKEND_TASKS: RoutineTask[] = [
     voicePhrase: 'Boa noite e bons sonhos!',
     durationMinutes: 20,
     imageUrl: '/mascots/panquecca_dormir.jpg',
+    videoUrl: '/mascots/panquecca_dormir.mp4',
   },
 ];
 
@@ -359,49 +572,83 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
     const parsed: Record<DayOfWeek, DayRoutine> = JSON.parse(raw);
     let changed = false;
 
-    // Auto-migrate mascot images and videos for core routines
+    // Auto-migrate mascot images and videos for all 20 Pixar 3D routines
     for (const day in parsed) {
       const routine = parsed[day as unknown as DayOfWeek];
       if (routine?.tasks) {
+        // 1. Atualiza e enriquece cada tarefa existente
         routine.tasks.forEach((t) => {
-          const lower = t.title.toLowerCase();
+          const lower = (t.title || '').toLowerCase();
 
-          // 1. Escovar os dentes
-          if (t.id === 'task-3' || t.id === 'task-we-3' || lower.includes('escovar')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_escovando.jpg'; changed = true; }
-            if (t.videoUrl !== '/mascots/panquecca_escovando.mp4') { t.videoUrl = '/mascots/panquecca_escovando.mp4'; changed = true; }
+          // A) Lanche e Fruta (prioridade para garantir vídeo e frase correta)
+          if (lower.includes('lanche') || lower.includes('fruta')) {
+            if (!t.imageUrl || t.imageUrl.includes('placeholder')) {
+              t.imageUrl = '/mascots/panquecca_fruta.jpg';
+              changed = true;
+            }
+            if (t.videoUrl !== '/mascots/panquecca_fruta.mp4') {
+              t.videoUrl = '/mascots/panquecca_fruta.mp4';
+              changed = true;
+            }
+            if (!t.voicePhrase) {
+              t.voicePhrase = 'Hora do lanche gostoso e saudável!';
+              changed = true;
+            }
+            if (!t.iconName || t.iconName === 'Circle') {
+              t.iconName = 'Apple';
+              changed = true;
+            }
+            return;
           }
-          // 2. Banheiro
-          if (t.id === 'task-toilet' || lower.includes('banheiro')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_banheiro.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_banheiro.mp4'; changed = true; }
-          }
-          // 3. Café da Manhã
-          if (t.id === 'task-2' || t.id === 'task-we-2' || lower.includes('café da manhã') || lower.includes('cafe da manha')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_comendo.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_comendo.mp4'; changed = true; }
-          }
-          // 4. Banho
-          if (t.id === 'task-8' || t.id === 'task-we-8' || lower.includes('banho')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_banho.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_banho.mp4'; changed = true; }
-          }
-          // 5. Tarefas da casa / Brinquedos
-          if (t.id === 'task-4' || t.id === 'task-we-4' || lower.includes('tarefas da casa') || lower.includes('brinquedos')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_guardar_brinquedos.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_guardar_brinquedos.mp4'; changed = true; }
-          }
-          // 6. Dormir
-          if (t.id === 'task-10' || t.id === 'task-we-9' || lower.includes('dormir')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_dormir.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_dormir.mp4'; changed = true; }
-          }
-          // 7. Lavar as mãos
-          if (lower.includes('lavar') || lower.includes('mão') || lower.includes('mao')) {
-            if (!t.imageUrl) { t.imageUrl = '/mascots/panquecca_lavando_maos.jpg'; changed = true; }
-            if (!t.videoUrl) { t.videoUrl = '/mascots/panquecca_lavando_maos.mp4'; changed = true; }
+
+          // B) Demais atividades: busca assets 3D Pixar oficiais correspondentes
+          const assets = getPanqueccaAssetsForTitle(t.title);
+          if (assets) {
+            if (!t.imageUrl || t.imageUrl.includes('placeholder')) {
+              t.imageUrl = assets.image;
+              changed = true;
+            }
+            if (!t.videoUrl || t.videoUrl === '/mascots/panquecca_1x1.mp4') {
+              if (assets.video) {
+                t.videoUrl = assets.video;
+                changed = true;
+              }
+            }
           }
         });
+
+        // 2. Garante que todo dia tenha a Hora do Lanche / Fruta
+        const hasLanche = routine.tasks.some((t) => {
+          const l = (t.title || '').toLowerCase();
+          return l.includes('lanche') || l.includes('fruta');
+        });
+
+        if (!hasLanche) {
+          const dayNum = Number(day);
+          const isWeekend = dayNum === 0 || dayNum === 6;
+          const lancheTask: RoutineTask = {
+            id: isWeekend ? `task-we-lanche-${day}` : `task-lanche-${day}`,
+            title: 'Hora do Lanche / Fruta',
+            time: isWeekend ? '16:00' : '15:30',
+            category: 'meals',
+            iconName: 'Apple',
+            color: 'amber',
+            completed: false,
+            subtasks: [
+              { id: `sub-lan-1-${day}`, title: 'Lavar as mãos antes do lanche', completed: false, iconName: 'Hand' },
+              { id: `sub-lan-2-${day}`, title: 'Comer a fruta ou lanchinho gostoso', completed: false, iconName: 'Apple' },
+              { id: `sub-lan-3-${day}`, title: 'Guardar o pratinho na pia', completed: false, iconName: 'Check' },
+            ],
+            soundAlert: 'marimba',
+            voicePhrase: 'Hora do lanche gostoso e saudável!',
+            durationMinutes: 20,
+            imageUrl: '/mascots/panquecca_fruta.jpg',
+            videoUrl: '/mascots/panquecca_fruta.mp4',
+          };
+          routine.tasks.push(lancheTask);
+          routine.tasks.sort((a, b) => a.time.localeCompare(b.time));
+          changed = true;
+        }
       }
     }
 
