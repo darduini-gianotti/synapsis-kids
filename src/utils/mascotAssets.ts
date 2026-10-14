@@ -221,6 +221,36 @@ export const PANQUECCA_CATALOG: MascotTaskConfig[] = [
     celebrationBadge: '🎉 Diversão Merecida!',
     celebrationTitle: 'Alegria e tempo bom com a família!',
   },
+  {
+    id: 'lavar_rosto',
+    keywords: ['lavar rosto', 'rosto', 'lavar a cara', 'água no rosto', 'agua no rosto', 'refrescar'],
+    titlePt: 'Lavar o Rosto',
+    category: 'higiene',
+    executionImage: '/mascots/panquecca_lavar_rosto.jpg',
+    celebrationImage: '/mascots/panquecca_lavar_rosto_fim.jpg',
+    celebrationBadge: '💧 Rosto Fresquinho!',
+    celebrationTitle: 'Rosto limpo, refrescado e cheio de energia!',
+  },
+  {
+    id: 'desligar_telas',
+    keywords: ['tela', 'telas', 'celular', 'tablet', 'ipad', 'computador', 'televisão', 'televisao', 'tv', 'videogame', 'game', 'desligar tela', 'desconectar'],
+    titlePt: 'Desligar Telas / Desconectar',
+    category: 'dia_a_dia',
+    executionImage: '/mascots/panquecca_desligar_telas.jpg',
+    celebrationImage: '/mascots/panquecca_desligar_telas_fim.jpg',
+    celebrationBadge: '📵 Desconectado!',
+    celebrationTitle: 'Telas guardadas e olhos descansando!',
+  },
+  {
+    id: 'acalmar_respirar',
+    keywords: ['acalmar', 'respirar', 'respiração', 'respiracao', 'calma', 'sensorial', 'pausa', 'meditar', 'relaxar', 'tranquilo'],
+    titlePt: 'Respiração & Acalmar / Pausa Sensorial',
+    category: 'saude',
+    executionImage: '/mascots/panquecca_acalmar.jpg',
+    celebrationImage: '/mascots/panquecca_acalmar_fim.jpg',
+    celebrationBadge: '🧘 Momento Zen!',
+    celebrationTitle: 'Corpo relaxado, respiração calma e coração feliz!',
+  },
 ];
 
 /**
@@ -267,6 +297,20 @@ export const EXISTING_MASCOT_FILES = new Set<string>([
   '/mascots/panquecca_terapia.jpg',
   '/mascots/panquecca_terapia.mp4',
   '/mascots/panquecca_terapia_fim.jpg',
+  '/mascots/panquecca_vestir_roupa.jpg',
+  '/mascots/panquecca_vestir_roupa_fim.jpg',
+  '/mascots/panquecca_pentear.jpg',
+  '/mascots/panquecca_pentear_fim.jpg',
+  '/mascots/panquecca_fruta.jpg',
+  '/mascots/panquecca_fruta_fim.jpg',
+  '/mascots/panquecca_brincar.jpg',
+  '/mascots/panquecca_brincar_fim.jpg',
+  '/mascots/panquecca_desligar_telas.jpg',
+  '/mascots/panquecca_desligar_telas_fim.jpg',
+  '/mascots/panquecca_lavar_rosto.jpg',
+  '/mascots/panquecca_lavar_rosto_fim.jpg',
+  '/mascots/panquecca_acalmar.jpg',
+  '/mascots/panquecca_acalmar_fim.jpg',
 ]);
 
 /**
