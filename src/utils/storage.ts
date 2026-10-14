@@ -442,7 +442,7 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
 
           // Se já tem a versão oficializada, descarta a versão legada/duplicada
           if (hasModernAlmoco && lower.includes('delicioso')) return false;
-          if (hasModernBanho && lower.includes('gostoso')) return false;
+          if (hasModernBanho && lower.includes('banho') && lower.includes('gostoso')) return false;
           if (hasModernCalm && (lower.includes('momento de acalmar') || lower.includes('leitura'))) return false;
           if (hasModernAcordar && lower.includes('sem pressa')) return false;
           if (hasModernDormir && lower === 'hora de dormir') return false;
@@ -574,7 +574,33 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
           changed = true;
         }
 
-        // 5. Ordena cronologicamente
+        // 5. Garante que todo dia tenha o Café da Manhã Gostoso
+        const hasCafe = routine.tasks.some((t) => {
+          const l = (t.title || '').toLowerCase();
+          return l.includes('café') || l.includes('cafe');
+        });
+
+        if (!hasCafe) {
+          const cafeTask: RoutineTask = {
+            id: 'task-2',
+            title: 'Café da Manhã Gostoso',
+            time: '08:00',
+            category: 'meals',
+            iconName: 'UtensilsCrossed',
+            color: 'emerald',
+            completed: false,
+            subtasks: [],
+            soundAlert: 'marimba',
+            voicePhrase: 'Hummm, que cheirinho bom! Hora do café da manhã para encher a barriguinha de energia!',
+            durationMinutes: 25,
+            imageUrl: '/mascots/panquecca_comendo.jpg',
+            videoUrl: '/mascots/panquecca_comendo.mp4',
+          };
+          routine.tasks.push(cafeTask);
+          changed = true;
+        }
+
+        // 6. Ordena cronologicamente
         routine.tasks.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
       }
     }
