@@ -8,41 +8,63 @@ export const CORE_TASK_AUDIO_MAP: Record<string, string> = {
   'espreguicar': '/audio/task_acordar.mp3',
   'bom dia': '/audio/task_acordar.mp3',
 
-  // 2. Escovar Dentes
-  'escovar': '/audio/task_escovar_dentes.mp3',
-  'dente': '/audio/task_escovar_dentes.mp3',
-  'dentes': '/audio/task_escovar_dentes.mp3',
+  // 2. Arrumar a Cama
+  'arrumar a cama': '/audio/task_arrumar_cama.mp3',
+  'arrumar cama': '/audio/task_arrumar_cama.mp3',
+  'cama': '/audio/task_arrumar_cama.mp3',
 
-  // 3. Café da Manhã (Exclusivo café da manhã, sem colidir com lanche da tarde)
+  // 3. Banheiro
+  'banheiro': '/audio/task_banheiro.mp3',
+  'xixi': '/audio/task_banheiro.mp3',
+  'vaso sanitário': '/audio/task_banheiro.mp3',
+  'vaso sanitario': '/audio/task_banheiro.mp3',
+  'privada': '/audio/task_banheiro.mp3',
+
+  // 4. Lavar as Mãos
+  'lavar as maos': '/audio/task_lavar_maos.mp3',
+  'lavar as mãos': '/audio/task_lavar_maos.mp3',
+  'lavar mao': '/audio/task_lavar_maos.mp3',
+  'lavar mão': '/audio/task_lavar_maos.mp3',
+  'lavando as maos': '/audio/task_lavar_maos.mp3',
+  'maos': '/audio/task_lavar_maos.mp3',
+  'mãos': '/audio/task_lavar_maos.mp3',
+
+  // 5. Café da Manhã (Exclusivo café da manhã)
   'cafe da manha': '/audio/task_cafe_manha.mp3',
   'café da manhã': '/audio/task_cafe_manha.mp3',
   'cafe': '/audio/task_cafe_manha.mp3',
   'café': '/audio/task_cafe_manha.mp3',
 
-  // 4. Escola & Mochila
-  'escola': '/audio/task_escola.mp3',
-  'aula': '/audio/task_escola.mp3',
-  'colégio': '/audio/task_escola.mp3',
-  'colegio': '/audio/task_escola.mp3',
-  'mochila': '/audio/task_mochila.mp3',
+  // 6. Escovar Dentes
+  'escovar': '/audio/task_escovar_dentes.mp3',
+  'dente': '/audio/task_escovar_dentes.mp3',
+  'dentes': '/audio/task_escovar_dentes.mp3',
 
-  // 5. Almoço & Jantar
-  'almoco': '/audio/task_almoco.mp3',
-  'almoço': '/audio/task_almoco.mp3',
-  'jantar': '/audio/task_jantar.mp3',
+  // 7. Vestir Roupa
+  'vestir a roupa': '/audio/task_vestir_roupa.mp3',
+  'vestir roupa': '/audio/task_vestir_roupa.mp3',
+  'vestir': '/audio/task_vestir_roupa.mp3',
+  'roupa': '/audio/task_vestir_roupa.mp3',
+  'roupas': '/audio/task_vestir_roupa.mp3',
 
-  // 6. Lição de Casa / Estudo
-  'licao': '/audio/task_licao.mp3',
-  'lição': '/audio/task_licao.mp3',
-  'estudar': '/audio/task_licao.mp3',
-  'estudo': '/audio/task_licao.mp3',
+  // 8. Pentear Cabelo
+  'pentear os cabelos': '/audio/task_pentear_cabelo.mp3',
+  'pentear o cabelo': '/audio/task_pentear_cabelo.mp3',
+  'pentear cabelo': '/audio/task_pentear_cabelo.mp3',
+  'pentear': '/audio/task_pentear_cabelo.mp3',
+  'cabelo': '/audio/task_pentear_cabelo.mp3',
+  'cabelos': '/audio/task_pentear_cabelo.mp3',
 
-  // 7. Brincar & Lazer
-  'brincar': '/audio/task_brincar.mp3',
-  'brincadeira': '/audio/task_brincar.mp3',
-  'brincadeiras': '/audio/task_brincar.mp3',
+  // 9. Tomar Água / Beber Água
+  'beber agua': '/audio/task_agua.mp3',
+  'beber água': '/audio/task_agua.mp3',
+  'tomar agua': '/audio/task_agua.mp3',
+  'tomar água': '/audio/task_agua.mp3',
+  'agua': '/audio/task_agua.mp3',
+  'água': '/audio/task_agua.mp3',
+  'hidratar': '/audio/task_agua.mp3',
 
-  // 8. Guardar Brinquedos & Tarefas da Casa
+  // 10. Guardar Brinquedos & Tarefas da Casa
   'guardar brinquedos': '/audio/task_guardar_brinquedos.mp3',
   'guardar brinquedo': '/audio/task_guardar_brinquedos.mp3',
   'brinquedos': '/audio/task_guardar_brinquedos.mp3',
@@ -50,27 +72,68 @@ export const CORE_TASK_AUDIO_MAP: Record<string, string> = {
   'tarefas da casa': '/audio/task_tarefas_casa.mp3',
   'tarefa da casa': '/audio/task_tarefas_casa.mp3',
 
-  // 9. Banho
+  // 11. Brincar & Lazer
+  'brincar': '/audio/task_brincar.mp3',
+  'brincadeira': '/audio/task_brincar.mp3',
+  'brincadeiras': '/audio/task_brincar.mp3',
+
+  // 12. Almoço & Jantar
+  'almoco': '/audio/task_almoco.mp3',
+  'almoço': '/audio/task_almoco.mp3',
+  'jantar': '/audio/task_jantar.mp3',
+
+  // 13. Lição de Casa / Estudo
+  'licao': '/audio/task_licao.mp3',
+  'lição': '/audio/task_licao.mp3',
+  'estudar': '/audio/task_licao.mp3',
+  'estudo': '/audio/task_licao.mp3',
+
+  // 14. Hora do Lanche / Fruta
+  'lanche': '/audio/task_lanche.mp3',
+  'fruta': '/audio/task_lanche.mp3',
+  'frutas': '/audio/task_lanche.mp3',
+  'comidinha': '/audio/task_lanche.mp3',
+
+  // 15. Lavar o Rosto
+  'lavar o rosto': '/audio/task_lavar_rosto.mp3',
+  'lavar rosto': '/audio/task_lavar_rosto.mp3',
+  'rosto': '/audio/task_lavar_rosto.mp3',
+
+  // 16. Banho
   'banho': '/audio/task_banho.mp3',
   'chuveiro': '/audio/task_banho.mp3',
 
-  // 10. Banheiro
-  'banheiro': '/audio/task_banheiro.mp3',
-  'xixi': '/audio/task_banheiro.mp3',
-  'vaso sanitário': '/audio/task_banheiro.mp3',
-  'vaso sanitario': '/audio/task_banheiro.mp3',
-  'privada': '/audio/task_banheiro.mp3',
+  // 17. Desligar Telas
+  'desligar as telas': '/audio/task_desligar_telas.mp3',
+  'desligar telas': '/audio/task_desligar_telas.mp3',
+  'desligar tela': '/audio/task_desligar_telas.mp3',
+  'telas': '/audio/task_desligar_telas.mp3',
+  'tela': '/audio/task_desligar_telas.mp3',
+  'celular': '/audio/task_desligar_telas.mp3',
+  'tablet': '/audio/task_desligar_telas.mp3',
 
-  // 11. Terapia
+  // 18. Escola & Mochila
+  'escola': '/audio/task_escola.mp3',
+  'aula': '/audio/task_escola.mp3',
+  'colégio': '/audio/task_escola.mp3',
+  'colegio': '/audio/task_escola.mp3',
+  'mochila': '/audio/task_mochila.mp3',
+
+  // 19. Terapia & Fono
   'terapia': '/audio/task_terapia.mp3',
   'fono': '/audio/task_terapia.mp3',
 
-  // 12. Passeio & Parquinho
+  // 20. Passeio & Parquinho
   'passeio': '/audio/task_passeio.mp3',
   'parque': '/audio/task_passeio.mp3',
   'parquinho': '/audio/task_passeio.mp3',
 
-  // 13. Dormir
+  // 21. Acalmar & Relaxar
+  'acalmar': '/audio/task_acalmar.mp3',
+  'respirar': '/audio/task_acalmar.mp3',
+  'relaxar': '/audio/task_acalmar.mp3',
+
+  // 22. Dormir
   'dormir': '/audio/task_dormir.mp3',
   'sono': '/audio/task_dormir.mp3',
   'boa noite': '/audio/task_dormir.mp3',
@@ -637,16 +700,29 @@ class AudioManager {
       return this.playRecording(audioRecording, effVol);
     }
 
+    // Formata o texto falado de forma natural e sem duplicar "Hora de"
+    const getSpokenText = () => {
+      if (voicePhrase && voicePhrase.trim()) {
+        return voicePhrase.trim();
+      }
+      const cleanTitle = (title || '').trim();
+      const lower = cleanTitle.toLowerCase();
+      if (lower.startsWith('hora')) {
+        return cleanTitle;
+      }
+      return `Hora de ${cleanTitle}`;
+    };
+
     if (this.voiceStyle === 'mascot') {
       const coreAudio = getCoreTaskAudioUrl(title);
       if (coreAudio) {
         return this.playRecording(coreAudio, effVol).catch(() => {
-          this.speak(voicePhrase || `Hora de: ${title}`, effVol);
+          this.speak(getSpokenText(), effVol);
         });
       }
     }
 
-    this.speak(voicePhrase || `Hora de: ${title}`, effVol);
+    this.speak(getSpokenText(), effVol);
     return Promise.resolve();
   }
 

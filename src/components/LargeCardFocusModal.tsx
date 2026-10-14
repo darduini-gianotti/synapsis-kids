@@ -9,6 +9,7 @@ import {
   Sparkles,
   ArrowLeft,
   Clock,
+  Pencil,
 } from 'lucide-react';
 import { RoutineTask } from '../types';
 import { COLOR_THEMES } from './TaskIcon';
@@ -24,6 +25,8 @@ interface LargeCardFocusModalProps {
   onToggleComplete: (taskId: string) => void;
   onToggleSubtask?: (taskId: string, subtaskId: string) => void;
   onOpenTimer?: (task: RoutineTask) => void;
+  onEditTask?: (task: RoutineTask) => void;
+  isLocked?: boolean;
 }
 
 export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
@@ -33,6 +36,8 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   onToggleComplete,
   onToggleSubtask,
   onOpenTimer,
+  onEditTask,
+  isLocked = false,
 }) => {
   if (!isOpen || !task) return null;
 
@@ -76,6 +81,21 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
             </button>
 
             <div className="flex items-center gap-2">
+              {!isLocked && onEditTask && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onEditTask(task);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition-all active:scale-95 shadow-2xs"
+                  title="Editar Atividade"
+                >
+                  <Pencil className="w-3.5 h-3.5" />
+                  <span>Editar</span>
+                </button>
+              )}
+
               <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-stone-200/80 dark:bg-stone-700/80 text-stone-700 dark:text-stone-200 flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {task.time}

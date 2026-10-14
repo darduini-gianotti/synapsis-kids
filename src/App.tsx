@@ -1251,6 +1251,14 @@ export default function App() {
               onToggleComplete={handleToggleTaskComplete}
               viewSubtype={boardSubtype}
               onSetSubtype={setBoardSubtype}
+              onEditTask={(t) =>
+                handleRequirePin(
+                  () => setEditingTask(t),
+                  'Editar Tarefa',
+                  'Digite a senha dos pais para alterar as informações desta tarefa.'
+                )
+              }
+              isLocked={isEditLocked}
             />
           ) : (
             /* STANDARD SCHEDULE AGENDA VIEW */
@@ -1569,6 +1577,14 @@ export default function App() {
               handleToggleSubtask(taskId, subtaskId);
             }}
             onOpenTimer={(task) => setActiveTimerTask(task)}
+            onEditTask={(t) =>
+              handleRequirePin(
+                () => setEditingTask(t),
+                'Editar Tarefa',
+                'Digite a senha dos pais para alterar as informações desta tarefa.'
+              )
+            }
+            isLocked={isEditLocked}
           />
         )}
 

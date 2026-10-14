@@ -55,7 +55,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'chime',
-    voicePhrase: 'Bom dia! Hora de acordar com calma e alegria!',
+    voicePhrase: 'Bom dia, raio de sol! Hora de acordar com calma e alegria!',
     durationMinutes: 10,
     notes: 'Abrir a cortina e respirar fundo',
     imageUrl: '/mascots/panquecca_acordar.jpg',
@@ -75,7 +75,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-bed-3', title: 'Dobrar a coberta', completed: false, iconName: 'Check' },
     ],
     soundAlert: 'bell',
-    voicePhrase: 'Hora de arrumar a cama e deixar o quarto lindo!',
+    voicePhrase: 'Missão quarto nota dez! Hora de esticar o lençol e deixar a cama fofinha como uma nuvem!',
     durationMinutes: 10,
     imageUrl: '/mascots/panquecca_arrumar_cama.jpg',
     videoUrl: '/mascots/panquecca_arrumar_cama.mp4',
@@ -90,7 +90,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: DEFAULT_TOILET_SUBTASKS,
     soundAlert: 'chime',
-    voicePhrase: 'Hora de ir ao banheiro com calma.',
+    voicePhrase: 'Hora de ir ao banheiro com calma! Desce a roupinha, usa o papel e depois dá tchau na descarga!',
     durationMinutes: 10,
     notes: 'Abaixe a roupa, use o papel e dê a descarga',
     imageUrl: '/mascots/panquecca_banheiro.jpg',
@@ -111,7 +111,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-hand-4', title: 'Secar na toalha limpa', completed: false, iconName: 'Check' },
     ],
     soundAlert: 'chime',
-    voicePhrase: 'Hora de lavar as mãozinhas com água e sabão!',
+    voicePhrase: 'Xô bactérias! Hora de lavar as mãozinhas com muita espuma e fazer bolhinhas de sabão!',
     durationMinutes: 5,
     imageUrl: '/mascots/panquecca_lavando_maos.jpg',
     videoUrl: '/mascots/panquecca_lavando_maos.mp4',
@@ -126,7 +126,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'marimba',
-    voicePhrase: 'Hora do café da manhã bem gostoso!',
+    voicePhrase: 'Hummm, que cheirinho bom! Hora do café da manhã para encher a barriguinha de energia!',
     durationMinutes: 25,
     imageUrl: '/mascots/panquecca_comendo.jpg',
     videoUrl: '/mascots/panquecca_comendo.mp4',
@@ -141,7 +141,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: DEFAULT_HYGIENE_SUBTASKS,
     soundAlert: 'harp',
-    voicePhrase: 'Hora de escovar os dentinhos!',
+    voicePhrase: 'Tchick, tchick, tchick! Hora de escovar os dentinhos e deixar tudo brilhando como estrelinhas!',
     durationMinutes: 3,
     imageUrl: '/mascots/panquecca_escovando.jpg',
     videoUrl: '/mascots/panquecca_escovando.mp4',
@@ -160,7 +160,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-clo-3', title: 'Calçar meias e sapatos', completed: false, iconName: 'Smile' },
     ],
     soundAlert: 'chime',
-    voicePhrase: 'Hora de vestir uma roupinha bem confortável!',
+    voicePhrase: 'Transformação mágica! Hora de vestir uma roupinha bem linda, confortável e charmosa!',
     durationMinutes: 10,
     imageUrl: '/mascots/panquecca_vestir_roupa.jpg',
     videoUrl: '/mascots/panquecca_vestir_roupa.mp4',
@@ -175,7 +175,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'chime',
-    voicePhrase: 'Hora de pentear o cabelinho!',
+    voicePhrase: 'Espelho, espelho meu! Hora de pentear o cabelinho e ficar super estiloso!',
     durationMinutes: 5,
     imageUrl: '/mascots/panquecca_pentear.jpg',
     videoUrl: '/mascots/panquecca_pentear.mp4',
@@ -190,7 +190,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'chime',
-    voicePhrase: 'Hora de beber água fresca e se hidratar!',
+    voicePhrase: 'Glub, glub, glub! Hora de beber água bem fresquinha para o corpinho ficar feliz e hidratado!',
     durationMinutes: 5,
     imageUrl: '/mascots/panquecca_beber_agua.jpg',
     videoUrl: '/mascots/panquecca_beber_agua.mp4',
@@ -205,7 +205,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: DEFAULT_CHORES_SUBTASKS,
     soundAlert: 'bell',
-    voicePhrase: 'Hora das tarefas da casa! Vamos conferir a lista?',
+    voicePhrase: 'Super organizador em ação! Cada brinquedinho na sua casinha e tudo no seu lugar!',
     durationMinutes: 20,
     notes: 'Marque cada item que você concluir!',
     imageUrl: '/mascots/panquecca_guardar_brinquedos.jpg',
@@ -221,7 +221,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'harp',
-    voicePhrase: 'Hora de brincar e relaxar!',
+    voicePhrase: 'Ebaaa! Hora de brincar, usar a imaginação e se divertir de montão!',
     durationMinutes: 60,
     imageUrl: '/mascots/panquecca_brincar.jpg',
     videoUrl: '/mascots/panquecca_brincar.mp4',
@@ -236,7 +236,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'marimba',
-    voicePhrase: 'O almoço está pronto!',
+    voicePhrase: 'Prato colorido e saboroso! Hora do almoço gostoso para crescer forte como um herói!',
     durationMinutes: 30,
     imageUrl: '/mascots/panquecca_comendo.jpg',
     videoUrl: '/mascots/panquecca_comendo.mp4',
@@ -255,7 +255,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-lic-3', title: 'Guardar todo o material', completed: false, iconName: 'Check' },
     ],
     soundAlert: 'chime',
-    voicePhrase: 'Hora da lição com bastante foco.',
+    voicePhrase: 'Modo gênio ativado! Hora da lição com bastante foco, calma e capricho!',
     durationMinutes: 45,
     imageUrl: '/mascots/panquecca_licao.jpg',
     videoUrl: '/mascots/panquecca_licao.mp4',
@@ -274,7 +274,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-lan-3', title: 'Guardar o pratinho na pia', completed: false, iconName: 'Check' },
     ],
     soundAlert: 'marimba',
-    voicePhrase: 'Hora do lanche gostoso e saudável!',
+    voicePhrase: 'Nhac, nhac, que delícia! Hora do lanche gostoso e saudável com frutinhas bem docinhas!',
     durationMinutes: 20,
     imageUrl: '/mascots/panquecca_fruta.jpg',
     videoUrl: '/mascots/panquecca_fruta.mp4',
@@ -289,7 +289,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'chime',
-    voicePhrase: 'Hora de beber água fresca e se hidratar!',
+    voicePhrase: 'Pausa para o gole mágico! Hora de beber mais uma água geladinha e refrescante!',
     durationMinutes: 5,
     imageUrl: '/mascots/panquecca_beber_agua.jpg',
     videoUrl: '/mascots/panquecca_beber_agua.mp4',
@@ -304,7 +304,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'harp',
-    voicePhrase: 'Hora de um banho bem gostoso!',
+    voicePhrase: 'Tchibum na banheira! Hora de um banho bem quentinho, cheiroso e cheio de espuminha!',
     durationMinutes: 20,
     imageUrl: '/mascots/panquecca_banho.jpg',
     videoUrl: '/mascots/panquecca_banho.mp4',
@@ -322,7 +322,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
       { id: 'sub-scr-2', title: 'Guardar o celular/tablet no lugar', completed: false, iconName: 'Box' },
     ],
     soundAlert: 'bell',
-    voicePhrase: 'Hora de desligar as telas e descansar os olhinhos!',
+    voicePhrase: 'Telinhas em modo soneca! Hora de desligar os aparelhos e dar um abraço bem gostoso na família!',
     durationMinutes: 15,
     imageUrl: '/mascots/panquecca_desligar_telas.jpg',
     videoUrl: '/mascots/panquecca_desligar_telas.mp4',
@@ -337,7 +337,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: DEFAULT_BACKPACK_SUBTASKS,
     soundAlert: 'bell',
-    voicePhrase: 'Vamos preparar a mochila de amanhã?',
+    voicePhrase: 'Mochila pronta, aventura garantida! Vamos conferir o estojo e os cadernos para amanhã!',
     durationMinutes: 15,
     imageUrl: '/mascots/panquecca_escola.jpg',
     videoUrl: '/mascots/panquecca_escola.mp4',
@@ -352,7 +352,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'harp',
-    voicePhrase: 'Hora de desacelerar, respirar fundo e relaxar.',
+    voicePhrase: 'Respira bem fundo como um balão... Solta devagarzinho... Hora da calma, do soninho e da paz no coração!',
     durationMinutes: 20,
     imageUrl: '/mascots/panquecca_acalmar.jpg',
     videoUrl: '/mascots/panquecca_acalmar.mp4',
@@ -367,7 +367,7 @@ const DEFAULT_WEEKDAY_TASKS: RoutineTask[] = [
     completed: false,
     subtasks: [],
     soundAlert: 'harp',
-    voicePhrase: 'Boa noite! Hora de relaxar e sonhar.',
+    voicePhrase: 'Boa noite, campeão! Fecha os olhinhos, relaxa no travesseiro e tenha sonhos mágicos e felizes!',
     durationMinutes: 15,
     imageUrl: '/mascots/panquecca_dormir.jpg',
     videoUrl: '/mascots/panquecca_dormir.mp4',
@@ -613,6 +613,38 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
                 t.videoUrl = assets.video;
                 changed = true;
               }
+            }
+          }
+
+          // C) Migra frases divertidas e criativas para tarefas existentes com frases genéricas
+          if (!t.voicePhrase || t.voicePhrase === 'Hora do lanche gostoso e saudável!' || t.voicePhrase.startsWith('Hora de ') || t.voicePhrase.startsWith('Hora do ')) {
+            if (lower.includes('lanche') || lower.includes('fruta')) {
+              t.voicePhrase = 'Nhac, nhac, que delícia! Hora do lanche gostoso e saudável com frutinhas bem docinhas!';
+              changed = true;
+            } else if (lower.includes('mão') || lower.includes('mao')) {
+              t.voicePhrase = 'Xô bactérias! Hora de lavar as mãozinhas com muita espuma e fazer bolhinhas de sabão!';
+              changed = true;
+            } else if (lower.includes('água') || lower.includes('agua')) {
+              t.voicePhrase = 'Glub, glub, glub! Hora de beber água bem fresquinha para o corpinho ficar feliz e hidratado!';
+              changed = true;
+            } else if (lower.includes('rosto')) {
+              t.voicePhrase = 'Gotinha mágica no rosto! Hora de lavar a carinha com água fresca para espantar a preguiça!';
+              changed = true;
+            } else if (lower.includes('pentear') || lower.includes('cabelo')) {
+              t.voicePhrase = 'Espelho, espelho meu! Hora de pentear o cabelinho e ficar super estiloso!';
+              changed = true;
+            } else if (lower.includes('vestir') || lower.includes('roupa')) {
+              t.voicePhrase = 'Transformação mágica! Hora de vestir uma roupinha bem linda, confortável e charmosa!';
+              changed = true;
+            } else if (lower.includes('tela') || lower.includes('celular') || lower.includes('tablet')) {
+              t.voicePhrase = 'Telinhas em modo soneca! Hora de desligar os aparelhos e dar um abraço bem gostoso na família!';
+              changed = true;
+            } else if (lower.includes('cama')) {
+              t.voicePhrase = 'Missão quarto nota dez! Hora de esticar o lençol e deixar a cama fofinha como uma nuvem!';
+              changed = true;
+            } else if (lower.includes('acalmar') || lower.includes('respirar')) {
+              t.voicePhrase = 'Respira bem fundo como um balão... Solta devagarzinho... Hora da calma, do soninho e da paz no coração!';
+              changed = true;
             }
           }
         });
