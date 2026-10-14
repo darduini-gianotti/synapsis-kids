@@ -205,7 +205,7 @@ export const PANQUECCA_CATALOG: MascotTaskConfig[] = [
   // 5. SAÚDE, TERAPIA & LAZER
   {
     id: 'terapia',
-    keywords: ['terapia', 'fono', 'fonoaudiologia', 'psicologia', 'terapeuta', 'médico', 'medico', 'to', 'fisioterapia'],
+    keywords: ['terapia', 'fono', 'fonoaudiologia', 'psicologia', 'terapeuta', 'médico', 'medico', 'terapia ocupacional', 'sessão to', 'sessao to', 'fisioterapia'],
     titlePt: 'Hora da Terapia / Fono',
     category: 'saude',
     executionImage: '/mascots/panquecca_terapia.jpg',
@@ -216,7 +216,7 @@ export const PANQUECCA_CATALOG: MascotTaskConfig[] = [
   },
   {
     id: 'brincar_lazer',
-    keywords: ['brincar', 'parquinho', 'jogo', 'jogos', 'passeio', 'parque', 'lazer'],
+    keywords: ['brincar', 'brincadeira', 'brincadeiras', 'momento livre', 'tempo livre', 'livre', 'parquinho', 'jogo', 'jogos', 'passeio', 'parque', 'lazer'],
     titlePt: 'Brincar & Passear',
     category: 'lazer',
     executionImage: '/mascots/panquecca_brincar.jpg',
@@ -328,14 +328,48 @@ export const EXISTING_MASCOT_FILES = new Set<string>([
 ]);
 
 /**
- * Encontra a configuração correspondente da tarefa pela análise do título.
+ * Encontra a configuração pelo identificador direto (ex: 'brincar_lazer', 'escovar_dentes')
+ */
+export function findMascotConfigById(id: string): MascotTaskConfig | undefined {
+  if (!id) return undefined;
+  return PANQUECCA_CATALOG.find((item) => item.id === id);
+}
+
+/**
+ * Encontra a configuração correspondente com base no videoUrl ou imageUrl já salvos na tarefa
+ */
+export function findMascotConfigByVideoOrImage(videoUrl?: string, imageUrl?: string): MascotTaskConfig | undefined {
+  if (!videoUrl && !imageUrl) return undefined;
+
+  for (const item of PANQUECCA_CATALOG) {
+    if (videoUrl && item.executionVideo === videoUrl) {
+      return item;
+    }
+    if (imageUrl && (item.executionImage === imageUrl || item.celebrationImage === imageUrl)) {
+      return item;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Encontra a configuração correspondente da tarefa pela análise inteligente do título.
  */
 export function findMascotConfigForTitle(title: string): MascotTaskConfig | undefined {
   const normalized = (title || '').toLowerCase().trim();
   if (!normalized) return undefined;
 
   for (const item of PANQUECCA_CATALOG) {
-    if (item.keywords.some((kw) => normalized.includes(kw))) {
+    if (
+      item.keywords.some((kw) => {
+        // Se a palavra-chave for curta (<= 3 letras), exige limite de palavra
+        if (kw.length <= 3) {
+          const regex = new RegExp(`\\b${kw}\\b`, 'i');
+          return regex.test(normalized);
+        }
+        return normalized.includes(kw);
+      })
+    ) {
       return item;
     }
   }
@@ -344,25 +378,26 @@ export function findMascotConfigForTitle(title: string): MascotTaskConfig | unde
 
 /**
  * Retorna a mídia de execução (ilustração oficial + vídeo animado, se houver).
+ * Permite especificar explicitConfigId para casos em que o usuário escolheu o vídeo manualmente.
  */
-export function getPanqueccaAssetsForTitle(taskTitle: string): { image: string; video?: string } {
-  const config = findMascotConfigForTitle(taskTitle);
+export function getPanqueccaAssetsForTitle(
+  taskTitle: string,
+  explicitConfigId?: string
+): { image: string; video?: string; config?: MascotTaskConfig } {
+  const config = (explicitConfigId && findMascotConfigById(explicitConfigId)) || findMascotConfigForTitle(taskTitle);
 
   if (config) {
-    // Se a imagem de execução específica já existe fisicamente, usa-a;
-    // caso contrário, usa o fallback mais próximo existente
     const image = EXISTING_MASCOT_FILES.has(config.executionImage)
       ? config.executionImage
       : config.category === 'alimentacao'
       ? '/mascots/panquecca_comendo.jpg'
       : '/mascots/panquecca_escovando.jpg';
 
-    // Se o vídeo configurado já existe fisicamente, anexa
     const video = config.executionVideo && EXISTING_MASCOT_FILES.has(config.executionVideo)
       ? config.executionVideo
       : undefined;
 
-    return { image, video };
+    return { image, video, config };
   }
 
   // Fallback padrão
@@ -373,9 +408,8 @@ export function getPanqueccaAssetsForTitle(taskTitle: string): { image: string; 
 }
 
 /**
- * Retorna os detalhes de celebração de vitória (imagem, selo comemorativo e frase)
- * com fallback inteligente para garantir que a tela nunca quebre se a imagem
- * personalizada ainda estiver sendo gerada.
+ * Retorna os detalhes de celebração de vitória (imagem, selo comemorativo e frase).
+ * Prioriza a atividade selecionada no vídeo/imagem da tarefa para garantir coerência absoluta.
  */
 export function getTaskCelebrationDetails(task: RoutineTask): {
   image: string;
@@ -398,8 +432,11 @@ export function getTaskCelebrationDetails(task: RoutineTask): {
     };
   }
 
-  // 2. Busca configuração específica da Panquecca para a tarefa
-  const config = findMascotConfigForTitle(task.title);
+  // 2. Busca configuração específica da Panquecca:
+  // Primeiro pelo vídeo ou imagem salvos na tarefa (se o usuário escolheu uma atividade manual)
+  const configFromAssets = findMascotConfigByVideoOrImage(task.videoUrl, task.imageUrl);
+  // Segundo pelo título da tarefa
+  const config = configFromAssets || findMascotConfigForTitle(task.title);
 
   if (config) {
     const hasCustomImage = EXISTING_MASCOT_FILES.has(config.celebrationImage);

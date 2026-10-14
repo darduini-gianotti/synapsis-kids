@@ -15,12 +15,19 @@ import {
   Square,
   Sparkles,
   HelpCircle,
+  Film,
+  RotateCcw,
 } from 'lucide-react';
 import { RoutineTask, SoundAlert, TaskCategory, SubTask, TaskColor } from '../types';
 import { TaskIcon, AVAILABLE_ICONS, COLOR_THEMES } from './TaskIcon';
 import { soundManager } from '../utils/audio';
 import { ArasaacPickerModal } from './ArasaacPickerModal';
-import { getPanqueccaAssetsForTitle } from '../utils/mascotAssets';
+import {
+  PANQUECCA_CATALOG,
+  getPanqueccaAssetsForTitle,
+  findMascotConfigByVideoOrImage,
+  findMascotConfigForTitle,
+} from '../utils/mascotAssets';
 
 interface EditTaskModalProps {
   isOpen: boolean;
@@ -96,7 +103,18 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
       ? initialTask.imageUrl
       : undefined);
 
+  // Identifica a configuração inicial do mascote associada à tarefa
+  const initialMascotConfig =
+    findMascotConfigByVideoOrImage(initialTask?.videoUrl, initialTask?.imageUrl) ||
+    findMascotConfigForTitle(initialTask?.title || '');
+
   const [isMascotEnabled, setIsMascotEnabled] = useState<boolean>(isInitialMascot);
+  const [selectedMascotId, setSelectedMascotId] = useState<string | undefined>(initialMascotConfig?.id);
+  const [isMascotManuallySelected, setIsMascotManuallySelected] = useState<boolean>(
+    Boolean(initialTask?.videoUrl && initialMascotConfig)
+  );
+  const [isMascotPickerOpen, setIsMascotPickerOpen] = useState(false);
+  const [mascotSearchTerm, setMascotSearchTerm] = useState('');
   const [arasaacImageUrl, setArasaacImageUrl] = useState<string | undefined>(initialArasaac);
   const [videoUrl, setVideoUrl] = useState<string | undefined>(initialTask?.videoUrl);
   const [isArasaacModalOpen, setIsArasaacModalOpen] = useState(false);
@@ -229,7 +247,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
   const handleSave = () => {
     if (!title.trim()) return;
 
-    const panqueccaAssets = isMascotEnabled ? getPanqueccaAssetsForTitle(title) : null;
+    const panqueccaAssets = isMascotEnabled ? getPanqueccaAssetsForTitle(title, selectedMascotId) : null;
 
     const taskToSave: RoutineTask = {
       id: initialTask?.id || `task-${Date.now()}`,
@@ -246,7 +264,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
       durationMinutes: durationMinutes > 0 ? durationMinutes : undefined,
       notes: notes.trim() || undefined,
       arasaacImageUrl: arasaacImageUrl || undefined,
-      videoUrl: isMascotEnabled ? (panqueccaAssets?.video || videoUrl || undefined) : undefined,
+      videoUrl: isMascotEnabled ? (panqueccaAssets?.video || undefined) : undefined,
       imageUrl: isMascotEnabled
         ? (panqueccaAssets?.image || arasaacImageUrl || undefined)
         : (arasaacImageUrl || undefined),
@@ -323,7 +341,16 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                   id="task-title-input"
                   placeholder="Ex: Tarefas da Casa, Lição, Escovar os Dentes..."
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setTitle(val);
+                    if (!isMascotManuallySelected) {
+                      const auto = findMascotConfigForTitle(val);
+                      if (auto) {
+                        setSelectedMascotId(auto.id);
+                      }
+                    }
+                  }}
                   className="w-full px-3.5 py-2.5 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 text-stone-800 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500"
                   required
                 />
@@ -457,7 +484,15 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
             {/* MASCOTE GUIA OFICIAL SYNAPSIS KIDS - PANQUECCA */}
             {(() => {
-              const currentPanqueccaAssets = getPanqueccaAssetsForTitle(title || initialTask?.title || '');
+              const currentPanqueccaAssets = getPanqueccaAssetsForTitle(title || initialTask?.title || '', selectedMascotId);
+              const activeConfig = currentPanqueccaAssets.config;
+
+              const filteredCatalog = PANQUECCA_CATALOG.filter((item) => {
+                if (!mascotSearchTerm.trim()) return true;
+                const term = mascotSearchTerm.toLowerCase();
+                return item.titlePt.toLowerCase().includes(term) || item.keywords.some((k) => k.toLowerCase().includes(term));
+              });
+
               return (
                 <div
                   className={`p-3.5 border-2 rounded-2xl space-y-2.5 transition-all ${
@@ -473,17 +508,25 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                         Mascote Guia Oficial da Tarefa
                       </label>
                     </div>
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        isMascotEnabled
-                          ? 'bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
-                          : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
-                      }`}
-                    >
-                      {isMascotEnabled ? 'Panquecca Ativada' : 'Panquecca Desativada'}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {isMascotManuallySelected && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
+                          Vídeo Personalizado
+                        </span>
+                      )}
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          isMascotEnabled
+                            ? 'bg-amber-200 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
+                            : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
+                        }`}
+                      >
+                        {isMascotEnabled ? 'Panquecca Ativada' : 'Panquecca Desativada'}
+                      </span>
+                    </div>
                   </div>
 
+                  {/* Card Principal da Mascote */}
                   <div className="flex items-center gap-3 p-2.5 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700">
                     <img
                       src={currentPanqueccaAssets.image}
@@ -491,9 +534,16 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                       className="w-14 h-14 rounded-xl object-cover shrink-0 border border-amber-300 dark:border-amber-700"
                     />
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs font-black text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
-                        Panquecca {currentPanqueccaAssets.video ? 'em Vídeo Animado' : 'em Ilustração Oficial'}
-                      </h4>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="text-xs font-black text-stone-900 dark:text-stone-100">
+                          {activeConfig ? activeConfig.titlePt : 'Panquecca Oficial'}
+                        </h4>
+                        {currentPanqueccaAssets.video && (
+                          <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 flex items-center gap-0.5">
+                            🎬 Vídeo 3D Ativo
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-tight mt-0.5">
                         {isMascotEnabled
                           ? 'Modela o hábito visualmente nos cartões grandes e na agenda.'
@@ -501,18 +551,109 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
                       </p>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setIsMascotEnabled((prev) => !prev)}
-                      className={`px-3 py-2 rounded-xl text-xs font-black transition-all shrink-0 active:scale-95 shadow-2xs ${
-                        isMascotEnabled
-                          ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                          : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 hover:bg-amber-100 dark:hover:bg-amber-950/60'
-                      }`}
-                    >
-                      {isMascotEnabled ? '✓ Ativada' : '+ Ativar'}
-                    </button>
+                    <div className="flex flex-col gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setIsMascotEnabled((prev) => !prev)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-2xs ${
+                          isMascotEnabled
+                            ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                            : 'bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 hover:bg-amber-100 dark:hover:bg-amber-950/60'
+                        }`}
+                      >
+                        {isMascotEnabled ? '✓ Ativada' : '+ Ativar'}
+                      </button>
+
+                      {isMascotEnabled && (
+                        <button
+                          type="button"
+                          onClick={() => setIsMascotPickerOpen((prev) => !prev)}
+                          className="px-2 py-1 rounded-lg text-[10px] font-bold bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/80 dark:hover:bg-amber-900 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-800 flex items-center justify-center gap-1 transition-all"
+                        >
+                          <Film className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                          {isMascotPickerOpen ? 'Fechar' : 'Trocar Vídeo'}
+                        </button>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Seletor Visual de Vídeos do Catálogo */}
+                  {isMascotEnabled && isMascotPickerOpen && (
+                    <div className="p-3 bg-white dark:bg-stone-800/90 rounded-xl border border-amber-300 dark:border-amber-700 space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-extrabold text-stone-800 dark:text-stone-200 flex items-center gap-1">
+                          🎬 Escolha a Atividade da Panquecca ({PANQUECCA_CATALOG.length} disponíveis)
+                        </span>
+
+                        {isMascotManuallySelected && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMascotManuallySelected(false);
+                              const auto = findMascotConfigForTitle(title || initialTask?.title || '');
+                              if (auto) setSelectedMascotId(auto.id);
+                            }}
+                            className="text-[10px] font-bold text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1"
+                          >
+                            <RotateCcw className="w-2.5 h-2.5" />
+                            Auto (pelo nome)
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Campo de busca rápida */}
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={mascotSearchTerm}
+                          onChange={(e) => setMascotSearchTerm(e.target.value)}
+                          placeholder="Buscar atividade (ex: brincar, lanche, banho)..."
+                          className="w-full pl-8 pr-3 py-1.5 text-xs bg-stone-50 dark:bg-stone-750 border border-stone-200 dark:border-stone-700 rounded-lg text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        />
+                        <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                      </div>
+
+                      {/* Grade de 20 Atividades com thumbnail */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-56 overflow-y-auto pr-1">
+                        {filteredCatalog.map((item) => {
+                          const isSelected = activeConfig?.id === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedMascotId(item.id);
+                                setIsMascotManuallySelected(true);
+                                setIsMascotPickerOpen(false);
+                              }}
+                              className={`p-1.5 rounded-xl border text-left flex items-center gap-2 transition-all active:scale-95 ${
+                                isSelected
+                                  ? 'bg-amber-100 dark:bg-amber-950/80 border-amber-500 ring-2 ring-amber-400 shadow-xs'
+                                  : 'bg-stone-50 dark:bg-stone-750 border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700'
+                              }`}
+                            >
+                              <img
+                                src={item.executionImage}
+                                alt={item.titlePt}
+                                className="w-10 h-10 rounded-lg object-cover shrink-0 border border-stone-200 dark:border-stone-600"
+                              />
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[11px] font-bold text-stone-900 dark:text-stone-100 truncate">
+                                  {item.titlePt}
+                                </p>
+                                <span className="text-[9px] text-amber-700 dark:text-amber-400 font-semibold block truncate">
+                                  🎬 Vídeo 3D
+                                </span>
+                              </div>
+                              {isSelected && (
+                                <Check className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })()}
