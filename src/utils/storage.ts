@@ -678,8 +678,29 @@ export function loadRoutines(): Record<DayOfWeek, DayRoutine> {
             videoUrl: '/mascots/panquecca_fruta.mp4',
           };
           routine.tasks.push(lancheTask);
-          routine.tasks.sort((a, b) => a.time.localeCompare(b.time));
           changed = true;
+        }
+
+        // 3. Garante que todas as rotinas oficiais do Catálogo Master estejam presentes
+        const dayNum = Number(day);
+        const isWeekend = dayNum === 0 || dayNum === 6;
+        const defaultList = isWeekend ? DEFAULT_WEEKEND_TASKS : DEFAULT_WEEKDAY_TASKS;
+
+        defaultList.forEach((defTask) => {
+          const normDef = defTask.title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+          const exists = routine.tasks.some((t) => {
+            const normT = (t.title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+            return t.id === defTask.id || normT === normDef || normT.includes(normDef) || normDef.includes(normT);
+          });
+
+          if (!exists) {
+            routine.tasks.push(JSON.parse(JSON.stringify(defTask)));
+            changed = true;
+          }
+        });
+
+        if (changed) {
+          routine.tasks.sort((a, b) => a.time.localeCompare(b.time));
         }
       }
     }
