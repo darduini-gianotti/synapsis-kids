@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Clock,
   Pencil,
+  Trash2,
 } from 'lucide-react';
 import { RoutineTask } from '../types';
 import { COLOR_THEMES } from './TaskIcon';
@@ -26,6 +27,7 @@ interface LargeCardFocusModalProps {
   onToggleSubtask?: (taskId: string, subtaskId: string) => void;
   onOpenTimer?: (task: RoutineTask) => void;
   onEditTask?: (task: RoutineTask) => void;
+  onDeleteTask?: (taskId: string) => void;
   isLocked?: boolean;
 }
 
@@ -37,6 +39,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
   onToggleSubtask,
   onOpenTimer,
   onEditTask,
+  onDeleteTask,
   isLocked = false,
 }) => {
   if (!isOpen || !task) return null;
@@ -81,7 +84,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
             </button>
 
             <div className="flex items-center gap-2">
-              {!isLocked && onEditTask && (
+              {onEditTask && (
                 <button
                   type="button"
                   onClick={() => {
@@ -89,10 +92,25 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                     onEditTask(task);
                   }}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition-all active:scale-95 shadow-2xs"
-                  title="Editar Atividade"
+                  title={isLocked ? 'Editar (protegido por senha)' : 'Editar Atividade'}
                 >
                   <Pencil className="w-3.5 h-3.5" />
                   <span>Editar</span>
+                </button>
+              )}
+
+              {onDeleteTask && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    onDeleteTask(task.id);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/70 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900 border border-rose-200/80 dark:border-rose-800 text-xs font-bold transition-all active:scale-95 shadow-2xs"
+                  title={isLocked ? 'Excluir (protegido por senha)' : 'Excluir Atividade'}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Excluir</span>
                 </button>
               )}
 

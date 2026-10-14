@@ -10,6 +10,7 @@ import {
   Clock,
   Mic,
   Pencil,
+  Trash2,
 } from 'lucide-react';
 import { RoutineTask } from '../types';
 import { COLOR_THEMES } from './TaskIcon';
@@ -24,6 +25,7 @@ interface VisualBoardViewProps {
   viewSubtype: 'board' | 'first-then';
   onSetSubtype: (subtype: 'board' | 'first-then') => void;
   onEditTask?: (task: RoutineTask) => void;
+  onDeleteTask?: (taskId: string) => void;
   isLocked?: boolean;
 }
 
@@ -34,6 +36,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
   viewSubtype,
   onSetSubtype,
   onEditTask,
+  onDeleteTask,
   isLocked = false,
 }) => {
   const uncompleted = tasks.filter((t) => !t.completed);
@@ -122,7 +125,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                     1º Primeiro
                   </span>
                   <div className="flex items-center gap-1.5">
-                    {!isLocked && onEditTask && (
+                    {onEditTask && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -130,9 +133,22 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                           onEditTask(firstTask);
                         }}
                         className="p-1 rounded-lg text-stone-500 hover:text-indigo-600 dark:text-stone-400 dark:hover:text-indigo-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shadow-2xs"
-                        title="Editar Atividade"
+                        title={isLocked ? 'Editar (protegido por senha)' : 'Editar Atividade'}
                       >
                         <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                    {onDeleteTask && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteTask(firstTask.id);
+                        }}
+                        className="p-1 rounded-lg text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors shadow-2xs"
+                        title={isLocked ? 'Excluir (protegido por senha)' : 'Excluir Atividade'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     )}
                     <span className="text-xs font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
@@ -232,7 +248,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                     2º Depois
                   </span>
                   <div className="flex items-center gap-1.5">
-                    {!isLocked && onEditTask && (
+                    {onEditTask && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -240,9 +256,22 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                           onEditTask(thenTask);
                         }}
                         className="p-1 rounded-lg text-stone-500 hover:text-emerald-600 dark:text-stone-400 dark:hover:text-emerald-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors shadow-2xs"
-                        title="Editar Atividade"
+                        title={isLocked ? 'Editar (protegido por senha)' : 'Editar Atividade'}
                       >
                         <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                    {onDeleteTask && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteTask(thenTask.id);
+                        }}
+                        className="p-1 rounded-lg text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors shadow-2xs"
+                        title={isLocked ? 'Excluir (protegido por senha)' : 'Excluir Atividade'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     )}
                     <span className="text-xs font-bold text-stone-500 dark:text-stone-400 flex items-center gap-1">
@@ -345,7 +374,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                   </span>
 
                   <div className="flex items-center gap-1">
-                    {!isLocked && onEditTask && (
+                    {onEditTask && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -353,9 +382,23 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                           onEditTask(task);
                         }}
                         className="p-1.5 rounded-full text-stone-500 hover:text-indigo-600 dark:text-stone-400 dark:hover:text-indigo-300 bg-stone-100 dark:bg-stone-700/80 hover:bg-indigo-50 dark:hover:bg-indigo-950/60 transition-colors shadow-2xs"
-                        title="Editar Atividade"
+                        title={isLocked ? 'Editar (protegido por senha)' : 'Editar Atividade'}
                       >
                         <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+
+                    {onDeleteTask && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteTask(task.id);
+                        }}
+                        className="p-1.5 rounded-full text-stone-400 hover:text-rose-600 dark:hover:text-rose-400 bg-stone-100 dark:bg-stone-700/80 hover:bg-rose-50 dark:hover:bg-rose-950/60 transition-colors shadow-2xs"
+                        title={isLocked ? 'Excluir (protegido por senha)' : 'Excluir Atividade'}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     )}
 

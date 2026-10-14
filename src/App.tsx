@@ -1258,6 +1258,13 @@ export default function App() {
                   'Digite a senha dos pais para alterar as informações desta tarefa.'
                 )
               }
+              onDeleteTask={(taskId) =>
+                handleRequirePin(
+                  () => handleDeleteTask(taskId),
+                  'Excluir Tarefa',
+                  'Digite a senha dos pais para remover esta tarefa do dia.'
+                )
+              }
               isLocked={isEditLocked}
             />
           ) : (
@@ -1582,6 +1589,16 @@ export default function App() {
                 () => setEditingTask(t),
                 'Editar Tarefa',
                 'Digite a senha dos pais para alterar as informações desta tarefa.'
+              )
+            }
+            onDeleteTask={(taskId) =>
+              handleRequirePin(
+                () => {
+                  setFocusedLargeTask(null);
+                  handleDeleteTask(taskId);
+                },
+                'Excluir Tarefa',
+                'Digite a senha dos pais para remover esta tarefa do dia.'
               )
             }
             isLocked={isEditLocked}
