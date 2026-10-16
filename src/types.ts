@@ -14,6 +14,7 @@ export type SoundAlert = 'chime' | 'harp' | 'bell' | 'marimba' | 'voice' | 'none
 export type VoiceCharacterStyle = 'mascot' | 'gentle' | 'normal';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
+export type TaskColor = string;
 
 export interface SubTask {
   id: string;

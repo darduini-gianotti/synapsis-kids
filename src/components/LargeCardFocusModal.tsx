@@ -159,6 +159,7 @@ export const LargeCardFocusModal: React.FC<LargeCardFocusModalProps> = ({
                     ) : (
                       <video
                         src={task.videoUrl}
+                        poster={task.imageUrl}
                         autoPlay
                         loop
                         muted

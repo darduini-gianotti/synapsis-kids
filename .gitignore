@@ -8,6 +8,10 @@ coverage/
 !.env.example
 
 .vercel
-.env*
 test_*.mjs
 promo-videos/
+NotebookLM/
+carrossel_panquecca_instagram/
+capture_all_screens_for_notebooklm.mjs
+render_all_notebooklm_pdfs.mjs
+docs/Rotinas/

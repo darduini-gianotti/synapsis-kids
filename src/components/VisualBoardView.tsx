@@ -163,6 +163,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                     <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-indigo-300 dark:border-indigo-700 shadow-sm relative bg-black/5 dark:bg-black/30">
                       <video
                         src={firstTask.videoUrl}
+                        poster={firstTask.imageUrl}
                         autoPlay
                         loop
                         muted
@@ -286,6 +287,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                     <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-emerald-400 dark:border-emerald-600 shadow-sm relative bg-black/5 dark:bg-black/30">
                       <video
                         src={thenTask.videoUrl}
+                        poster={thenTask.imageUrl}
                         autoPlay
                         loop
                         muted
@@ -427,6 +429,7 @@ export const VisualBoardView: React.FC<VisualBoardViewProps> = ({
                     <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-indigo-200 dark:border-indigo-800 shadow-xs relative bg-black/5 dark:bg-black/30">
                       <video
                         src={task.videoUrl}
+                        poster={task.imageUrl}
                         autoPlay
                         loop
                         muted

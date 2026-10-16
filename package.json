@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3001 --host=0.0.0.0",
-    "build": "vite build",
+    "build": "node generate_landing_page.mjs && node generate_legal_pages.mjs && vite build && node generate_landing_page.mjs && node generate_legal_pages.mjs",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
   },
